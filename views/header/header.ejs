@@ -1,0 +1,94 @@
+<style>
+
+</style>
+
+<nav id="header" class="navbar navbar-default">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand cursor" href="rq100">
+
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+            <ul class="nav navbar-nav">
+
+                <li class="projectList cursor rq100" style="position: relative"><a href="rq100">首页</a></li>
+                <% if(user){ %>
+                    <li class="projectList cursor rq300" style="position: relative"><a href="rq300">销售模块</a></li>
+                    <li class="templateMarket cursor rq400"><a href="rq400">生产模块</a></li>
+
+                    <% if(user.type == 'supervisor' || user.type == 'financial'){ %>
+                        <li class="templateMarket cursor rq500"><a href="rq500">财务模块</a></li>
+                    <% }else{ %>
+                    <% } %>
+
+
+                    <li class="templateMarket cursor rq600"><a href="rq600">库存模块</a></li>
+
+                    <li class="templateMarket cursor rq201 rq202 rq203 rq204"><a href="rq201">信息模块</a></li>
+                    <% if(user.type == 'supervisor' ){ %>
+
+                    <% }else{ %>
+                    <% } %>
+
+                <% }else{ %>
+                <% } %>
+
+            </ul>
+
+
+            <ul class="nav navbar-nav navbar-right">
+
+                <li class="cursor cursor"><a href="rq1001"> <i class="icon icon-wechat"></i> 充值</a></li>
+
+                <% if(user){ %>
+
+                    <li class="cursor "><a>您好，<span style="color: #0a67fb"><%= user.name %>
+                                <% if(user.imgUrl){ %>
+                                    <img style="width: 19px;margin-left: 3px" src="<%= user.imgUrl %>" alt="">
+                    <% }else{ %>
+                    <% } %>
+
+                            </span></a></li>
+
+
+
+                    <% if(user.type == 'supervisor'){ %>
+                        <li class="cursor cursor"><a href="rq800"> <i class="icon icon-wrench"></i> 超级管理员</a></li>
+                    <% }else{ %>
+                    <% } %>
+
+
+                    <li class="cursor cursor"><a href="rq1012">退出登录</a></li>
+
+                <% }else{ %>
+                    <li class="cursor cursor"><a href="rq1000">登录</a></li>
+                <% } %>
+
+                <!--                    <li class="cursor" v-show="isLogin" @click="logOut();toIndex()"><a>退出登录</a></li>-->
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right additionalButtons">
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script>
+    //为已选页面添加高亮
+    var configId = window.config.id
+    $('.' + configId).addClass('active')
+</script>

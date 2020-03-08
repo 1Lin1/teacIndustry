@@ -1,0 +1,3066 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <%- include head/head %>
+
+    <!--引用自动完成的代码-->
+    <%- include autocomplete/production %>
+
+
+</head>
+
+<body>
+<%- include header/header %>
+<div class="container">
+    <div style="margin:auto" class="tabs" id="tabsExample">
+
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+
+        var selected1_2;
+        var rows1_4;
+        var tab2_click_id;
+
+        var tab1selectedOrder = {
+            dataSource: {
+                cols: [
+                    {name: 'type', label: '型号', width: 100},
+                    {name: 'model', label: '名称', width: 100},
+                    {name: 'specifications', label: '规格', width: 100},
+                    {name: 'packingnumber', label: '装箱数', width: 100},
+                    {name: 'piece', label: '件数', width: 100},
+                    {name: 'number', label: '数量', width: 100},
+                    {name: 'unitprice', label: '单价', width: 100},
+                    {name: 'price', label: '金额', width: 100},
+                    // {name: 'deliveried', label: '交付情况', width: 100},
+                    {name: 'remarks', label: '备注', width: 100},
+                ],
+                array: []
+            }
+        };
+
+        var Work_OrderDataSource = {
+            "form": {
+                "recorder": "",
+                "type": "",
+                "name": "",
+                "Serial_number": "",
+                "department": "",
+                "model": "",
+                "batch": "",
+                "procedure": "",
+                "number": "",
+                "price": "",
+                "wages": "",
+                "note": "",
+                "material_consumption": "",
+                "finishing_warehousing": "",
+                "is_outsourcing": ""
+            },
+            "list": {
+                "cols": [
+                    // {
+                    //     "name": "recorder",
+                    //     "label": "经手人",
+                    //     "width": 100
+                    // },
+                    // {
+                    //     "name": "type",
+                    //     "label": "类型",
+                    //     "width": 100
+                    // },
+                    {
+                        "name": "name",
+                        "label": "姓名",
+                        "width": 100
+                    },
+                    {
+                        "name": "Serial_number",
+                        "label": "编号",
+                        "width": 200
+                    },
+
+                    {
+                        "name": "number",
+                        "label": "数量",
+                        "width": 100
+                    },
+                    {
+                        "name": "price",
+                        "label": "工价",
+                        "width": 100
+                    },
+                    {
+                        "name": "wages",
+                        "label": "薪酬",
+                        "width": 100
+                    },
+
+                    {
+                        "name": "op",
+                        "label": "操作",
+                        "width": 200
+                    },
+                    {
+                        "name": "department",
+                        "label": "部门",
+                        "width": 100
+                    },
+                    {
+                        "name": "model",
+                        "label": "型号",
+                        "width": 100
+                    },
+                    {
+                        "name": "batch",
+                        "label": "批次",
+                        "width": 100
+                    },
+                    {
+                        "name": "procedure",
+                        "label": "工序",
+                        "width": 100
+                    },
+                    {
+                        "name": "note",
+                        "label": "备注",
+                        "width": 200
+                    },
+                    // {
+                    //     "name": "material_consumption",
+                    //     "label": "物料消耗",
+                    //     "width": 100
+                    // },
+                    // {
+                    //     "name": "finishing_warehousing",
+                    //     "label": "成品入库",
+                    //     "width": 100
+                    // },
+                    // {
+                    //     "name": "is_outsourcing",
+                    //     "label": "是否外包",
+                    //     "width": 100
+                    // },
+                    // {
+                    //     "name": "createdAt",
+                    //     "label": "创建日期",
+                    //     "width": 150
+                    // }
+                ],
+                "array": []
+            }
+        }
+        window.renderWork_OrderTable = function (tableId, dataSource) {
+            $(tableId).html('').append('<div class="table"></div>')
+
+            $(tableId + ' .table').datagrid({
+                dataSource: dataSource,
+                checkable: false,
+                checkByClickRow: false,
+                partialRendering: true,
+                // height: '300',
+                cellFormator: function ($cell, cell, datagrid) {
+                    var form = cell.config.data
+                    // console.log(cell);
+                    if ((cell.config.name == "price" || cell.config.name == "wages" || cell.config.name == "number" || cell.config.name == "note" || cell.config.name == "Serial_number") && cell.rowIndex > 0) {
+                        $cell.html('<input value="' + cell.value + '" placeholder="请输入">');
+                        var $input = $cell.find('input');
+                        $input.on('blur', function () {
+                            var val = $(this).val();
+                            cell.config.data[cell.config.name] = val
+                            cell.config.data.wages = window.accMul(parseFloat(cell.config.data['price']), parseFloat(cell.config.data['number']))
+                            datagrid.renderData()
+                        })
+                    } else if ((cell.config.name == "op") && cell.rowIndex > 0) {
+                        var htmlString = '<button class="btn btn-sm btn-info save">保存</button><button class="btn btn-sm btn-danger remove">删除</button>'
+                        if (form.id) {
+                            htmlString += '<span class="label label-success">已保存</span>'
+                        }
+                        $cell.html(htmlString);
+                        var $button = $cell.find('.save')
+                        var $removeButton = $cell.find('.remove')
+                        $removeButton.off('click')
+                        $removeButton.on('click', function () {
+                            // $(tableId).find('.datagrid-row[data-id=' + cell.rowIndex + ']').remove()
+                            // var ds = JSON.parse(JSON.stringify(dataSource))
+                            // ds.array.splice(cell.rowIndex-1, 1)
+                            Work_OrderDataSource.list.array.splice(cell.rowIndex - 1, 1)
+                            window.renderWork_OrderTable(tableId, Work_OrderDataSource.list)
+
+                        })
+                        $button.off('click')
+                        $button.on('click', function () {
+                            // window.enterAccount(cell.config.data)
+                            var employeeId = form.employeeId
+                            var model = form['model']
+                            var productionProcessId = form.productionProcessId
+                            var batch = form.batch
+                            var productionProcessProcedureId = form.productionProcessProcedureId
+                            var procedure = form.procedure
+                            var department = form.department
+
+                            if (!employeeId) {
+                                new $.zui.Messager("请选择姓名！", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                return
+                            }
+                            if (!productionProcessId) {
+                                new $.zui.Messager("请选择批次！", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                return
+                            }
+                            if (!productionProcessId) {
+                                new $.zui.Messager("请选择工序！", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                return
+                            }
+
+                            var dataToPost = cell.config.data
+                            dataToPost.model = model;
+                            dataToPost.batch = batch;
+                            dataToPost.procedure = procedure;
+                            dataToPost.department = department;
+                            try {
+                                dataToPost.wages = dataToPost.wages.toFixed(1)
+                            } catch (e) {
+                            }
+                            var event = events['rq425']
+                            event.requiredParams = {}
+                            event.optionalParams = {
+                                isOutSource: 0, //是否外包
+                                employeeId: employeeId, // 员工关联
+                                productionProcessId: productionProcessId, //批次关联
+                                productionProcessProcedureId: productionProcessProcedureId, //工序关联 (用于生产进度汇总各工序的总数)
+                                data: dataToPost,
+                            }
+                            console.log(event);
+                            window.ajax(event)
+                                .then(function (result) {
+                                    console.log(result);
+                                    new $.zui.Messager("保存成功！", {
+                                        icon: 'info' // 定义消息图标
+                                    }).show()
+                                    $('.tab3Submit').click()
+                                    if (result.data.id) {
+                                        cell.config.data.id = result.data.id
+                                        datagrid.renderData()
+                                    }
+                                })
+                        })
+                    } else {
+                        $cell.html(cell.value);
+                    }
+                },
+                onRender: function () {
+
+                }
+            })
+        }
+        window.openBatchInputWorkOrder = function () { //调起创建弹窗
+            var formId = 'Work_OrderForm'
+            var modalId = 'Work_OrderModal'
+            $('#' + modalId).modal('show')
+
+            window.renderForm('#' + formId, data);
+            $('#' + formId + ' .flag').val('new')
+            $('#' + formId + ' .id').val('')
+
+            var data = {
+                "id": "",
+                "recorder": "",
+                "type": "",
+                "name": "",
+                "Serial_number": "",
+                "department": "",
+                "model": "",
+                "batch": "",
+                "procedure": "",
+                "number": "",
+                "price": "",
+                "wages": "",
+                "note": "",
+                "material_consumption": "",
+                "finishing_warehousing": "",
+                "is_outsourcing": "",
+                "employeeId": '',
+            };
+
+            Work_OrderDataSource.list.array = []
+            $('#Work_OrderModal .employeeN').val('')
+            $('#Work_OrderModal .employeeId').val('')
+            $('#Work_OrderModal .department').val('')
+
+            window.renderWork_OrderTable('#table_Work_Order', Work_OrderDataSource.list)
+
+        }
+        window.addOneBatchWorkOrder = function () {
+            var date = $('#Work_OrderModal .date').val()
+            var name = $('#Work_OrderModal .name').val()
+            var newPrd_model = $('#Work_OrderModal .newPrd_model ').val()
+            var newPrd_batch = $('#Work_OrderModal .newPrd_batch ').val()
+            var newPrd_procedure = $('#Work_OrderModal .newPrd_procedure').val()
+            var department = $('#Work_OrderModal .department').val()
+            var employeeId = $('#Work_OrderModal .employeeId').val()
+            var number = $('#Work_OrderModal .number').val()
+            var price = $('#Work_OrderModal .price').val()
+            var info = $('#Work_OrderModal .info').val()
+
+            var wages = '';
+            if (number && price) {
+                wages = window.accMul(parseFloat(price), parseFloat(number))
+            }
+
+            var data = {
+                "id": "",
+                "recorder": "",
+                "type": "",
+                "name": name,
+                "Serial_number": window.generateUUID(),
+                "department": department,
+                "model": newPrd_model,
+                "batch": $('#Work_OrderModal .newPrd_batch').find('option:selected').text(),
+                "procedure": $('#Work_OrderModal .newPrd_procedure').find('option:selected').text(),
+                "number": number,
+                "price": price,
+                "wages": wages,
+                "note": info,
+                "is_outsourcing": "",
+                "createdAt": date,
+                "employeeId": employeeId,
+                productionProcessId: newPrd_batch,
+                productionProcessProcedureId: newPrd_procedure
+
+            };
+
+            if (!date) {
+                new $.zui.Messager("请选择日期", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (!newPrd_model) {
+                new $.zui.Messager("请选择型号", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (!newPrd_batch || newPrd_batch == -1) {
+                new $.zui.Messager("请选择批次", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (!newPrd_procedure || newPrd_procedure == -1) {
+                new $.zui.Messager("请选择工序", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (!name) {
+                new $.zui.Messager("请选择姓名", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+
+            // 获取数据表格实例
+            // var myDataGrid = $('#table_Work_Order .table').data('zui.datagrid');
+            // myDataGrid.dataSource.array.push(data)
+            // myDataGrid.render()
+            // alert(1)
+            Work_OrderDataSource.list.array.push(data)
+            window.renderWork_OrderTable('#table_Work_Order', Work_OrderDataSource.list)
+        }
+
+
+        // 未支付订单表格数据
+        var Tab1_Table1_Data = {
+            cols: [],
+            array: [],
+        }
+
+        // 未支付产品表格数据
+        var Tab1_Table1_2_Data = {
+            cols: [],
+            array: [],
+        }
+
+
+        // 未支付订单双击弹窗数据
+        var Tab1_Table1_3_Data = {
+            cols: [],
+            array: [],
+        }
+
+        // 未支付产品双击弹窗数据
+        var Tab1_Table1_4_Data = {
+            cols: [],
+            array: [],
+        }
+
+        // 未支付产品弹窗表格里双击数据
+        var Tab1_Table1_5_Data = {
+            cols: [],
+            array: [],
+        }
+
+
+        // 产品生产进度数据
+
+        var Tab2_Table1Data = {
+            cols: [],
+            array: [],
+        }
+
+        var Tab2_TableCreateData = {
+            cols: [],
+            array: [],
+        }
+
+
+        // 获取工单列表1
+        var Tab3_tb1_workOrderList = {
+            cols: [
+                {name: 'createdAt', label: '日期', width: 150},
+                {name: 'name', label: '姓名', width: 150},
+                {name: 'department', label: '部门', width: 150},
+                {name: 'model', label: '型号', width: 160},
+                {name: 'procedure', label: '工序', width: 150},
+                {name: 'price', label: '工价', width: 150},
+                {name: 'number', label: '数量', width: 150},
+                {name: 'wages', label: '酬金', width: 150},
+                {name: 'batch', label: '批次', width: 160},
+                {name: 'note', label: '备注', width: 180},
+                {name: 'Serial_number', label: '编号', width: 180},
+                {name: 'is_outsourcing', label: '类型', width: 180},
+            ],
+            array: [],
+        }
+
+        var selectedOutSourceOrder = {
+            form: {},
+            dataSource: {
+                cols: [
+                    {name: 'model', label: '型号', width: 132},
+                    {name: 'batch', label: '批次', width: 132},
+                    {name: 'procedure', label: '工序', width: 132},
+                    {name: 'price', label: '单价', width: 132},
+                    {name: 'unit', label: '单位', width: 132},
+                    {name: 'number', label: '数量', width: 132},
+                    {name: 'wages', label: '金额', width: 132},
+                    {name: 'desc', label: '备注', width: 132},
+                ],
+                array: []
+
+            },
+            selectedRecord: {
+                form: {},
+                dataSource: {},
+            },
+        }
+
+
+        var Tab3_update_wlist_data = {}
+
+
+        // 产品生产制度全部表格数据汇总
+        var dataSourceTab2_tb1 = {};
+
+        // 产品进度双击工序数据
+        var production_process_proceduresData = {};
+
+
+        var newDataTab2_tb1 = {};
+
+        // 每一个表格对应的数据
+        var tab2_click_id_data = {}
+
+        // 双击工人贡献数据
+        var workerGX = {};
+
+
+        // 工单管理表单详情
+        var Tab3_tb1_worklist_data = {}
+
+        // 当前工单选中的数据
+        var worklist_auto_data = {}
+
+        var selectedOrderIndex1_4;
+
+        // 字母验证
+        var onlyNum = function (s) {
+            if (s.search(/[a-zA-Z]+/) == -1) {
+                return false;
+            } else {
+                return true;
+            }
+
+        }
+
+        //定义标签页
+        var outSourceData = {
+            cols: [
+                {name: 'model', label: '型号', width: 132},
+                {name: 'batch', label: '批次', width: 132},
+                {name: 'procedure', label: '工序', width: 132},
+                {name: 'price', label: '单价', width: 132},
+                {name: 'unit', label: '单位', width: 132},
+                {name: 'number', label: '数量', width: 132},
+                {name: 'sum', label: '金额', width: 132},
+                {name: 'desc', label: '备注', width: 132},
+            ],
+            array: []
+        }
+
+        var renderTab1NewProductFormTop = function (data) {
+            for (var x in data) {
+                $('#tab1MyLgModal4 .' + x).val(data[x])
+            }
+        }
+        var getTab1DataFromNewProductTop = function () {
+            var data = {}
+            $('#tab1MyLgModal4 input, #tab1MyLgModal4 select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val; // data.date = 1980-01-01
+            })
+            return data;
+        }
+        var renderTab1Edit = function (data) {
+            for (var x in data) {
+                $('#tab1MyLgModal5 .' + x).val(data[x])
+            }
+        }
+        var getTab1Edit = function () {
+            var data = {}
+            $('#tab1MyLgModal5 input, #tab1MyLgModal5 select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val; // data.date = 1980-01-01
+            })
+            return data;
+        }
+
+        var renderTab3WorkOrderForm = function (data) {
+
+            $('#myworkPage .batch').html('').append('<option value="' + data['batch'] + '">' + data['batch'] + '</option>')
+            $('#myworkPage .procedure').html('').append('<option value="' + data['procedure'] + '">' + data['procedure'] + '</option>')
+
+            for (var x in data) {
+                $('#myworkPage .' + x).val(data[x])
+            }
+        }
+
+        var getTab3WorkOrderForm = function () {
+            var data = {}
+            $('#myworkPage input, #myworkPage select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val;
+            })
+            return data;
+        }
+
+        var renderOutSourceTable = function (data) {
+
+            $('#outSoureTable').html('').append("<div class='table'></div>")
+            $('#outSoureTable .table').datagrid({
+                dataSource: data,
+                height: 200,
+                partialRendering: false,
+                // ... 其他初始化选项
+                onRender: function () {
+                    $('#outSoureTable .datagrid-cell').off('click');
+                    $('#outSoureTable .datagrid-cell').on('click', function () {
+                        var row = $(this).attr('data-row')
+                        if (row == 0) return
+                        var index = row - 1
+                        var item = selectedOutSourceOrder.dataSource.array[index];
+                        //console.log(item);
+
+
+                        $('#myOutSourceProductEditModal').modal('show');
+                        item.index = index;
+                        renderMyOutSourceProductEditModal(item);
+
+                        $('#myOutSourceProductEditModal .number,#myOutSourceProductEditModal .price').off('change')
+                        $('#myOutSourceProductEditModal .number,#myOutSourceProductEditModal .price').on('change', function () {
+                            var number = parseFloat($('#myOutSourceProductEditModal .number').val() ? $('#myOutSourceProductEditModal .number').val() : 0)
+                            var price = parseFloat($('#myOutSourceProductEditModal .price').val() ? $('#myOutSourceProductEditModal .price').val() : 0)
+                            //console.log(number, price);
+                            // var wages = number * price
+                            var wages = window.accMul(number, price)
+                            $('#myOutSourceProductEditModal .wages').val(wages)
+                        })
+
+                        window.saveOutsourceProduct = function () {
+                            var index = $('#myOutSourceProductEditModal .index').val()
+                            var dataForm = getMyOutSourceProductEditModal();
+                            // 外包工单产品信息双击填写验证
+                            if ($.trim(dataForm.unit) == '') {
+                                new $.zui.Messager("单位不能为空", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                return;
+                            }
+
+                            var numberVal = $.trim(dataForm.number);
+                            if (numberVal == '') {
+                                new $.zui.Messager("数量不能为空", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                return;
+                            }
+
+                            if (onlyNum(numberVal)) {
+
+                                window.setTips('#myOutSourceProductEditModal .number', "请输入数字")
+
+                                return;
+                            }
+
+                            var priceVal = $.trim(dataForm.price);
+                            if (priceVal == '') {
+                                new $.zui.Messager("单价不能为空", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+
+                                return;
+                            }
+
+                            if (onlyNum(priceVal)) {
+
+
+                                window.setTips('#myOutSourceProductEditModal .price', "请输入数字")
+
+                                return;
+                            }
+
+
+                            var wageVal = $.trim(dataForm.wages);
+                            if (wageVal == '') {
+                                new $.zui.Messager("金额不能为空", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                return;
+                            }
+
+                            if (onlyNum(wageVal)) {
+
+                                window.setTips('#myProductEditModal .wages', "请输入数字")
+
+                                return;
+                            }
+
+
+                            //console.log('外包工单产品信息~~~', dataForm);
+                            var data = selectedOutSourceOrder.dataSource.array[index]
+                            for (var x in dataForm) {
+                                try {
+                                    data[x] = dataForm[x]
+                                } catch (e) {
+                                }
+                            }
+                            renderOutSourceTable(selectedOutSourceOrder.dataSource)
+                            $('#myOutSourceProductEditModal').modal('hide');
+
+
+                        }
+                        window.deleteOutsourceProduct = function () {
+                            var index = $('#myOutSourceProductEditModal .index').val()
+                            var dataForm = getMyOutSourceProductEditModal();
+
+                            var id = selectedOutSourceOrder.dataSource.array[index].id
+                            if (id) { //删除
+                                var event = events['rq2113'];
+                                event.requiredParams = {model: "Work_Order"}
+                                event.optionalParams = {data: {id: id}}
+                                window.ajax(event)
+                                    .then(function (data) {
+                                        selectedOutSourceOrder.dataSource.array.splice(index, 1)
+                                    })
+                            } else {
+                                selectedOutSourceOrder.dataSource.array.splice(index, 1)
+                            }
+
+                            renderOutSourceTable(selectedOutSourceOrder.dataSource)
+                            $('#myOutSourceProductEditModal').modal('hide');
+
+
+                        }
+
+
+                        $('#xiaohaoIdOutSource').off('click')
+                        $('#xiaohaoIdOutSource').click(function () {
+
+                            var data = {}
+                            data.createdAt = new Date().format("yyyy-MM-dd ")
+                            data.model = item.model
+                            data.procedure = $('#myOutSourceProductEditModal .procedure').val();
+                            data.productId = item.productId;
+                            data.factoryId = item.factoryId;
+                            data.product_model = item.model;
+                            data.procedureNumber = $('#myOutSourceProductEditModal .number').val();
+                            data.number = '';
+                            data.consumeType = '外包工单消耗';
+                            data.workOrderId = selectedWorkOrder.sn;
+                            console.log(selectedWorkOrder);
+                            render_WPXH_WorkList(data)
+
+
+                            // 仅选择日期 日期插件
+                            $(" #updateThing .form-date").datetimepicker(
+                                {
+                                    language: "zh-CN",
+                                    weekStart: 1,
+                                    todayBtn: 1,
+                                    autoclose: 1,
+                                    todayHighlight: 1,
+                                    startView: 2,
+                                    minView: 2,
+                                    forceParse: 0,
+                                    format: "yyyy-mm-dd"
+                                });
+
+                            $('#thingjsManId_Tab3_WPXH').val(window.user.name)
+                            $('#updateThing').modal({show: true, moveable: true});
+                        })
+
+                        $('#rukuId_btOutSource').off('click')
+                        $('#rukuId_btOutSource').click(function () {
+
+                            var data = {}
+                            data.createdAt = new Date().format("yyyy-MM-dd ")
+                            data.document_handler = window.user.name
+                            data.productId = item.productId;
+                            data.product_model = item.model
+                            data.product_batch = item.batch
+                            //console.log('成品入库数据', data);
+                            // 仅选择日期 日期插件
+                            $(" #updateruku .form-date").datetimepicker(
+                                {
+                                    language: "zh-CN",
+                                    weekStart: 1,
+                                    todayBtn: 1,
+                                    autoclose: 1,
+                                    todayHighlight: 1,
+                                    startView: 2,
+                                    minView: 2,
+                                    forceParse: 0,
+                                    format: "yyyy-mm-dd"
+                                });
+                            render_ruku_workList(data)
+
+                            $('#updateruku').modal('show')
+                        })
+
+                    });
+                }
+
+            });
+
+            var sum = 0;
+            var items = selectedOutSourceOrder.dataSource.array;
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                sum = sum + (item.wages ? parseFloat(item.wages) : 0)
+            }
+            $('#myOutSourceModal3 .sum').val(sum)
+
+
+        }
+
+        var renderMyOutSourceProductEditModal = function (data) {
+            //console.log(data);
+            $('#myOutSourceProductEditModal input').val('')
+            for (var x in data) {
+                $('#myOutSourceProductEditModal .' + x).val(data[x])
+            }
+        }
+
+        var getMyOutSourceProductEditModal = function (data) {
+            var data = {}
+            $('#myOutSourceProductEditModal input, #myOutSourceProductEditModal select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val;
+            })
+            return data;
+        }
+
+        // 直接发请求那请求，不需要for循环
+        var renderTable1 = function (data) {
+            //console.log('详情', data);
+            $('#datagrid_unPay_Tab1tb1').html('').append('<div class="table"></div>')
+            $('#datagrid_unPay_Tab1tb1 .table').datagrid({
+                dataSource: {
+                    cols:
+
+                        [{name: 'createdAt', label: '下单日期', width: 200},
+                            {name: 'deleveredDate', label: '交付日期', width: 100},
+                            {name: 'orderNo', label: '订单编号', width: 100},
+                            {name: 'clientName', label: '客户名称', width: 100},
+                            {name: 'create_user_id', label: '制单员', width: 100},
+                            {name: 'priceSum', label: '订单总金额', width: 100},
+                            {name: 'accepted', label: '已收账款', width: 100},
+                            {name: 'discount', label: ' 优惠 ', width: 100},
+                            {name: 'account_receivale', label: '应收账款', width: 100},
+                            {name: 'remarks', label: '备注', width: 100},],
+                    array: data,
+                },
+                states: {
+                    pager: {page: 1, recPerPage: 20},
+                    sortBy: 'createdAt',
+                    order: 'desc',
+                },
+                partialRendering: false,
+                sortable: true,
+                cellFormator: function ($cell, cell, datagrid) {
+                    var col = cell.colIndex;
+                    var row = cell.rowIndex;
+                    var form = cell.config.data
+                    var value = cell.value;
+                    value = value ? value : ''
+
+                    if (row == 0 || col == 0) { //不绑定点击事件
+
+                    } else {
+                        $cell.off('click')
+                        $cell.on('click', function () {
+                            var index = datagrid.getDataIndex(form.id)
+                            tab1selectedOrder.order = data[index];
+                            tab1selectedOrder.dataSource.array = tab1selectedOrder.order.order_products
+
+                            $('#tab1MyLgModal4 .flag').val('edit')
+                            $('#tab1MyLgModal4 .index').val(index);
+                            renderTab1NewProductFormTop(tab1selectedOrder.order);
+                            $('#tab1MyLgModal4').modal('show')
+                            renderTab1Table10(tab1selectedOrder.dataSource);
+
+
+                        })
+                    }
+
+                    var config = cell.config
+                    var isCheckbox = config.checkbox;
+                    var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                    $cell[cell.config.html ? 'html' : 'text'](value);
+                    if (config.className) {
+                        $cell.addClass(config.className);
+                    }
+                },
+
+                onRender: function () {
+
+
+                }
+            })
+
+
+        }
+
+        // 未支付产品1-2
+        var renderTable1_2 = function (data) {
+
+
+            $('#datagrid_UnDeliveryProductsTab1tb2').html('').append('<div class="table"></div>')
+            $('#datagrid_UnDeliveryProductsTab1tb2 .table').datagrid({
+                dataSource: {
+                    cols: [
+                        {name: 'typeN', label: '型号'},
+                        {name: 'sumN', label: '数量'},
+                        {name: 'countN', label: '订单数'},
+                    ],
+                    array: data,
+                },
+                sortable: true,
+                partialRendering: true,
+                // checkable: true,
+                // checkByClickRow: false
+
+                cellFormator: function ($cell, cell, datagrid) {
+                    var col = cell.colIndex;
+                    var row = cell.rowIndex;
+                    var form = cell.config.data
+                    var value = cell.value;
+                    value = value ? value : ''
+
+                    if (row == 0 || col == 0) { //不绑定点击事件
+
+                    } else {
+                        $cell.off('click')
+                        $cell.on('click', function () {
+                            var index = datagrid.getDataByType(form.typeN)
+                            selectedOrderIndex1_4 = index;
+                            $('#model_code').val(Tab1_Table1_2_Data.array[index].typeN)
+                            $('#model_num').val(Tab1_Table1_2_Data.array[index].sumN)
+                            $('#model_accept_num').val(Tab1_Table1_2_Data.array[index].countN)
+
+                            // //console.log(Tab1_Table1_4_Data.array[index].order.order_products)
+
+                            selected1_2 = Tab1_Table1_2_Data.array[index]
+                            rows1_4 = Tab1_Table1_4_Data.array;
+                            var orders = []
+                            for (var i = 0; i < rows1_4.length; i++) {
+                                var row = rows1_4[i];
+                                if (selected1_2.type == row.type) {
+                                    orders.push(row.order)
+                                }
+                            }
+
+                            //console.log('我的最终数据', orders);
+                            renderTable1_4(orders)
+                            $('#myModal1').modal('show')
+
+                            // 双击未支付产品中订单详情
+                            setTimeout(function () {
+
+                            }, 1000)
+                        })
+                    }
+
+                    var config = cell.config
+                    var isCheckbox = config.checkbox;
+                    var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                    $cell[cell.config.html ? 'html' : 'text'](value);
+                    if (config.className) {
+                        $cell.addClass(config.className);
+                    }
+                },
+
+                onRender: function () {
+
+                }
+            });
+
+
+        }
+
+        var renderTab1Table10 = function (data) {
+
+            $('#datagrid_unPayPrd_Tab1tb1_3').html('').append('<div class="table"></div>')
+            $('#datagrid_unPayPrd_Tab1tb1_3 .table').datagrid({
+                dataSource: data,
+                height: 200,
+                partialRendering: false,
+                onRender: function (params) {
+                    $("#datagrid_unPayPrd_Tab1tb1_3 .datagrid-row").off('click');
+                    $("#datagrid_unPayPrd_Tab1tb1_3 .datagrid-row").click(function () {
+                        var row = $(this).attr("data-row");
+                        if (row == 0) return;
+                        var index = parseInt(row) - 1
+                        ind = index;
+                        var rowData = data.array[index];
+
+
+                        $('#tab1MyLgModal5').modal('show')
+                        renderTab1Edit(rowData)
+                        $('#tab1MyLgModal5 .index').val(index)
+                        $('#tab1MyLgModal5 .flag').val('edit')
+                    });
+                }
+            });
+        };
+
+        // 未交付订单弹窗
+        var renderTable1_3 = function (data) {
+            $('#datagrid_unPayPrd_Tab1tb1_3').html('').append('<div class="table"></div>')
+            $('#datagrid_unPayPrd_Tab1tb1_3 .table').datagrid({
+                dataSource: {
+                    cols: [
+                        {name: 'createdAt', label: '下单日期', width: 150},
+                        {name: 'updatedAt', label: '交付日期', width: 150},
+                        {name: 'model', label: '型号', width: 160},
+                        {name: 'number', label: '数量', width: 132},
+                        {name: 'piece', label: '批次', width: 132},
+                        {name: 'unitprice', label: '最终价格', width: 132},
+                    ],
+                    array: data,
+                },
+
+                partialRendering: false,
+                // checkable: true,
+                // checkByClickRow: false
+            });
+
+        }
+
+        // 未支付产品弹窗
+        var renderTable1_4 = function (data) {
+
+            $('#datagrid_prdTab1_4').html('').append('<div class="table"></div>')
+
+            $('#datagrid_prdTab1_4 .table').datagrid({
+                dataSource: {
+                    cols: [
+                        {name: 'orderNo', label: '订单编号', width: 160},
+                        {name: 'createdAt', label: '下单日期', width: 150},
+                        // {name: 'updatedAt', label: '交付日期', width: 150},
+                        {name: 'adress', label: '收货单元', width: 150},
+                    ],
+                    array: data,
+
+                },
+
+                partialRendering: false,
+                sortable: true,
+                // checkable: true,
+                // checkByClickRow: false
+                onRender: function () {
+                    $('#myModal1 .datagrid-row ').off('click');
+                    $('#myModal1 .datagrid-row ').click(function () {
+
+                        var indexUp = $(this).attr("data-row") - 1
+                        var form = data[indexUp];
+                        window.renderForm('#Tab1_unPay_dingdan_dbclick', form)
+                        console.log(form);
+                        // //console.log(Tab1_Table1_4_Data.array[indexUp].order.order_products);
+                        console.log(data[indexUp]);
+                        renderTable1_5(data[indexUp].order_products);
+
+                        $('#Tab1_unPay_dingdan_dbclick').modal('show')
+                        s
+                    })
+                }
+            });
+
+
+        }
+
+
+        // 未支付产品弹窗中双击弹窗
+
+        var renderTable1_5 = function (data) {
+
+            $('#Tab1_Table1_5').html('').append("<div class='table'></div>")
+            $('#Tab1_Table1_5 .table').datagrid({
+                dataSource: {
+                    cols: [
+                        {name: 'createdAt', label: '下单日期', width: 132},
+                        // {name: 'updatedAt', label: '交付日期', width: 132},
+                        {name: 'model', label: '型号', width: 132},
+                        {name: 'number', label: '数量', width: 134},
+                        {name: 'unitprice', label: '单价', width: 132},
+                        {name: 'price', label: '金额', width: 132},
+
+
+                    ],
+                    array: data,
+
+
+                },
+
+                partialRendering: false,
+                // checkable: true,
+                // checkByClickRow: false,
+            })
+
+        }
+        var selectedProcessTableId;
+        //产品进度
+        var renderTable2 = function (data) {
+
+            $('#datagridCheckableExample_process').html('')
+
+
+            for (var i = 0; i < data.length; i++) {
+
+                // exe的作用是防止i值变化出错
+                var exe = function (i) {
+                    dataSourceTab2_tb1 = {
+                        cols: [
+                            {name: 'product_model', label: '产品型号', width: 150},
+                            {name: 'product_batch', label: '产品批次', width: 150},
+                        ], array: []
+                    }
+                    var item = data[i];
+
+
+                    //对工序进行冒泡排序
+                    function bSort(arr) {
+                        var len = arr.length;
+                        for (var i = 0; i < len - 1; i++) {
+                            for (var j = 0; j < len - 1 - i; j++) {
+                                // 相邻元素两两对比，元素交换，大的元素交换到后面
+                                if (arr[j].orderNum > arr[j + 1].orderNum) {
+                                    var temp = arr[j];
+                                    arr[j] = arr[j + 1];
+                                    arr[j + 1] = temp;
+                                }
+                            }
+                        }
+                        return arr;
+                    }
+
+                    item.production_process_procedures = bSort(item.production_process_procedures);
+                    var procedures = item.production_process_procedures
+                    //console.log("item++++++++++++++", item);
+
+
+                    dataSourceTab2_tb1.array = [item];
+
+                    for (var j = 0; j < procedures.length; j++) {
+                        var procedure = procedures[j];
+                        dataSourceTab2_tb1.cols.push({name: 'id' + procedure.id, label: procedure.name, width: 150})
+                    }
+
+                    for (var k = 0; k < data.length; k++) {
+                        var item = data[k];
+                        for (var m = 0; m < procedures.length; m++) {
+                            var procedure = procedures[m];
+                            item['id' + procedure.id] = procedure.totalNumber;
+                        }
+                    }
+                    //console.log("final dataSource+++++ : ", dataSourceTab2_tb1);
+
+                    newDataTab2_tb1 = dataSourceTab2_tb1;
+                    //双击弹窗中数据
+
+                    var tableId = 'table' + i
+                    $('#datagridCheckableExample_process').append('<div class="container"><div class="table" id=' + tableId + '></div></div>')
+                    //console.log("newdata++++++:", data);
+                    $('#datagridCheckableExample_process #' + tableId).click(function () {
+                        tab2_click_id = $(this).attr('id').replace('table', '')
+                        tab2_click_id = parseInt(tab2_click_id);
+                        //console.log('点击数据~~~~~~', data[tab2_click_id]);
+                        tab2_click_id_data = data[tab2_click_id];
+                        selectedProcessTableId = tableId
+
+                        window.selectedProcessId = data[tab2_click_id].id;
+                        production_process_proceduresData = data[tab2_click_id].production_process_procedures;
+
+                        $('#prd_model_Tab2_tb2_click').val(data[tab2_click_id].product_model)
+                        $('#prd_batch_Tab2_tb2_click').val(data[tab2_click_id].product_batch)
+                        $('#prd_id_Tab2_tb2_click').val(data[tab2_click_id].id)
+                        $('#prd_productId_Tab2_tb2_click').val(data[tab2_click_id].productId)
+
+                        renderTable2_1(production_process_proceduresData)
+                        handleOrder(production_process_proceduresData)
+                        //
+                        //
+                        $('#myModal2').modal('show')
+
+
+                    })
+
+
+                    $('#datagridCheckableExample_process .container #' + tableId)
+                    $('#datagridCheckableExample_process .container #' + tableId).datagrid({
+                        partialRendering: false,
+                        dataSource: newDataTab2_tb1,
+                        // checkable: true,
+                        // checkByClickRow: false,
+                        height: 76,
+                        onRender: function () {
+
+                        }
+                    });
+
+
+                }
+                exe(i);
+
+            }
+
+
+            setTimeout(function () {
+                $('#prdWxPlus').click(function () {
+                    var num = parseInt(Math.random() * 10000)
+                    $('#myLgModal #input-group-WXplus').append('<div style="margin-top: 10px" class="input-control has-label-left has-icon-right">\n' +
+                        '  <input id="inputEmailExample"+num type="email" class="procedureInputTab2_1 form-control" placeholder="工序名称">\n' +
+                        '  <label for="inputEmailExample"+num class="input-control-label-left">工序:</label>\n' +
+                        '  <label for="inputEmailExample"+num class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '</div>')
+
+                    alert('成功添加工序')
+                })
+            }, 600)
+        }
+
+        var handleOrder = function (procedures) {
+            $('#sortableList').sortable('destroy');
+
+            var arr = JSON.parse(JSON.stringify(procedures))
+
+            function bSort(arr) {
+                var len = arr.length;
+                for (var i = 0; i < len - 1; i++) {
+                    for (var j = 0; j < len - 1 - i; j++) {
+                        // 相邻元素两两对比，元素交换，大的元素交换到后面
+                        if (arr[j].orderNum > arr[j + 1].orderNum) {
+                            var temp = arr[j];
+                            arr[j] = arr[j + 1];
+                            arr[j + 1] = temp;
+                        }
+                    }
+                }
+                return arr;
+            }
+
+            arr = bSort(arr);
+
+            $('#sortableList').html('')
+            $(arr).each(function () {
+                //console.log(this)
+                $('#sortableList').append('<div id=' + this.id + ' class="list-group-item" style="width: 100px;display: inline-block">' + this.name + '</div>')
+            })
+
+            $('#sortableList').sortable({
+                finish: function () {
+                    var items = $('#sortableList').data('zui.sortable').getItems()
+                    var batchUpdate = []
+                    $(items).each(function () {
+                        var p = {
+                            id: this.item.attr('id'),
+                            orderNum: this.item.attr('data-order'),
+                        }
+                        var event = events['rq2112'];
+                        event.requiredParams = {model: "Production_Process_Procedure"}
+                        event.optionalParams = {data: p}
+                        window.ajax(event)
+                            .then(function (data) {
+
+                            })
+                    })
+                    setTimeout(function () {
+                        // window.getProcessData()
+                        $('.tab2Submit').click(); //点击搜索
+                        new $.zui.Messager("修改排序成功！", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        $('#myModal2').modal('hide')
+
+                    }, 1000)
+                    //console.log(batchUpdate);
+                }
+            });
+        }
+
+        var Production_Process_ProcedureDataSource = {
+            "form": {
+                "name": "",
+                "price": ""
+            },
+            "list": {
+                "cols": [
+                    {
+                        "name": "name",
+                        "label": "工序名称",
+                        "width": 100
+                    },
+                    {
+                        "name": "price",
+                        "label": "工序单价",
+                        "width": 100
+                    },
+                    {
+                        "name": "createdAt",
+                        "label": "创建日期",
+                        "width": 150
+                    }
+                ],
+                "array": []
+            }
+        }
+        //创建
+        window.createProduction_Process_ProcedureForm = function () { //调起创建弹窗
+            var formId = 'Production_Process_ProcedureForm'
+            var modalId = 'Production_Process_ProcedureModal'
+            $('#' + modalId).modal('show')
+            var data = {"id": "", "name": "", "price": ""};
+            window.renderForm('#' + formId, data);
+            $('#' + formId + ' .flag').val('new')
+            $('#' + formId + ' .id').val('')
+        }
+
+        //保存
+        window.saveProduction_Process_ProcedureForm = function () { //创建或保存
+            var formId = 'Production_Process_ProcedureForm'
+            var flag = $('#' + formId + ' .flag').val()
+            var formData = window.getFormData('#' + formId)
+            formData.productionProcessId = window.selectedProcessId
+            if (flag == 'new') { //创建状态
+                // Production_Process_ProcedureDataSource.list.array.push(formData)
+                var event = events['rq2111']
+                event.requiredParams = {model: 'Production_Process_Procedure'}
+                event.optionalParams = {data: formData}
+                window.ajax(event)
+                    .then(function (data) {
+                        setTimeout(function () {
+                            new $.zui.Messager("新增成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            var datagrid = $('#datagrid_clickProcess_Tap2_tb2_1 .table').data('zui.datagrid');
+                            var dataSource = datagrid.dataSource
+                            formData = data.data
+                            dataSource.array.push(formData)
+                            renderTable2_1(dataSource.array)
+                            handleOrder(dataSource.array)
+                        }, 1000)
+                    })
+            } else {
+                var dataToPost = window.getFormData('#' + formId)
+                dataToPost.productionProcessId = window.selectedProcessId
+                var event = events['rq2112']
+                event.requiredParams = {model: 'Production_Process_Procedure'}
+                event.optionalParams = {data: dataToPost}
+                window.ajax(event)
+                    .then(function (data) {
+                        setTimeout(function () {
+                            new $.zui.Messager("保存成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            var datagrid = $('#datagrid_clickProcess_Tap2_tb2_1 .table').data('zui.datagrid');
+                            var dataSource = datagrid.dataSource
+                            var dataToEdit = dataSource.array[dataToPost.index]
+                            dataToEdit.price = dataToPost.price;
+                            renderTable2_1(dataSource.array)
+                            handleOrder(dataSource.array)
+                        }, 1000)
+                    })
+            }
+            var modalId = 'Production_Process_ProcedureModal'
+            $('#' + modalId).modal('hide')
+        }
+
+        //删除
+        window.deleteProduction_Process_ProcedureForm = function () { //删除
+            var formId = 'Production_Process_ProcedureForm'
+            var dataToPost = window.getFormData('#' + formId)
+
+            if (dataToPost.index) { //调用接口从服务器删除
+                var modelName = 'Production_Process_Procedure';
+                var id = dataToPost.id;
+                if (!id) {
+                    return
+                } else {
+                    var event = events['rq2115']
+                    event.requiredParams = {model: modelName}
+                    event.optionalParams = {items: [{id: id}]}
+                    window.ajax(event)
+                        .then(function () {
+                            setTimeout(function () {
+                                new $.zui.Messager("删除成功", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+
+                                var datagrid = $('#datagrid_clickProcess_Tap2_tb2_1 .table').data('zui.datagrid');
+                                var dataSource = datagrid.dataSource
+                                dataSource.array.splice(dataToPost.index, 1);
+                                renderTable2_1(dataSource.array)
+                                handleOrder(dataSource.array)
+                                $('#Production_Process_ProcedureForm').modal('hide');
+
+
+                            }, 1000)
+                        })
+                }
+
+            }
+
+        }
+
+
+        var renderTable2_1 = function (data) {
+
+            //console.log('这是render2_1的数据', data);
+
+            $('#datagrid_clickProcess_Tap2_tb2_1').html('').append('<div class="table"></div>')
+            $(' #datagrid_clickProcess_Tap2_tb2_1 .table').datagrid({
+
+                dataSource: {
+                    cols: [
+                        {name: 'name', label: '工序', width: 132},
+                        {name: 'totalNumber', label: '进度', width: 134},
+                        {name: 'price', label: '工价', width: 134},
+                        {name: 'op', label: '操作', width: 134},
+
+                    ],
+                    array: data,
+                },
+                height: 200,
+                partialRendering: false,
+                cellFormator: function ($cell, cell, datagrid) {
+                    var col = cell.colIndex;
+                    var row = cell.rowIndex;
+                    var form = cell.config.data
+                    var value = cell.value;
+                    // value = ((value === '') ? '' : '')
+
+                    if (row != 0 && (col == 4)) {
+                        $cell.html('<button class="btn btn-sm btn-info view">查看</button><button class="btn btn-sm btn-warning edit">编辑</button>');
+                        var $buttonView = $cell.find('.view')
+                        $buttonView.on('click', function () {
+                            var index = datagrid.getDataIndex(form.id)
+                            workerGX = data[index].workOrders
+                            renderTable2_2(workerGX)
+                            $('#workManNumModal').modal('show')
+                        })
+                        var $buttonEdit = $cell.find('.edit')
+                        $buttonEdit.on('click', function () {
+                            var index = datagrid.getDataIndex(form.id)
+                            var formId = 'Production_Process_ProcedureForm'
+                            var modalId = 'Production_Process_ProcedureModal'
+                            $('#' + modalId).modal('show', 'fit');
+                            var formData = form;
+                            window.renderForm('#' + formId, formData)
+                            $('#' + formId + ' .flag').val('edit')
+                            $('#' + formId + ' .index').val(index)
+                        })
+
+
+                    } else {
+                        // $cell.off('click')
+                        // $cell.on('click', function () {
+                        //     var index = datagrid.getDataIndex(form.id)
+                        //     workerGX = data[index].workOrders
+                        //     renderTable2_2(workerGX)
+                        //     $('#workManNumModal').modal('show')
+                        // })
+
+                        var config = cell.config
+                        var isCheckbox = config.checkbox;
+                        var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                        $cell[cell.config.html ? 'html' : 'text'](value);
+                        if (config.className) {
+                            $cell.addClass(config.className);
+                        }
+                    }
+
+
+                },
+
+                // checkable: true,
+                // checkByClickRow: false,
+
+            })
+            // setTimeout(function () {
+            //     //点击事件取消 防止冲突
+            //     $('#myModal2 .datagrid-row ').off('click');
+            //     $('#myModal2 .datagrid-row ').click(function () {
+            //         var index = $(this).attr("data-row") - 1
+            //
+            //         workerGX = data[index].workOrders
+            //         renderTable2_2(workerGX)
+            //         $('#workManNumModal').modal('show')
+            //
+            //     })
+            // }, 800)
+
+        }
+
+        // // 双击显示工人
+        var renderTable2_2 = function (data) {
+
+            console.log('renderTable2_2',data);
+            $('#clickShowPeopleContribution').html('').append('<div class="table" ></div>')
+            $(' #clickShowPeopleContribution .table').datagrid({
+                dataSource: {
+                    cols: [
+                        {name: 'name', label: '工人组成', width: 100},
+                        {name: 'createdAt', label: '日期', width: 100},
+                        {name: 'number', label: '数量', width: 100},
+                        {name: 'price', label: '工价', width: 100},
+                        {name: 'wages', label: '薪金', width: 100},
+                        {name: 'note', label: '备注', width: 100},
+                    ],
+                    array: data
+                },
+                partialRendering: false,
+                sortable: true
+            });
+
+
+        }
+
+        // 双击工单input表单
+        var renderWorkList = function (data) {
+            for (var x in data) {
+                $('#work_order_dbclick .' + x).val(data[x])
+            }
+        }
+
+
+        // 修改工单input表单
+        var render_update_WorkList = function (data) {
+            for (var x in data) {
+                try {
+                    $('#updateWpage .' + x).val(data[x])
+                } catch (e) {
+                    //console.log(e);
+                }
+            }
+        }
+
+
+        // 双击外包工单input表单
+
+        var render_outsourse_WorkList = function (data) {
+            for (var x in data) {
+                $('#myOutSourceModal3 .' + x).val(data[x])
+            }
+        }
+
+        var get_outsourse_WorkList = function () {
+            var data = {}
+            $('#myOutSourceModal3 input, #myOutSourceModal3 select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val;
+            })
+            return data;
+        }
+
+
+        // 物品消耗input表单
+        var render_WPXH_WorkList = function (data) {
+            //console.log(data);
+            //根据productId生成options
+            for (var x in data) {
+                $('#updateThing .' + x).val(data[x])
+            }
+            var event = events['rq2114']
+            event.requiredParams = {
+                model: "Product", id: data.productId,
+                include: [{
+                    model: "Material",
+                }]
+            }
+            event.optionalParams = {}
+            window.ajax(event)
+                .then(function (result) {
+                    var materials = result.data[0].materials
+                    var string = ''
+                    string = string + '<option value="-1">请选择物料</option>'
+                    for (var i = 0; i < materials.length; i++) {
+                        var material = materials[i];
+                        string = string + '<option  index="' + i + '" value="' + material.id + '">' + material.name + '</option>'
+                    }
+                    $('#updateThing .materialId').html('').html(string);
+                    $('#updateThing .materialId').off('change')
+                    $('#updateThing .materialId').on('change', function () {
+                        var index = $(this).find("option:selected").attr('index')
+                        var material = materials[index]
+                        var name = material.name
+                        $('#updateThing .name').val(name);
+                    })
+
+
+                })
+
+
+        }
+
+        var render_ruku_workList = function (data) {
+            for (var x in data) {
+                $('#updateruku .' + x).val(data[x])
+            }
+        }
+
+
+        var getWorkListData = function () {
+            var data = {}
+            $('#work_order_dbclick input, #work_order_dbclick select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val;
+            })
+            return data;
+        }
+
+        var selectedWorkOrder
+        var renderTable3 = function (data) {
+            //console.log('renderT3获取的数据~~~~', data);
+
+            var myDataGridOld = $('#datagrid_getWorkOrderList_Tab3_tb1 .table').data('zui.datagrid');
+            var pager = null;
+            if (myDataGridOld) {
+                pager = myDataGridOld.pager;
+                console.log('原分页', pager);
+            }
+            if (!pager) {
+                pager = {page: 1, recPerPage: 10}
+            }
+            console.log('原分页器', pager);
+            setTimeout(function () {
+                var myDataGrid = $('#datagrid_getWorkOrderList_Tab3_tb1 .table').data('zui.datagrid');
+                if (pager) {
+                    myDataGrid.setPager(pager.page).render();
+                }
+            }, 2000)
+
+            $(' #datagrid_getWorkOrderList_Tab3_tb1').html('').append('<div class="table"><div class="input-control search-box search-box-circle has-icon-left has-icon-right"id="depInfoList-example"style="margin-bottom: 10px; max-width: 300px"><input id="depInfoList-exampleInput"type="search"class="form-control search-input"placeholder="关键字过滤(区分大小写)"><label for="depInfoList-exampleInput"class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a href="#"class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a></div><div class="datagrid-container"></div><div class="pager"></div></div>')
+            $(' #datagrid_getWorkOrderList_Tab3_tb1 .table').datagrid({
+                dataSource: data,
+                sortable: true,
+                loading: true,
+                // checkable: true,
+                // checkByClickRow: false,
+                partialRendering: true,//取消局部渲染
+                states: {
+                    pager: pager,
+                    sortBy: 'createdAt',
+                    order: 'desc',
+                },
+                height: 'page',
+                cellFormator: function ($cell, cell, datagrid) {
+
+                    var col = cell.colIndex;
+                    var row = cell.rowIndex;
+                    var form = cell.config.data
+                    var value = cell.value;
+                    value = value ? value : ''
+
+                    if (row == 0 || col == 0) { //不绑定点击事件
+
+                    } else {
+                        $cell.off('click')
+                        $cell.on('click', function () {
+                            var index = datagrid.getDataIndex(form.id)
+                            var row = index
+                            // 工单详情自动填写
+
+                            if (data.array[row].is_outsourcing == 0) {
+                                // 非外包工单
+                                worklist_auto_data = data.array[row];
+                                $('#myworkPage').modal('show')
+
+                                $('#myworkPage input,#myworkPage select').val('');
+                                $('#myworkPage .editStatus').css('display', 'block')
+                                $('#myworkPage .index').val(row)
+                                $('#myworkPage .name').attr("employeeId", form.employeeId)
+                                $('#myworkPage .flag').val('edit')
+
+
+                                renderTab3WorkOrderForm(worklist_auto_data)
+                            } else {
+                                var snValue = data.array[row].work_order_outSource_info.sn;
+                                selectedOutSourceOrder.dataSource.array = [];
+                                var orders = Tab3_tb1_workOrderList.array;
+                                // 双击后先清空数据
+                                var list = []
+                                for (var i = 0; i < orders.length; i++) {
+                                    var item = orders[i];
+                                    if (item.is_outsourcing == 1 && item.work_order_outSource_info.sn == snValue) {
+                                        list.push(item)
+                                    }
+                                }
+                                //console.log('同一个外包工单', list);
+                                //console.log('其中一个外包工单', list[0].work_order_outSource_info);
+                                render_outsourse_WorkList(list[0].work_order_outSource_info);
+                                selectedWorkOrder = list[0].work_order_outSource_info;
+
+                                selectedOutSourceOrder.dataSource.array = list;
+                                renderOutSourceTable(selectedOutSourceOrder.dataSource)
+                                // 经手人
+                                $('#outSourceName').val(window.user.name)
+                                $('#myOutSourceModal3').modal('show')
+
+                                $('#myOutSourceModal3 .outsourceModel').val('')
+                                $('#myOutSourceModal3 .outsourceBatch').html('')
+                                $('#myOutSourceModal3 .outsourceProcedure').html('')
+
+                                var sum = 0;
+                                var items = list;
+                                for (var i = 0; i < items.length; i++) {
+                                    var item = items[i];
+                                    sum = sum + (item.wages ? parseFloat(item.wages).toFixed(2) : 0)
+                                }
+
+                                $('#myOutSourceModal3 .sum').val(sum)
+
+
+                            }
+                            window.setWorkOrderNumberDisable()
+
+                            // 物品消耗弹窗
+                            //console.log('物品消耗的数据~~~~', worklist_auto_data);
+                            $('#xiaohaoId').off('click')
+                            $('#xiaohaoId').click(function () {
+
+                                var data = JSON.parse(JSON.stringify(worklist_auto_data))
+                                console.log(data);
+                                data.createdAt = new Date().format("yyyy-MM-dd ")
+                                data.product_model = data.model;
+                                data.procedureNumber = data.number;
+                                data.number = '';
+                                // data.note = data.name;
+                                // data.note = '工序：' + data.procedure + ';' + '工序数量：' + data.procedureNumber + ';' + '员工：' + data.name + ';'
+                                data.consumeType = '内部工单消耗'
+                                data.workOrderId = data.Serial_number
+                                // form.note = '型号：' + form.product_model + ';' + '工序：' + form.procedure + ';' + '工序数量：' + form.procedureNumber + ';' + '员工：' + form.name + ';'
+
+                                render_WPXH_WorkList(data)
+
+
+                                // 仅选择日期 日期插件
+                                $(" #updateThing .form-date").datetimepicker(
+                                    {
+                                        language: "zh-CN",
+                                        weekStart: 1,
+                                        todayBtn: 1,
+                                        autoclose: 1,
+                                        todayHighlight: 1,
+                                        startView: 2,
+                                        minView: 2,
+                                        forceParse: 0,
+                                        format: "yyyy-mm-dd"
+                                    });
+
+                                $('#thingjsManId_Tab3_WPXH').val(window.user.name)
+                                $('#updateThing').modal({show: true, moveable: true});
+                            })
+
+                            $('#rukuId_bt').off('click')
+                            $('#rukuId_bt').click(function () {
+
+                                var data = JSON.parse(JSON.stringify(worklist_auto_data))
+                                data.createdAt = new Date().format("yyyy-MM-dd ")
+                                data.document_handler = window.user.name
+                                data.product_model = data.model
+                                data.product_batch = data.batch
+                                //console.log('成品入库数据', data);
+                                // 仅选择日期 日期插件
+                                $(" #updateruku .form-date").datetimepicker(
+                                    {
+                                        language: "zh-CN",
+                                        weekStart: 1,
+                                        todayBtn: 1,
+                                        autoclose: 1,
+                                        todayHighlight: 1,
+                                        startView: 2,
+                                        minView: 2,
+                                        forceParse: 0,
+                                        format: "yyyy-mm-dd"
+                                    });
+                                render_ruku_workList(data)
+
+                                $('#updateruku').modal('show')
+                            })
+
+                        })
+                    }
+
+
+                    if ((cell.config.name == "is_outsourcing") && cell.rowIndex > 0) {
+                        if (cell.value == 0) {
+                            $cell.html("内部");
+                        } else {
+                            $cell.html("外包");
+                        }
+                    } else {
+                        var config = cell.config
+                        var isCheckbox = config.checkbox;
+                        var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                        $cell[cell.config.html ? 'html' : 'text'](cell.value);
+                        if (config.className) {
+                            $cell.addClass(config.className);
+                        }
+                    }
+                },
+
+                onRender: function () {
+                    //点击事件取消 防止冲突
+                    $('#tabsExample  #datagrid_getWorkOrderList_Tab3_tb1 .datagrid-row  ').off('click');
+                    $('#tabsExample  #datagrid_getWorkOrderList_Tab3_tb1 .datagrid-row ').click(function () {
+                        // 工单
+
+                    })
+                }
+            });
+
+
+            // 工单修改按钮
+            $('#updateId').click(function () {
+                var updataData = getWorkListData();
+                //console.log('修改工单的数据~~~~~~~~~~~', updataData);
+
+
+                // 修改工单自动填写
+
+                render_update_WorkList(updataData)
+
+                $('#updateWpage').modal('show')
+
+            })
+            $('#update_work_list').click(function () {
+                Tab3_update_wlist_data = getWorkListData();
+                //console.log('修改工单的数据~~~~~~~~~~~', Tab3_update_wlist_data);
+            })
+
+
+        }
+
+        // var renderProcessPagerUi = function (data) {
+        //     var pagerHtml = ''
+        //     var perPage = 20;
+        //     var pageAmount = data.length / 20;
+        //     // $('#processTables').append('<ul class="pager"></ul>')
+        //     // $('#processTables .pager').append(' <li class="previous"><a >«上一页</a></li>')
+        //     for (var i = 1; i < pageAmount + 1; i++) {
+        //         $('#processTables .pager').append('<li class="page" id="' + i + '"><a >' + i + '</a></li>')
+        //     }
+        //     // $('#processTables .pager').append('<li class="next"><a >下一页»</a></li>')
+        //     window.currentProcessPage = 1;
+        //     $('#processTables .pager li').off('click')
+        //     $('#processTables .pager li').click(function () {
+        //         var $this = $(this)
+        //         var className = $this.attr('class');
+        //         var pageToQuery = 0;
+        //         // if (className == 'previous') {
+        //         //     if (window.currentProcessPage == 1) return;
+        //         //     window.currentProcessPage--;
+        //         // } else if (className == 'next') {
+        //         //     if (window.currentProcessPage == pageAmount) return;
+        //         //     window.currentProcessPage++;
+        //         // } else {
+        //         //
+        //         // }
+        //         window.currentProcessPage = $this.attr('id');
+        //         pageToQuery = window.currentProcessPage;
+        //         console.log(pageToQuery)
+        //         $('#processTables .pager li').removeClass('active');
+        //         $('#processTables .pager li[id=' + pageToQuery + ']').addClass('active')
+        //
+        //     });
+        // }
+
+        window.setWorkOrderNumberDisable = function () {
+            $('#newPrdNum').attr('readonly', 'readonly')
+            $('#myOutSourceModal3 .sn').attr('readonly', 'readonly')
+            $('#newPrdNumGen,.newPrdNumGen').addClass('hideGen')
+        }
+        window.setWorkOrderNumberEnable = function () {
+            $('#newPrdNum').removeAttr('readonly')
+            $('#myOutSourceModal3 .sn').removeAttr('readonly')
+            $('#newPrdNumGen,.newPrdNumGen').removeClass('hideGen')
+        }
+
+        var tabs = [
+
+            {
+                title: '未交付订单',
+                // icon: 'icon-star',
+                type: 'ajax',
+                forbidClose: true,
+                url: '/template/prdPageTap1.html',
+
+                onOpen: function () {
+
+
+                    //rq411 获取未交付订单列表
+                    events['rq411'].requiredParams = {factoryId: 1}
+                    events['rq411'].optionalParams = {}
+                    window.ajax(events['rq411'])
+                        .then(function (data) {
+                            // 将数据处理成表格的格式 并 实例化表格
+                            //console.log('我的数据411', data);
+
+                            Tab1_Table1_Data.array = data.data.rows;
+                            Tab1_Table1_3_Data.array = data.data.rows;
+
+                            renderTable1(Tab1_Table1_Data.array);//注意传的参数
+
+                        })
+
+                    //rq412 获取未交付产品  数据未完成
+                    events['rq412'].requiredParams = {factoryId: 1}
+                    events['rq412'].optionalParams = {}
+                    window.ajax(events['rq412'])
+                        .then(function (data) {
+                            // 将数据处理成表格的格式 并 实例化表格
+                            //console.log('未支付产品数据rq412!!!!!', data);
+                            Tab1_Table1_2_Data.array = data.data.unDeliveredProducts;
+                            Tab1_Table1_4_Data.array = data.data.rows;
+
+
+                            var list = Tab1_Table1_2_Data.array;
+                            for (var i = 0; i < list.length; i++) {
+                                var item = list[i];
+                                // 赋值KEY 把值赋给一个新的key
+                                item.typeN = item.type;
+                                item.sumN = item['sum(op.number)'];//注意字符串格式
+                                item.countN = item['count(o.id)'];
+
+
+                            }
+
+
+                            renderTable1_2(Tab1_Table1_2_Data.array)
+                        })
+
+                    //
+                    // //rq414 获取未交付订单列表
+                    // events['rq411'].requiredParams = {factoryId: 1}
+                    // events['rq411'].optionalParams = {}
+                    // window.ajax(events['rq411'])
+                    //     .then(function (data) {
+                    //         // 将数据处理成表格的格式 并 实例化表格
+                    //         //console.log('我的数据rq414', data);
+                    //         var list = data.data.rows;
+                    //         for (var j = 0; j < list.length; j++) {
+                    //             var item = list[j];
+                    //             // 赋值KEY 把值赋给一个新的key
+                    //             item.orderNname2 = item.orderNo;
+                    //             item.createdAtname2 = item.client.createdAt
+                    //             item.updatedAtname2 = item.client.updatedAt;
+                    //             item.contactname2 = item.client.contact;
+                    //             try {
+                    //                 item.addressN = item.client.address;
+                    //             } catch (e) {
+                    //             }
+                    //
+                    //
+                    //         }
+                    //
+                    //         renderTab1tb3(data.data.rows);//注意传的参数
+                    //
+                    //     })
+
+
+                    window.batchSaveWorkOrder = function () {
+                        var myDataGrid = $('#table_Work_Order .table').data('zui.datagrid');
+                        var saveFun = {
+                            orders: '',
+                            cursor: 0,
+                            save: function (dataToPost) {
+                                var that = this;
+                                var event = events['rq425']
+                                event.requiredParams = {}
+                                event.optionalParams = {
+                                    isOutSource: 0, //是否外包
+                                    employeeId: dataToPost.employeeId, // 员工关联
+                                    productionProcessId: dataToPost.productionProcessId, //批次关联
+                                    productionProcessProcedureId: dataToPost.productionProcessProcedureId, //工序关联 (用于生产进度汇总各工序的总数)
+                                    data: dataToPost,
+                                }
+                                console.log(event);
+                                window.ajax(event)
+                                    .then(function (result) {
+                                        if (result.data.id) {
+                                            dataToPost.id = result.data.id
+                                        }
+                                        myDataGrid.renderData()
+                                        if (that.cursor + 1 < that.orders.length) {
+                                            $('#batchSaveWorkOrder').attr('disable', 'disable')
+                                            $('#batchSaveWorkOrder').text('提交中...')
+                                            that.cursor++;
+                                            console.log("继续保存");
+                                            setTimeout(function () {
+                                                that.save(that.orders[that.cursor])
+                                            }, 2500)
+                                        } else {
+                                            $('#batchSaveWorkOrder').removeAttr('disable')
+                                            $('#batchSaveWorkOrder').text('批量保存')
+                                            new $.zui.Messager("保存成功！", {
+                                                icon: 'info' // 定义消息图标
+                                            }).show()
+                                            $('.tab3Submit').click()
+                                            myDataGrid.renderData()
+                                        }
+                                    })
+                            }
+                        }
+
+                        var list = myDataGrid.dataSource.array;
+                        saveFun.orders = list;
+                        saveFun.save(list[0]);
+                    }
+
+                    $("#rq411").on("click", function (params) {
+                        var searhSaleDId = $('#searhSaleDId').val()
+                        events['rq411'].optionalParams.modelId = searhSaleDId;//events里面的东西
+
+                        var searhPayDId = $('#searhPayDId').val()
+                        events['rq411'].optionalParams.modelId = searhPayDId;//events里面的东西
+
+                        var saledateId = $('#saledateId').val()
+                        events['rq411'].optionalParams.modelId = saledateId;//events里面的东西
+
+                        var searhPayNumId = $('#searhPayNumId').val()
+                        events['rq411'].optionalParams.modelId = searhPayNumId;//events里面的东西
+
+                        var searhPayNumPersonId = $('#searhPayNumPersonId').val()
+                        events['rq411'].optionalParams.modelId = searhPayNumPersonId;//events里面的东西
+
+                        var payMANId = $('#payMANId').val()
+                        events['rq411'].optionalParams.modelId = payMANId;//events里面的东西
+
+                        var prdCodeId = $('#prdCodeId').val()
+                        events['rq411'].optionalParams.modelId = prdCodeId;//events里面的东西
+
+                        //console.log(events['rq411'].optionalParams);
+
+                        window.ajax(events['rq411'])
+                            .then(function (data) {
+                                Tab1_Table1_Data.array = data.data.rows;
+                                renderTable1(Tab1_Table1_Data.array);
+                                renderTable1_2(data)
+                            })
+
+
+                    })
+
+                    //绑定日期组件
+                    $('.tab1 .datetimepicker').each(function () {
+                        $(this).datetimepicker({ //这里是bootstrap里面的模式，
+                            language: "zh-CN",
+                            weekStart: 1,
+                            todayBtn: 1,
+                            autoclose: 1,
+                            todayHighlight: 1,
+                            startView: 2,
+                            minView: 2,
+                            forceParse: 0,
+                            format: "yyyy-mm-dd"
+                        })
+                            .on('hide', function (ev) {
+                                $('.datetimepicker').blur();
+                            });
+
+                    });
+
+                    //绑定搜索按钮
+                    $('.tab1Submit').off('click');
+                    $('.tab1Submit').on('click', function () {
+
+                        var event = events['rq411']
+                        event.requiredParams = {}
+                        event.optionalParams = {}
+                        event.dateParams = {createdAt: {}, deleveredDate: {}}
+
+
+                        var tab1CreatedAt = $('.tab1CreatedAt').val()
+                        if (tab1CreatedAt) {
+                            event.dateParams.createdAt.start = tab1CreatedAt
+                            // event.dateParams.createdAt.end = new Date(new Date(tab1CreatedAt).getTime() + 86400000).format("yyyy-MM-dd")
+                        }
+                        var tab1CreatedAtEnd = $('.tab1CreatedAtEnd').val()
+                        if (tab1CreatedAtEnd) {
+                            event.dateParams.createdAt.end = new Date(new Date(tab1CreatedAtEnd).getTime() + 86400000).format("yyyy-MM-dd")
+                            // event.dateParams.createdAt.end = new Date(new Date(tab1DeliveryDate).getTime() + 86400000).format("yyyy-MM-dd")
+                        }
+                        var tab1DeliveryDateStart = $('.tab1DeliveryDateStart').val()
+                        var tab1DeliveryDateEnd = $('.tab1DeliveryDateEnd').val()
+                        if (tab1DeliveryDateStart) {
+                            event.dateParams.deleveredDate.start = tab1DeliveryDateStart
+                        }
+                        if (tab1DeliveryDateEnd) {
+                            event.dateParams.deleveredDate.end = new Date(new Date(tab1DeliveryDateEnd).getTime() + 86400000).format("yyyy-MM-dd")
+                        }
+                        var orderNo = $('.tab1OrderNo').val()
+                        var productId = $('.tab1Model').attr("productId");
+                        var clientId = $('.tab1ClientName').attr('clientId')
+                        var tab1Creator = $('.tab1Creator').attr('nickName')
+
+                        if (clientId) {
+                            event.optionalParams.clientId = clientId
+                        }
+                        if (productId) {
+                            event.optionalParams.productId = productId
+                        }
+                        if (orderNo) {
+                            event.optionalParams.orderNo = orderNo
+                        }
+                        if (tab1Creator) {
+                            event.optionalParams.create_user_id = tab1Creator
+                        }
+                        window.ajax(event)
+                            .then(function (data) {
+                                //渲染表单
+                                Tab1_Table1_Data.array = data.data.rows;
+                                renderTable1(Tab1_Table1_Data.array);
+                            })
+                    });
+
+                    window.setTab1ClientAutoComplete() //调用下拉
+                    window.setTab1ModelAutoComplete(); //让自动填充组件生效
+                    window.setTab1CreatorAutoComplete(); //让自动填充组件生效
+
+
+                },
+
+
+            },
+            {
+                title: '产品生产进度',
+                // icon: 'icon-star',
+                type: 'ajax',
+                forbidClose: true,
+                url: '/template/prdPageTap2.html',
+                forceReload: false,
+                onOpen: function () {
+
+                    var getProcessData = function (query) {
+                        // rq417 产品进度搜索
+                        var event = events['rq417']
+                        event.requiredParams = {}
+                        event.optionalParams = {closed: 0}
+                        if (query) {
+                            // if (query.productId) {
+                            //     event.optionalParams.productId = query.productId;
+                            // }
+                            if (query.productName) {
+                                event.optionalParams.productName = query.productName;
+                            }
+                            if (query.id) {
+                                event.optionalParams.id = query.id;
+                            }
+                            if (query.dateParams) {
+                                event.dateParams = query.dateParams;
+                            }
+                            if (query.showAll) {
+                                event.optionalParams.showAll = 1;
+                            }
+                        } else {
+
+                        }
+                        window.ajax(event)
+                            .then(function (data) {
+                                //console.log('产品进度数据rq417', data);
+                                // 将数据处理成表格的格式 并 实例化表格
+                                renderTable2(data.data);
+                            })
+                    }
+                    getProcessData()
+                    window.getProcessData = getProcessData
+                    window.showAllgetProcessData = function () {
+
+
+                    }
+
+                    window.refreshProcedureForm = function () {
+                        var datagrid = $('#datagrid_clickProcess_Tap2_tb2_1 .table').data('zui.datagrid');
+                        var dataSource = datagrid.dataSource
+                        renderTable2_1(dataSource.array)
+                    }
+
+                    window.rq421 = function () {
+                        var processId = window.selectedProcessId;
+                        if (processId) {
+                            var event = events['rq421']
+                            event.requiredParams = {processId: processId}
+                            event.optionalParams = {}
+                            window.ajax(event)
+                                .then(function (result) {
+                                    $('#myModal2').modal('hide')
+                                    new $.zui.Messager(result.msg, {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    $('.tab2Submit').click()
+                                })
+                        }
+                    }
+
+                    window.saveProductionProcedure = function () {
+                        var form = window.getFormData('#myModal2')
+                        console.log(form);
+                        var event = events['rq435']
+                        event.requiredParams = {data: form}
+                        event.optionalParams = {}
+                        window.ajax(event)
+                            .then(function (result) {
+                                new $.zui.Messager(result.msg, {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                $('#myModal2').modal('hide')
+                                $('.tab2OBatchNo').val(form.product_batch)
+                                $('.tab2OBatchNo').attr('processId', form.id)
+                                $('.tab2Submit').click();
+                            })
+                    }
+
+                    // 新增进度 !!!
+                    $('#myLgModal #createProcess').off('click');
+                    $('#myLgModal #createProcess').click(function () {
+
+
+                        setTimeout(function () {
+                            // 产品生产进度新增验证
+                            var prdCode = $.trim($('#prdCode_Tab2_1').val())
+                            var productId = $.trim($('#prdCode_Tab2_1').attr('productId'))
+                            if (prdCode == '') {
+                                new $.zui.Messager("产品型号不能为空", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                window.setTips('#myLgModal #prdCode_Tab2_1', "请输入正确的产品型号")
+                                return;
+                            }
+                            if (!productId) {
+                                new $.zui.Messager("请输入正确的产品型号", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                            }
+
+                            var prdPC = $.trim($('#prdPC_Tab2_1').val())
+                            if (prdPC == '') {
+                                new $.zui.Messager("产品批次不能为空", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                return;
+                            }
+
+                            var length = $('#myLgModal .procedures button').length;
+                            if (length == 0) {
+                                new $.zui.Messager("此产品型号下没有对应批次，请重新选择", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                return;
+                            }
+                            var process = {
+                                product_model: $('#prdCode_Tab2_1').val(),
+                                product_batch: $('#prdPC_Tab2_1').val()
+                            }
+                            var productId = $('#prdCode_Tab2_1').attr('productId')
+
+                            if (productId == '') {
+                                new $.zui.Messager("产品工序不能为空", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                return;
+                            }
+
+                            events['rq416'].requiredParams = {}
+                            events['rq416'].optionalParams = {
+                                productId: productId,
+                                data: process,
+                            }
+
+                            window.ajax(events['rq416'])
+                                .then(function (result) {
+                                    new $.zui.Messager(result.msg, {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    $('#myLgModal').modal('hide')
+
+                                    var product_batch = result.data.product_batch;
+                                    var id = result.data.id;
+                                    $('.tab2OBatchNo').val(product_batch)
+                                    $('.tab2OBatchNo').attr('processId', id)
+                                    $('.tab2Submit').click();
+
+                                    window.setTips('.tab2OBatchNo', '新增成功')
+
+
+                                    // window.ajax(events['rq417'])
+                                    //     .then(function (data) {
+                                    //         Tab2_Table1Data.array = data.data;
+                                    //         renderTable2(Tab2_Table1Data.array);
+                                    //     });
+                                })
+                        }, 200)
+
+                    })
+
+
+                    // 搜索点击查询遍历
+
+                    $("#rq418").on("click", function (params) {
+
+                        var prdCodeId = $('#prdCodeId').val()
+                        events['rq418'].optionalParams.modelId = prdCodeId;//events里面的东西
+
+                        var searhPayDId = $('#searhPayDId').val()
+                        events['rq418'].optionalParams.modelId = searhPayDId;//events里面的东西
+
+                        var prdPNumId = $('#prdPNumId').val()
+                        events['rq418'].optionalParams.modelId = prdPNumId;//events里面的东西
+
+                        var prdWorkId = $('#prdWorkId').val()
+                        events['rq418'].optionalParams.modelId = prdWorkId;//events里面的东西
+
+
+                        window.ajax(events['418'])
+                            .then(function (data) {
+                                renderTable2(data);
+
+                            })
+                    })
+
+                    //绑定日期组件
+
+                    $('.tab2 .datetimepicker').each(function () {
+                        $(this).datetimepicker({ //这里是bootstrap里面的模式，
+                            language: "zh-CN",
+                            weekStart: 1,
+                            todayBtn: 1,
+                            autoclose: 1,
+                            todayHighlight: 1,
+                            startView: 2,
+                            minView: 2,
+                            forceParse: 0,
+                            format: "yyyy-mm-dd"
+                        })
+                            .on('hide', function (ev) {
+                                $('.datetimepicker').blur();
+                            });
+
+                    });
+
+                    //绑定搜索按钮
+                    $('.tab2Submit').off('click');
+                    $('.tab2Submit').on('click', function () {
+
+                        var query = {dateParams: {createdAt: {}}}
+                        var productId = $('.tab2Model').attr("productId");
+                        var productName = $('.tab2Model').val();
+                        var id = $('.tab2OBatchNo').attr("processId");
+                        var showAll = $('.showAllProcess').val();
+
+                        // if (productId) {
+                        //     query.productId = productId;
+                        // }
+                        if (productName) {
+                            query.productName = productName;
+                        }
+                        if (id) {
+                            query.id = id;
+                        }
+
+                        var tab2CreatedAtDateStart = $('.tab2CreatedAtDateStart').val()
+                        var tab2CreatedAtDateEnd = $('.tab2CreatedAtDateEnd').val()
+
+                        if (tab2CreatedAtDateStart) {
+                            query.dateParams.createdAt.start = tab2CreatedAtDateStart
+                        }
+                        if (tab2CreatedAtDateEnd) {
+                            query.dateParams.createdAt.end = new Date(new Date(tab2CreatedAtDateEnd).getTime() + 86400000).format("yyyy-MM-dd")
+                        }
+                        if (showAll) {
+                            query.showAll = 1
+                        }
+                        getProcessData(query)
+                    });
+
+                    window.setTab2ModelAutoComplete()
+                    window.setTab2ProcessAutoComplete()
+                    window.setTab2ProcedureAutoComplete()
+
+                    window.myLgModalOpen = function () {
+
+                        $('#prdCode_Tab2_1').val('')
+                        $('#prdPC_Tab2_1').val(window.generateUUID())
+                        $('.procedures').html('')
+
+                        $('#myLgModal').modal('show', 'fit')
+
+                        setTimeout(function () {
+                            window.setTab2PopUpModelAutoComplete();
+                        }, 200)
+                    }
+
+
+                },
+
+
+            },
+            {
+                title: '工单管理',
+                // icon: 'icon-star',
+                type: 'ajax',
+                forbidClose: true,
+                url: '/template/prdPageTap3.html',
+                onClose: function () {
+
+                },
+                onOpen: function () {
+
+
+                    var getWordOrder = function (query) {
+
+                        var event = events['rq423']
+                        event.requiredParams = {}
+                        event.optionalParams = {}
+
+                        if (query) {
+                            if (query.create_user_id) {
+                                event.optionalParams.recorder = query.create_user_id;
+                            }
+                            if (query.employeeId) {
+                                event.optionalParams.employeeId = query.employeeId;
+                            }
+                            if (query.name) {
+                                event.optionalParams.procedure = query.name;
+                            }
+                            if (query.model) {
+                                event.optionalParams.model = query.model;
+                            }
+                            if (query.productionProcessProcedureId) {
+                                event.optionalParams.productionProcessProcedureId = query.productionProcessProcedureId;
+                            }
+                            if (query.dateParams) {
+                                event.dateParams = query.dateParams;
+                            }
+                        }
+
+
+                        window.ajax(event)
+                            .then(function (data) {
+                                //console.log('获取工单详情rq423+++', data);
+                                Tab3_tb1_workOrderList.array = data.data.rows;
+                                renderTable3(Tab3_tb1_workOrderList);
+                                // 新增工单
+
+
+                            })
+                    }
+                    window.getWordOrder = getWordOrder
+                    getWordOrder()
+
+                    window.autoParseFloat4('#newWprice , .price')
+                    window.autoParseFloat('#newWcash')
+                    window.autoParseFloat('#myOutSourceProductEditModal .wages')
+
+                    window.deleteWorkOrder = function () {
+                        var id = $('#myworkPage .id').val()
+
+                        if (!id) {
+                            return
+                        } else {
+                            var event = events['rq2115']
+                            event.requiredParams = {model: 'Work_Order'}
+                            event.optionalParams = {items: [{id: id}]}
+                            window.ajax(event)
+                                .then(function () {
+
+                                    getWordOrder()
+                                    new $.zui.Messager("删除成功", {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    $('#myworkPage').modal('hide')
+
+
+                                })
+                        }
+
+
+                    }
+                    window.saveMaterialConsume = function (type) {
+
+                        // 物料验证
+                        var form = window.getFormData('#updateThing')
+                        form.type = 'out'
+
+                        if (form.materialId == -1) {
+                            new $.zui.Messager("请选择物料", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+
+                            window.setTips('#updateThing .materialId', "请下拉选择物料")
+
+
+                            return;
+                        }
+
+                        if (form.number == '') {
+                            new $.zui.Messager("请填写物料消耗数量", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+                        if (onlyNum(form.number)) {
+                            new $.zui.Messager("请输入正确的数字", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+                        //console.log(form);
+                        var event = events['rq2111']
+                        event.requiredParams = {model: 'Material_In_Out_Record'}
+                        try {
+                            form.number = Math.abs(parseFloat(form.number)) * -1 //消耗是负数
+                        } catch (e) {
+
+                        }
+                        form.note = '类型：' + form.consumeType + ';工序：' + form.procedure + ';' + '工序数量：' + form.procedureNumber + ';' + '工单id：' + form.workOrderId + ';'
+                        event.optionalParams = {data: form}
+                        window.ajax(event)
+                            .then(function () {
+                                setTimeout(function () {
+                                    new $.zui.Messager("创建成功", {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+
+                                }, 1000)
+                            })
+                        $('#updateThing').modal('hide')
+                    }
+
+                    window.saveEndproductIn = function () {
+
+                        var form = window.getFormData('#updateruku')
+                        form.type = 'in'
+                        form.sum = 0
+                        //console.log(form);
+                        if (form.productId == '' || form.product_model == '') {
+                            new $.zui.Messager("请填写型号", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+                        if (form.product_batch == '') {
+                            new $.zui.Messager("请填写批次", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+
+                        if (form.number == '') {
+                            new $.zui.Messager("请填写数量", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+
+                        //console.log(form);
+                        var event = events['rq2111'];
+                        event.requiredParams = {model: "EndProductInOut", data: form}
+                        event.optionalParams = {};
+                        window.ajax(event) // 成品进仓
+                            .then(function (data) {
+                                new $.zui.Messager("入库成功", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                $('#updateruku').modal('hide')
+                            })
+                    }
+
+                    window.deleteOutSourceWorkOrder = function () {
+                        var id = $('#myOutSourceModal3 .id').val();
+                        if (!id) {
+
+                            return
+                        } else {
+                            var event = events['rq2115']
+                            event.requiredParams = {model: 'Work_Order_OutSource_Info'}
+                            event.optionalParams = {items: [{id: id}]}
+                            window.ajax(event)
+                                .then(function () {
+
+                                    setTimeout(function () {
+                                        getWordOrder()
+                                        $('#myOutSourceModal3').modal('hide')
+                                        new $.zui.Messager("删除成功", {
+                                            icon: 'info' // 定义消息图标
+                                        }).show();
+                                    }, 1000)
+                                })
+                        }
+
+                    }
+
+                    // 工单模块成品入库
+                    events['rq433'].requiredParams = {factoryId: 1}
+                    events['rq433'].optionalParams = {}
+                    window.ajax(events['rq433'])
+                        .then(function (data) {
+                            //console.log('获取433获取可消耗的物料详情  未实现', data);
+
+                        })
+
+
+                    $('#wPageUpdate_Tab3').off('click')
+                    $('#wPageUpdate_Tab3').click(function () {
+
+                        var employeeId = $('#myworkPage #employeeN').attr("employeeId");
+                        var batchId = $('#myworkPage #newPrd_batch').find("option:selected").attr('batchId')
+                        var productionProcessId = $('#myworkPage #newPrd_procedure').find("option:selected").attr('productionProcessId')
+
+                        var dataToPost = getTab3WorkOrderForm()
+
+
+                        // 新增工单验证
+                        if (dataToPost.name == '') {
+                            new $.zui.Messager("工单姓名不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+
+                        if (dataToPost.Serial_number == '') {
+                            new $.zui.Messager("编号不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+
+
+                        var departmentVal = $.trim(dataToPost.department);
+                        if (departmentVal == '') {
+
+                            new $.zui.Messager("部门不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+
+                            window.setTips('#myworkPage .department', "先清空后点击调出下拉菜单选择")
+
+                            return;
+                        }
+
+
+                        var modelVal = $.trim(dataToPost.model)
+
+                        if (modelVal == '') {
+
+                            new $.zui.Messager("产品型号不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+
+                            window.setTips('#myworkPage .newPrd_model', "先清空后点击调出下拉菜单选择")
+
+
+                            return;
+                        }
+
+                        if (dataToPost.batch == '请选择批次' || dataToPost.batch == '') {
+
+                            new $.zui.Messager("批次不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            window.setTips('#myworkPage #newPrd_batch', "请下拉选择产品批次")
+
+                            return;
+                        }
+
+
+                        if (dataToPost.procedure == '请选择工序' || dataToPost.procedure == '') {
+
+                            new $.zui.Messager("工序不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            window.setTips('#myworkPage #newPrd_procedure', "请下拉选择产品工序")
+
+                            return;
+                        }
+
+
+                        var priveVal = onlyNum(dataToPost.price)
+                        if (dataToPost.price == '') {
+                            new $.zui.Messager("工价不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+                        if (priveVal) {
+                            window.setTips('#myworkPage #newWprice', "请输入数字")
+                            return;
+                        }
+
+
+                        var numberVal = onlyNum(dataToPost.number)
+
+                        if (dataToPost.number == '') {
+                            new $.zui.Messager("数量不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+
+                        if (numberVal) {
+                            window.setTips('#myworkPage #newPrdallNum', "请输入数字")
+                            return;
+                        }
+
+                        //console.log('新增工单数据~~~', dataToPost);
+
+
+                        dataToPost.is_outsourcing = 0;
+                        try {
+                            dataToPost.wages = dataToPost.wages.toFixed(1)
+                        } catch (e) {
+                        }
+                        events['rq425'].requiredParams = {}
+                        events['rq425'].optionalParams = {
+                            isOutSource: 0, //是否外包
+                            employeeId: employeeId, // 员工关联
+                            productionProcessId: batchId, //批次关联
+                            productionProcessProcedureId: productionProcessId, //工序关联 (用于生产进度汇总各工序的总数)
+                            data: dataToPost,
+                        }
+
+                        //console.log(events['rq425']);
+
+
+                        window.ajax(events['rq425'])
+                            .then(function (result) {
+                                $('#myworkPage').modal('hide')
+                                getWordOrder()
+                            })
+                    })
+
+                    $('#createNewOrder').off('click')
+                    $('#createNewOrder').on('click', function () {
+                        var data = {
+                            createdAt: new Date().format("yyyy-MM-dd hh:mm"),
+                            recorder: window.user.name, //经手人
+                            name: "", //姓名
+                            Serial_number: window.generateUUID(), //编号
+                            department: "", //部门
+                            batch: "", //批次
+                            model: "", //型号
+                            procedure: "", //工序
+                            number: "", //数量
+                            price: "", //工价
+                            wages: "", //薪酬
+                            note: "", //备注
+                            is_outsourcing: 0 //是否外包
+                        }
+                        $('#myworkPage').modal('show');
+                        $('#myworkPage .name ').attr('employeeId', '');
+                        $('#myworkPage .flag').val('new');
+                        $('#myworkPage .editStatus').css('display', 'none');
+                        $('#myworkPage input,#myworkPage select').val('');
+                        renderTab3WorkOrderForm(data);
+
+                        window.setWorkOrderNumberEnable()
+
+                    })
+
+                    $('#newWprice,#newPrdallNum').off('blur')
+                    $('#newWprice,#newPrdallNum').on('blur', function () {
+                        var price = $('#newWprice').val()
+                        var num = $('#newPrdallNum').val()
+                        var wage = window.accMul(price, num)
+                        $('#newWcash').val(wage);
+                    })
+                    window.setTab3NewWorkOrderModelAutoComplete();
+
+
+                    $('#myOutSourceModal3_add').off('click')
+                    $('#myOutSourceModal3_add').click(function () {
+
+                        var form = get_outsourse_WorkList()
+                        // 外包工单数字验证
+                        var isEng = function (s) {
+                            if (s.search(/[a-zA-Z]+/) == -1) {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        }
+                        // 新增外包工单验证
+                        if (form.sn == '') {
+
+                            new $.zui.Messager("单据编号不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+
+                        var nameVal = $.trim(form.name)
+                        if (nameVal == '') {
+
+                            new $.zui.Messager("外包单位名称不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+
+                            window.setTips('#myOutSourceModal3 .name', "请先清空后点击弹出下拉菜单")
+
+                            return;
+                        }
+
+                        if ($.trim(form.contactPeople) == '') {
+
+                            new $.zui.Messager("联系人不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+
+                        if ($.trim(form.address) == '') {
+
+                            new $.zui.Messager("地址不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+
+
+                        var conPhoneVal = isEng(form.contactPhone)
+                        if ($.trim(form.contactPhone) == '') {
+
+
+                            new $.zui.Messager("电话不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+
+
+                        if (conPhoneVal) {
+                            window.setTips('#myOutSourceModal3 .contactPhone', "请输入正确的手机号码")
+                            return;
+                        }
+
+
+                        var outsModelVal = $.trim(form.outsourceModel)
+                        // if (outsModelVal == '') {
+                        //
+                        //
+                        //     new $.zui.Messager("产品型号不能为空", {
+                        //         icon: 'info' // 定义消息图标
+                        //     }).show();
+                        //
+                        //     window.setTips('#myOutSourceModal3 .outsourceModel', "请先清空后点击调出下拉菜单选择")
+                        //     return;
+                        // }
+
+
+                        // if (form.outsourceBatch == '' || form.outsourceBatch == '请选择批次') {
+                        //
+                        //     new $.zui.Messager("产品批次不能为空", {
+                        //         icon: 'info' // 定义消息图标
+                        //     }).show();
+                        //
+                        //     window.setTips('#myOutSourceModal3 .outsourceBatch', "请下拉选择产品批次")
+                        //
+                        //
+                        //     return;
+                        // }
+
+
+                        // if (form.outsourceProcedure == '' || form.outsourceProcedure == '请选择工序') {
+                        //
+                        //     new $.zui.Messager("产品工序不能为空", {
+                        //         icon: 'info' // 定义消息图标
+                        //     }).show();
+                        //
+                        //     window.setTips('#myOutSourceModal3 .outsourceProcedure', "请下拉选择产品工序")
+                        //
+                        //
+                        //     return;
+                        // }
+
+                        if (form.delegateName == '') {
+
+                            new $.zui.Messager("委托单位名称不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+
+                        if (form.delegateAddressAndPhone == '') {
+
+                            new $.zui.Messager("委托单位地址和电话不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+                        //console.log('新增外包工单数据~~~', form);
+
+
+                        selectedOutSourceOrder.form = form
+                        var flag = selectedOutSourceOrder.form.flag
+                        // if (flag == 'new') {
+                        var outSourceInfo = selectedOutSourceOrder.form;
+                        var workOrders = selectedOutSourceOrder.dataSource.array;
+
+                        if (workOrders.length == 0) {
+
+                            new $.zui.Messager("产品型号不能为空，请选择型号，批次，工序，添加一个产品记录", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+
+                            return;
+                        }
+
+                        for (var i = 0; i < workOrders.length; i++) {
+                            var workOrder = workOrders[i];
+                            // workOrder.wages = workOrder.number * workOrder.price
+                            workOrder.wages = window.accMul(workOrder.number, workOrder.price)
+                            workOrder.Serial_number = form.sn
+                            workOrder.name = form.contactPeople
+                            workOrder.department = form.name
+                            workOrder.note = form.note
+                            try {
+                                workOrder.wages = parseFloat(workOrder.wages).toFixed(2)
+                            } catch (e) {
+                            }
+                        }
+                        events['rq425'].requiredParams = {}
+                        events['rq425'].optionalParams = {
+                            isOutSource: 1, //是否外包
+                            employeeId: window.user.id, // 员工关联
+                            // productionProcessId: 1, //批次关联
+                            // productionProcessProcedureId: 1, // 工序id
+                            // supplierId: 1,//供应商关联
+                            data: workOrders,
+                            outSourceInfo: outSourceInfo,
+                        }
+                        window.ajax(events['rq425'])
+                            .then(function (result) {
+                                $('#myOutSourceModal3').modal('hide')
+                                getWordOrder()
+                            })
+                        // } else {
+                        //     new $.zui.Messager("编辑状态实施中", {
+                        //         icon: 'info' // 定义消息图标
+                        //     }).show();
+                        // }
+                    })
+
+
+                    $(".tab3Submit").on("click", function (params) {
+                        var query = {dateParams: {createdAt: {}}}
+
+                        var employeeId = $('.tab3Name').attr("employeeId");
+                        // var productionProcessId = $('.tab3BatchName').attr("processId");
+                        var model = $('.tab3Model').val();
+                        var productionProcessProcedureName = $('.tab3ProcedureName').val()
+                        var tab3Creator = $('.tab3Creator').attr('nickName')
+
+
+                        if (tab3Creator) {
+                            query.create_user_id = tab3Creator
+                        }
+
+                        if (employeeId) {
+                            query.employeeId = employeeId;
+                        }
+                        // if (productionProcessId) {
+                        //     query.productionProcessId = productionProcessId;
+                        // }
+                        if (model) {
+                            query.model = model;
+                        }
+                        if (productionProcessProcedureName) {
+                            query.name = productionProcessProcedureName;
+                        }
+
+                        var tab3DateCreatedAtStart = $('.tab3DateCreatedAtStart').val()
+                        var tab3DateCreatedAtEnd = $('.tab3DateCreatedAtEnd').val()
+
+                        if (tab3DateCreatedAtStart) {
+                            query.dateParams.createdAt.start = tab3DateCreatedAtStart
+                        }
+                        if (tab3DateCreatedAtEnd) {
+                            query.dateParams.createdAt.end = new Date(new Date(tab3DateCreatedAtEnd).getTime() + 86400000).format("yyyy-MM-dd")
+                        }
+                        getWordOrder(query)
+                    })
+                    //绑定日期组件
+                    $('.tab3 .datetimepicker').each(function () {
+
+                        $(this).datetimepicker({ //这里是bootstrap里面的模式，
+                            language: "zh-CN",
+                            weekStart: 1,
+                            todayBtn: 1,
+                            autoclose: 1,
+                            todayHighlight: 1,
+                            startView: 2,
+                            minView: 2,
+                            forceParse: 0,
+                            format: "yyyy-mm-dd"
+                        })
+                            .on('hide', function (ev) {
+                                $('.datetimepicker').blur();
+                            });
+
+                    });
+                    $('#newDate').each(function () {
+                        $(this).datetimepicker({ //这里是bootstrap里面的模式，
+                            language: "zh-CN",
+                            weekStart: 1,
+                            todayBtn: 1,
+                            autoclose: 1,
+                            todayHighlight: 1,
+                            startView: 2,
+                            minView: 2,
+                            forceParse: 0,
+                            format: "yyyy-mm-dd"
+                        })
+                            .on('hide', function (ev) {
+                                $('.datetimepicker').blur();
+                            });
+                    })
+
+                    window.setTab3ProcessAutoComplete()
+                    window.setTab3ProcedureAutoComplete()
+                    window.setTab3CreatorAutoComplete()
+                    window.setTab3EmployeeAutoComplete()
+                    window.setTab3ModelAutoComplete()
+                    window.openmyOutSourceModal3 = function () {
+
+                        selectedOutSourceOrder.form = {
+                            createdAt: new Date().format("yyyy-MM-dd hh:mm"),
+                            recorder: window.user.name, //经手人
+                            name: '', //名称
+                            address: '', //地址
+                            contactPeople: '', //联系人
+                            contactPhone: '', //电话
+                            sn: window.generateUUID(), // 单据编号
+                            sum: '', //金额
+                            note: '', //备注
+                            delegateName: window.user.factory.name, //委派单位名称
+                            delegateAddressAndPhone: window.user.factory.info,//委派单位地址电话
+                        }
+                        window.setWorkOrderNumberEnable()
+
+                        selectedOutSourceOrder.dataSource.array = [];
+                        $('#outSoureTable').html('')
+                        $('#myOutSourceModal3 input,#myOutSourceModal3 select').val('');
+                        render_outsourse_WorkList(selectedOutSourceOrder.form)
+                        $('#myOutSourceModal3 .flag').val('new');
+                        $('#myOutSourceModal3').modal("show");
+
+                        $('#myOutSourceModal3 .outsourceModel').val('')
+                        $('#myOutSourceModal3 .outsourceBatch').html('')
+                        $('#myOutSourceModal3 .outsourceProcedure').html('')
+                    }
+
+                    window.setTab3OutSourcePopupSupplierAutoComplete()
+                    window.editOutsourceProduct = function () {
+                        $('#myOutSourceProductEditModal').modal('show');
+                    }
+                    window.setTab3OutSourcePopupModelAutoComplete(function (model, batch, procedure, selectedProductId, productionProcessId, productionProcessProcedureId) {
+                        var item = {
+                            model: model,
+                            batch: batch,
+                            procedure: procedure.name,
+                            price: procedure.price,
+                            unit: '',
+                            number: '',
+                            sum: '',
+                            desc: '',
+                            productionProcessId: productionProcessId,
+                            productionProcessProcedureId: productionProcessProcedureId,
+                            productId: selectedProductId,
+                        }
+                        selectedOutSourceOrder.dataSource.array.push(item);
+                        renderOutSourceTable(selectedOutSourceOrder.dataSource)
+                    })
+                    window.setTab3DepartmentsAutoComplete()
+
+
+                },
+            },
+        ];
+
+        // 初始化标签页管理器
+        $('#tabsExample').tabs({tabs: tabs});
+        //表格排序
+
+        // 新增进度
+        var rq416 = function () {
+
+            var process = {product_model: {}, product_batch: "批次1"}
+
+            events['rq416'].requiredParams = {factoryId: 1, productId: 1}
+            events['rq416'].optionalParams = {data: process, procedures: []}
+            window.ajax(events['rq416'])
+                .then(function (data) {
+                    // 将数据处理成表格的格式 并 实例化表格
+                })
+        }
+    })
+
+</script>
+</body>

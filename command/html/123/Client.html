@@ -1,0 +1,311 @@
+<div>
+<!--搜索表单-->
+<div class="searchForm" id="ClientsearchForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">客户名称</span> 
+<input id="namesearchFormId" type="text" name="name" class="form-control name" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#namesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">联系电话</span> 
+<input id="mobilesearchFormId" type="text" name="mobile" class="form-control mobile" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#mobilesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">收货地址</span> 
+<input id="addresssearchFormId" type="text" name="address" class="form-control address" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#addresssearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">联系人</span> 
+<input id="contactsearchFormId" type="text" name="contact" class="form-control contact" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#contactsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">联系人电话</span> 
+<input id="contact_phonesearchFormId" type="text" name="contact_phone" class="form-control contact_phone" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#contact_phonesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">备注</span> 
+<input id="remarkssearchFormId" type="text" name="remarks" class="form-control remarks" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#remarkssearchFormId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--功能按钮-->
+<div id="Clientfunctions" class="functions"><button class="btn  btn-warning "type="button"onclick="window.createClientForm()">新增</button><button class="btn  btn-danger"type="button"onclick="window.batchDeleteClient()">删除</button><button class="btn  btn-primary"type="button"onclick="window.searchClient()">搜索</button></div>
+<!--表单-->
+<div class="form" id="ClientForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">客户名称</span> 
+<input id="nameformId" type="text" name="name" class="form-control name" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#nameformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">联系电话</span> 
+<input id="mobileformId" type="text" name="mobile" class="form-control mobile" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#mobileformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">收货地址</span> 
+<input id="addressformId" type="text" name="address" class="form-control address" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#addressformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">联系人</span> 
+<input id="contactformId" type="text" name="contact" class="form-control contact" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#contactformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">联系人电话</span> 
+<input id="contact_phoneformId" type="text" name="contact_phone" class="form-control contact_phone" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#contact_phoneformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">备注</span> 
+<input id="remarksformId" type="text" name="remarks" class="form-control remarks" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#remarksformId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--弹窗-->
+<div class="modal fade modal-moveable"id="ClientModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button"class="close"data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button><h4 class="modal-title">Client</h4></div><div class="modal-body"></div><div style="clear: both"></div> <div class="modal-footer"><button type="button"class="btn btn-default"data-dismiss="modal">关闭</button><button onclick="window.deleteClientForm()"type="button"class="btn btn-danger"data-dismiss="modal">删除</button><button onclick="window.saveClientForm()"type="button"class="btn btn-primary"data-dismiss="modal">保存</button></div></div></div></div>
+
+<!--列表-->
+<div id="table_Client"></div>
+</div>
+<script>
+
+ var ClientDataSource={
+  "form": {
+    "name": "",
+    "mobile": "",
+    "address": "",
+    "contact": "",
+    "contact_phone": "",
+    "remarks": ""
+  },
+  "list": {
+    "cols": [
+      {
+        "name": "name",
+        "label": "客户名称",
+        "width": 100
+      },
+      {
+        "name": "mobile",
+        "label": "联系电话",
+        "width": 100
+      },
+      {
+        "name": "address",
+        "label": "收货地址",
+        "width": 100
+      },
+      {
+        "name": "contact",
+        "label": "联系人",
+        "width": 100
+      },
+      {
+        "name": "contact_phone",
+        "label": "联系人电话",
+        "width": 100
+      },
+      {
+        "name": "remarks",
+        "label": "备注",
+        "width": 100
+      },
+      {
+        "name": "createdAt",
+        "label": "创建日期",
+        "width": 150
+      }
+    ],
+    "array": []
+  }
+}
+
+ //渲染列表
+ window.renderClientTable=function (tableId, dataSource) {
+        $(tableId).html('').append('<div class="table"></div>')
+
+        $(tableId + ' .table').datagrid({
+            dataSource: dataSource,
+            checkable: true,
+            checkByClickRow: false,
+            partialRendering: false,
+            // height: '300',
+            onRender: function () {
+                $(tableId + ' .datagrid-cell').off('click');
+                $(tableId + ' .datagrid-cell').on('click', function () {
+                    var row = $(this).attr('data-row')
+                    var col = $(this).attr('data-col')
+                    if (row == 0 || col == 0) return
+                    var index = row - 1
+                    var formId = 'ClientForm'
+                    var modalId = 'ClientModal'
+                    $('#' + modalId).modal('show', 'fit');
+                    var formData = ClientDataSource.list.array[index];
+                    window.renderForm('#' + formId, formData)
+                    $('#' + formId + ' .flag').val('edit')
+                    $('#' + formId + ' .index').val(index)
+                })
+            }
+        })
+    }
+
+ //创建
+ window.createClientForm=function () { //调起创建弹窗
+        var formId = 'ClientForm'
+        var modalId = 'ClientModal'
+        $('#' + modalId).modal('show')
+        var data = {"id":"","name":"","mobile":"","address":"","contact":"","contact_phone":"","remarks":""};
+        window.renderForm('#' + formId, data);
+        $('#' + formId + ' .flag').val('new')
+        $('#' + formId + ' .id').val('')
+    }
+
+ //保存
+ window.saveClientForm=function () { //创建或保存
+        var formId = 'ClientForm'
+        var flag = $('#' + formId + ' .flag').val()
+        var formData = window.getFormData('#' + formId)
+        if (flag == 'new') { //创建状态
+            ClientDataSource.list.array.push(formData)
+            var event = events['rq2111']
+            event.requiredParams = {model: 'Client'}
+            event.optionalParams = {data: formData}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("创建成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Client'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                ClientDataSource.list.array = result.data;
+                                window.renderClientTable('#table_Client', ClientDataSource.list)
+                            })
+                    }, 1000)
+                })
+        } else {
+            var index = $('#' + formId + ' .index').val()
+            var data = ClientDataSource.list.array[index]
+            for (var x in formData) {
+                try {
+                    data[x] = formData[x]
+                } catch (e) {
+                }
+            }
+            var event = events['rq2112']
+            event.requiredParams = {model: 'Client'}
+            event.optionalParams = {data: data}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("保存成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Client'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                ClientDataSource.list.array = result.data;
+                                window.renderClientTable('#table_Client', ClientDataSource.list)
+                            })
+                    }, 1000)
+                })
+        }
+        var modalId = 'ClientModal'
+        $('#' + modalId).modal('hide')
+    }
+
+ //删除
+ window.deleteClientForm=function () { //删除
+        var formId = 'ClientForm'
+        var index = $(formId + ' .index').val()
+        var data = ClientDataSource.list.array[index]
+
+        if (index) { //调用接口从服务器删除
+            var modelName = 'Client';
+            var id = data.id;
+            if (!id) {
+                return
+            } else {
+                var event = events['rq2115']
+                event.requiredParams = {model: modelName}
+                event.optionalParams = {items: [{id: id}]}
+                window.ajax(event)
+                    .then(function () {
+                        setTimeout(function () {
+                            new $.zui.Messager("删除成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            $('.modal').modal('hide');
+
+                        }, 1000)
+                    })
+            }
+            ClientDataSource.list.array.splice(index, 1);
+            window.renderClientTable('#table_Client', ClientDataSource.list)
+        }
+
+        var modalId = 'ClientModal'
+        $('#' + modalId).modal('hide');
+    }
+
+ //批量删除
+ window.batchDeleteClient=function () { //批量删除
+        var formId = 'ClientForm'
+        var index = $(formId + ' .index').val()
+        var data = ClientDataSource.list.array[index]
+
+        var tableId = 'table_Client'
+        var items = window.getSelectedTableItems('#' + tableId + ' .table')
+        if (items.length == 0) {
+            new $.zui.Messager("请至少选择一个记录", {
+                icon: 'info' // 定义消息图标
+            }).show();
+            return
+        }
+        var batchDeleteEvent = events['rq2115'] //通用删除接口
+        batchDeleteEvent.requiredParams = {model: 'Client'}
+        batchDeleteEvent.optionalParams = {items: items}
+        window.ajax(batchDeleteEvent)
+            .then(function () {
+                var getEvent = events['rq2114'] //通用查找接口
+                getEvent.requiredParams = {model: 'Client'}
+                getEvent.optionalParams = {items: items}
+                return window.ajax(getEvent)
+            })
+            .then(function (result) {
+                ClientDataSource.list.array = result.data;
+                window.renderClientTable('#table_Client', ClientDataSource.list)
+            })
+    }
+
+ //搜索
+ window.searchClient=function (limit) { //搜索
+        var formId = 'ClientsearchForm'
+        var formData = limit ? window.getFormData('#' + formId) : {}
+
+        var searchEvent = events['rq2114'] //通用查询接口
+        searchEvent.requiredParams = {model: 'Client'}
+        searchEvent.optionalParams = formData
+        window.ajax(searchEvent)
+            .then(function (result) {
+                ClientDataSource.list.array = result.data;
+                window.renderClientTable('#table_Client', ClientDataSource.list)
+            })
+    }
+
+</script>

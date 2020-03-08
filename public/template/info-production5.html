@@ -1,0 +1,72 @@
+<div class="tab5">
+      <button  onclick="window.openCreateDepartment()" class="btn btn-warning createEmployeeButton" type="button" style="margin-left:12px;margin-top:15px;margin-bottom: 15px">
+            新增
+        </button>
+        <button onclick="window.deleteDepartment()" class="btn btn-danger" type="button" style="margin-left:12px;margin-top:15px;margin-bottom: 15px">
+            删除
+        </button>
+<!--    <div style="margin-top: 20px;margin-bottom: 20px"-->
+<!--         class="input-control search-box search-box-circle has-icon-left has-icon-right" id="searchboxExample">-->
+<!--        <input id="inputSearchExample1" type="text" class="form-control " placeholder="搜索">-->
+<!--        <label for="inputSearchExample1" class="input-control-icon-left search-icon"><i-->
+<!--                class="icon icon-search"></i></label>-->
+<!--        <a href="#" class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a>-->
+
+
+
+
+<!--    </div>-->
+    <div id="depInfoList" class="datagrid">
+        <div class="datagrid-container">
+
+        </div>
+
+    </div>
+
+    <!-- 员工录入对话框HTML -->
+    <div class="modal fade modal-moveable" id="depInfo">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 style="font-size: 20px" class="modal-title">部门信息</h4>
+                </div>
+                <div style="margin: 10px 10px" class="input-control has-icon-left">
+
+                    <div class="input-control has-icon-left">
+
+                    </div>
+
+                    <div class="input-control has-icon-left">
+                        <input name="name" style="margin-top: 10px" id="Department" type="text"
+                               class="form-control name"
+                               placeholder="部门名称">
+                        <label for="Department" class="input-control-icon-left"><i class="icon icon-user "></i></label>
+                    </div>
+
+                    <div class="input-control has-icon-left">
+                        <input name="info" style="margin-top: 10px" id="info" type="text" class="form-control info"
+                               placeholder="相关信息">
+                        <label for="info" class="input-control-icon-left"><i class="icon icon-user "></i></label>
+                    </div>
+
+                    <input value="" name="index" type="hidden" class="form-control index">
+                    <input value="" name="flag" type="hidden" class="form-control flag">
+                    <input value="" name="id" type="hidden" class="form-control id">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary saveEmployee" onclick="window.saveDepartment()">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>

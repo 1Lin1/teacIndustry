@@ -1,0 +1,157 @@
+<div class="tab2">
+    <button style="margin: 20px 10px"
+            class="btn  btn-warning createEmployeeButton" type="button" data-moveable="true"
+            onclick="window.openCreateEmployee()">新增
+    </button>
+    <button style="margin: 20px 10px" class="btn  btn-danger" type="button" id="deleteEmployee"
+            onclick="window.deleteEmployee()">删除
+    </button>
+    <button onclick="window.doExport('employee','infoprot3','#datagridCheckableExampleyuangong2')"
+            style="margin: 20px 10px" class="btn  btn-success" type="button">导出
+    </button>
+    <button style="margin: 20px 10px" class="btn  btn-success" type="button">导入</button>
+    <button onclick="window.doExportTemplate('employee','infoprot3','#datagridCheckableExampleyuangong2')"
+            style="margin: 20px 10px" class="btn  btn-info" type="button">下载导入模板
+    </button>
+    <!--    <div style="margin-bottom: 20px"-->
+    <!--         class="input-control search-box search-box-circle has-icon-left has-icon-right" id="searchboxExample">-->
+    <!--        <input id="inputSearchExample1" type="text" class="form-control " placeholder="搜索">-->
+    <!--        <label for="inputSearchExample1" class="input-control-icon-left search-icon"><i-->
+    <!--                class="icon icon-search"></i></label>-->
+    <!--        <a href="#" class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a>-->
+
+
+    <!--    </div>-->
+    <div id="datagridCheckableExampleyuangong2" class="datagrid">
+        <div class="datagrid-container">
+
+        </div>
+
+    </div>
+
+    <!-- 员工录入对话框HTML -->
+    <div class="modal fade modal-moveable" id="employInfoModal2_2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 style="font-size: 20px" class="modal-title">员工信息录入</h4>
+                </div>
+                <div style="margin: 10px 10px" class="input-control has-icon-left">
+
+
+                    <div class="input-control has-icon-left">
+
+                    </div>
+
+                    <div class="input-control has-icon-left">
+                        <input name="work_number" style="margin-top: 10px" id="work_number" type="text"
+                               class="form-control work_number"
+                               placeholder="工号">
+                        <label for="work_number" class="input-control-icon-left"><i class="icon icon-user "></i></label>
+                    </div>
+
+                    <div class="input-control has-icon-left">
+                        <input name="name" style="margin-top: 10px" id="empyName" type="text" class="form-control name"
+                               placeholder="姓名">
+                        <label for="empyName" class="input-control-icon-left"><i class="icon icon-user "></i></label>
+                    </div>
+
+                    <div class="input-group" style="margin-top: 10px;width: 100%">
+                        <label for="sex">性别</label>
+                        <select name="gender" id="sex" class="form-control gender">
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+
+                    <div class="input-control has-icon-left">
+                        <input name="departmentName" style="margin-top: 10px" id="tab2Department" type="text"
+                               class="form-control departmentName"
+                               placeholder="部门">
+                        <label for="tab2Department" class="input-control-icon-left"><i
+                                class="icon icon-user "></i></label>
+                    </div>
+
+                    <div class="input-control has-icon-left">
+                        <input name="position" style="margin-top: 10px" id="empyWorker" type="text"
+                               class="form-control position" placeholder="职务">
+                        <label for="empyWorker" class="input-control-icon-left"><i class="icon icon-user "></i></label>
+                    </div>
+
+                    <div class="input-control has-icon-left">
+
+                        <input name="mobile" style="margin-top: 10px" style="margin-top: 10px" id="empyMobile"
+                               type="text"
+                               class="form-control mobile" placeholder="手机号">
+                        <label for="empyMobile" class="input-control-icon-left"><i class="icon icon-user "></i></label>
+                    </div>
+
+                    <div class="input-control has-icon-left">
+
+                        <input name="id_num" style="margin-top: 10px" id="empyIDcode" type="text"
+                               class="form-control id_num" placeholder="证件号">
+                        <label for="empyIDcode" class="input-control-icon-left"><i class="icon icon-user "></i></label>
+                    </div>
+
+                    <div class="input-control has-icon-left">
+                        <input name="inDate" style="margin-top: 10px" id="empyWtime" type="text"
+                               class="form-control datetimepicker inDate"
+                               placeholder="入职时间">
+                        <label for="empyWtime" class="input-control-icon-left"><i class="icon icon-user "></i></label>
+                    </div>
+
+                    <input value="" name="index" type="hidden" class="form-control index">
+                    <input value="" name="flag" type="hidden" class="form-control flag">
+                    <input value="" name="id" type="hidden" class="form-control id">
+                    <input value="" name="departmentId" type="hidden" class="form-control departmentId">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary saveEmployee" onclick="window.saveEmployee()">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 员工信息修改对话框HTML -->
+    <div class="modal fade modal-moveable" id="employInfoModal2_3">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 style="font-size: 20px" class="modal-title">员工信息修改</h4>
+                </div>
+
+
+                <div id="datagridSortExampleEmply2_3" class="datagrid"></div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="batchEditEmployee"
+                            onclick="window.batchEditEmployee()">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center;width: 100%" id="btnGroup">
+
+        <div style="margin: auto">
+
+            <!--        <button style="margin: 20px 10px" class="btn btn-lg btn-info" data-toggle="modal"-->
+            <!--                data-target="#employInfoModal2_3" type="button" data-moveable="true" id="emplUpdate"-->
+            <!--                onclick="window.emplUpdate()">修改-->
+            <!--        </button>-->
+
+        </div>
+    </div>
+
+</div>
+

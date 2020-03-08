@@ -1,0 +1,240 @@
+<div class="tab1">
+    <button style="margin: 20px 10px" class="btn  btn-warning" type="button" id="xCodePlus"
+            onclick="window.addProduct()">型号+
+    </button>
+    <button style="margin: 20px 10px" class="btn  btn-warning" type="button" id="prdWxplus"
+            onclick="window.addProcedure()">工序+
+    </button>
+
+    <button onclick="window.doExport('products','infoprot1','#datagridCheckableExample')" style="margin: 20px 10px" class="btn  btn-success"
+            type="button">导出
+    </button>
+    <button style="margin: 20px 10px" class="btn  btn-success" type="button">导入</button>
+    <button onclick="window.doExportTemplate('products','infoprot1','#datagridCheckableExample')" style="margin: 20px 10px" class="btn  btn-info" type="button">下载导入模板</button>
+
+    <div id="datagridCheckableExample" class="datagrid">
+        <div class="datagrid-container">
+
+        </div>
+
+    </div>
+
+
+    <div class="modal fade modal-moveable" id="ProductModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">产品</h4></div>
+                <div class="modal-body">
+                    <div class="form" id="ProductForm">
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">型号</span>
+                            <input id="modelformId" type="text" name="model" class="form-control model" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#modelformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">名称</span>
+                            <input id="nameformId" type="text" name="name" class="form-control name" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#nameformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">规格</span>
+                            <input id="specificationsformId" type="text" name="specifications"
+                                   class="form-control specifications"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#specificationsformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">装箱数</span>
+                            <input id="packingnumberformId" type="text" name="packingnumber"
+                                   class="form-control packingnumber"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#packingnumberformId').val('')">x</span>
+                        </div>
+<!--                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">-->
+<!--                            <span class="input-group-addon">箱数</span>-->
+<!--                            <input id="packing_amountformId" type="text" name="packing_amount"-->
+<!--                                   class="form-control packing_amount"-->
+<!--                                   placeholder="">-->
+<!--                            <span class="input-group-addon cursor" onclick="$('#packing_amountformId').val('')">x</span>-->
+<!--                        </div>-->
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">单价</span>
+                            <input id="unitpriceformId" type="text" name="unitprice" class="form-control unitprice"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#unitpriceformId').val('')">x</span>
+                        </div>
+                        <input name="type" class="type" type="hidden">
+                        <input name="row" class="row" type="hidden">
+                        <input name="col" class="col" type="hidden">
+                        <input name="id" class="id" type="hidden">
+                        <input name="flag" class="flag" type="hidden">
+                        <input name="index" class="index" type="hidden">
+                    </div>
+
+                    <div style="clear: both"></div>
+                    <div class="orderDrag">
+                        <div style="margin-top: 20px">
+                            工序排序
+                        </div>
+                        <div class="list-group" id="sortableList">
+                            <div class="list-group-item"><i class="icon-move"></i> 猫咪</div>
+                            <div class="list-group-item"><i class="icon-move"></i> 小鸡</div>
+                            <div class="list-group-item"><i class="icon-move"></i> 大黄</div>
+                            <div class="list-group-item"><i class="icon-move"></i> 鹅鹅鹅</div>
+                            <div class="list-group-item"><i class="icon-move"></i> 猪王</div>
+                        </div>
+                    </div>
+
+                </div>
+                <div style="clear: both"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button onclick="window.deleteProduct()" type="button" class="btn btn-danger"
+                    >删除
+                    </button>
+                    <button onclick="window.saveProduct()" type="button" class="btn btn-primary"
+                    >保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改属性 对话框HTML -->
+    <div class="modal fade modal-moveable" id="InfoModal1_10">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 style="font-size: 20px" class="modal-title">值修改</h4>
+                </div>
+                <div class="modal-content">
+                    <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+                        <span class="input-group-addon ">修改为：</span>
+                        <input class="form-control tab10Value" type="text" placeholder="请输入工价">
+                        <input class="id" type="hidden" name="id">
+                        <input class="modelName" type="hidden" name="modelName">
+                        <input name="row" class="row" type="hidden">
+                        <input name="col" class="col" type="hidden">
+                        <input name="productIndex" class="productIndex" type="hidden">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button onclick="window.deleteModel()"
+                            type="button" class="btn btn-danger" data-dismiss="modal">删除
+                    </button>
+                    <button type="button" class="btn btn-primary" id="savePros"
+                            onclick="window.saveProductHasProcedure()">
+                        保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 产品新增 对话框HTML -->
+    <div class="modal fade modal-moveable" id="prdInfoModal1_5">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 style="font-size: 20px" class="modal-title">产品新增</h4>
+                </div>
+                <div class="modal-content">
+                    <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+                        <span class="input-group-addon ">型号</span>
+                        <input name="model" class="form-control model" type="text" placeholder="请输入型号">
+                        <input class="id" type="hidden" name="id">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <!--                    <button onclick="window.deleteModel('Product',$('#prdInfoModal1_5 .id').val())" type="button"-->
+                    <!--                            class="btn btn-danger" data-dismiss="modal">删除-->
+                    <!--                    </button>-->
+                    <button type="button" class="btn btn-primary" id="saveModel" onclick="window.saveProduct()">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 工序新增 对话框HTML -->
+    <div class="modal fade modal-moveable" id="prdInfoModal1_6">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 style="font-size: 20px" class="modal-title">工序新增</h4>
+                </div>
+                <div class="modal-content">
+                    <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+                        <span class="input-group-addon ">工序</span>
+                        <input name="name" class="form-control name" type="text" placeholder="请输入工序">
+                        <input class="id" type="hidden" name="id">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <!--                    <button onclick="window.deleteModel('Working_Procedure',$('#prdInfoModal1_6 .id').val())"-->
+                    <!--                            type="button" class="btn btn-danger" data-dismiss="modal">删除-->
+                    <!--                    </button>-->
+                    <button type="button" class="btn btn-primary" id="saveProcedure" onclick="window.saveProcedure()">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 产品修改对话框HTML -->
+    <div class="modal fade modal-moveable" id="prdInfoModal1_3">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 style="font-size: 20px" class="modal-title">产品修改</h4>
+                </div>
+                <button style="margin: 20px 10px" class="btn btn-lg btn-success" type="button" id="prdWxUpdatePlus">工序+
+                </button>
+
+                <div class="datagridSortExample1_3Box">
+                    <div id="datagridSortExample1_3" class="datagrid"></div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="prdUpdateSuccess">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div style="text-align: center;width: 100%" id="btnGroup">
+
+        <div style="margin: auto">
+            <!--        <button style="margin: 20px 10px" class="btn btn-lg btn-primary" data-toggle="modal"-->
+            <!--                data-target="#prdInfoModal1_2" type="button" data-moveable="true" id="prdLuru1_2">录入-->
+            <!--        </button>-->
+            <!--        <button style="margin: 20px 10px" class="btn btn-lg btn-info " data-toggle="modal"-->
+            <!--                data-target="#prdInfoModal1_3" type="button" data-moveable="true" id="prdUpdate1_3">修改-->
+            <!--        </button>-->
+            <!--        <button style="margin: 20px 10px" class="btn btn-lg btn-danger" type="button" id="deleteProduct"-->
+            <!--                onclick="window.deleteProduct()">删除-->
+            <!--        </button>-->
+
+        </div>
+    </div>
+
+</div>
+

@@ -1,0 +1,349 @@
+<div>
+<!--搜索表单-->
+<div class="searchForm" id="EmployeesearchForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">工号</span> 
+<input id="work_numbersearchFormId" type="text" name="work_number" class="form-control work_number" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#work_numbersearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">姓名</span> 
+<input id="namesearchFormId" type="text" name="name" class="form-control name" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#namesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">性别</span> 
+<select id="gendersearchFormId" type="text" name="gender" class="form-control gender" placeholder=""><option value="1">男</option>
+<option value="2">女</option>
+</select> 
+<span class="input-group-addon cursor" onclick="$('#gendersearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">部门</span> 
+<input id="departmentNamesearchFormId" type="text" name="departmentName" class="form-control departmentName" placeholder=""> 
+<input id="departmentNamesearchFormIdcallback" type="hidden" name="departmentNameId" class="form-control departmentNameId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#departmentNamesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">职务</span> 
+<input id="positionsearchFormId" type="text" name="position" class="form-control position" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#positionsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">手机号</span> 
+<input id="mobilesearchFormId" type="text" name="mobile" class="form-control mobile" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#mobilesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">证件号</span> 
+<input id="id_numsearchFormId" type="text" name="id_num" class="form-control id_num" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#id_numsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">入职时间</span> 
+<input id="inDatesearchFormId" type="text" name="inDate" class="form-control inDate" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#inDatesearchFormId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--功能按钮-->
+<div id="Employeefunctions" class="functions"><button class="btn  btn-warning "type="button"onclick="window.createEmployeeForm()">新增</button><button class="btn  btn-danger"type="button"onclick="window.batchDeleteEmployee()">删除</button><button class="btn  btn-primary"type="button"onclick="window.searchEmployee()">搜索</button></div>
+<!--表单-->
+<div class="form" id="EmployeeForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">工号</span> 
+<input id="work_numberformId" type="text" name="work_number" class="form-control work_number" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#work_numberformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">姓名</span> 
+<input id="nameformId" type="text" name="name" class="form-control name" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#nameformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">性别</span> 
+<select id="genderformId" type="text" name="gender" class="form-control gender" placeholder=""><option value="1">男</option>
+<option value="2">女</option>
+</select> 
+<span class="input-group-addon cursor" onclick="$('#genderformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">部门</span> 
+<input id="departmentNameformId" type="text" name="departmentName" class="form-control departmentName" placeholder=""> 
+<input id="departmentNameformIdcallback" type="hidden" name="departmentNameId" class="form-control departmentNameId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#departmentNameformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">职务</span> 
+<input id="positionformId" type="text" name="position" class="form-control position" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#positionformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">手机号</span> 
+<input id="mobileformId" type="text" name="mobile" class="form-control mobile" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#mobileformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">证件号</span> 
+<input id="id_numformId" type="text" name="id_num" class="form-control id_num" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#id_numformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">入职时间</span> 
+<input id="inDateformId" type="text" name="inDate" class="form-control inDate" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#inDateformId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--弹窗-->
+<div class="modal fade modal-moveable"id="EmployeeModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button"class="close"data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button><h4 class="modal-title">Employee</h4></div><div class="modal-body"></div><div style="clear: both"></div> <div class="modal-footer"><button type="button"class="btn btn-default"data-dismiss="modal">关闭</button><button onclick="window.deleteEmployeeForm()"type="button"class="btn btn-danger"data-dismiss="modal">删除</button><button onclick="window.saveEmployeeForm()"type="button"class="btn btn-primary"data-dismiss="modal">保存</button></div></div></div></div>
+
+<!--列表-->
+<div id="table_Employee"></div>
+</div>
+<script>
+
+ var EmployeeDataSource={
+  "form": {
+    "work_number": "",
+    "name": "",
+    "gender": "",
+    "departmentName": "",
+    "position": "",
+    "mobile": "",
+    "id_num": "",
+    "inDate": ""
+  },
+  "list": {
+    "cols": [
+      {
+        "name": "work_number",
+        "label": "工号",
+        "width": 100
+      },
+      {
+        "name": "name",
+        "label": "姓名",
+        "width": 100
+      },
+      {
+        "name": "gender",
+        "label": "性别",
+        "width": 100
+      },
+      {
+        "name": "departmentName",
+        "label": "部门",
+        "width": 100
+      },
+      {
+        "name": "position",
+        "label": "职务",
+        "width": 100
+      },
+      {
+        "name": "mobile",
+        "label": "手机号",
+        "width": 100
+      },
+      {
+        "name": "id_num",
+        "label": "证件号",
+        "width": 100
+      },
+      {
+        "name": "inDate",
+        "label": "入职时间",
+        "width": 100
+      },
+      {
+        "name": "createdAt",
+        "label": "创建日期",
+        "width": 150
+      }
+    ],
+    "array": []
+  }
+}
+
+ //渲染列表
+ window.renderEmployeeTable=function (tableId, dataSource) {
+        $(tableId).html('').append('<div class="table"></div>')
+
+        $(tableId + ' .table').datagrid({
+            dataSource: dataSource,
+            checkable: true,
+            checkByClickRow: false,
+            partialRendering: false,
+            // height: '300',
+            onRender: function () {
+                $(tableId + ' .datagrid-cell').off('click');
+                $(tableId + ' .datagrid-cell').on('click', function () {
+                    var row = $(this).attr('data-row')
+                    var col = $(this).attr('data-col')
+                    if (row == 0 || col == 0) return
+                    var index = row - 1
+                    var formId = 'EmployeeForm'
+                    var modalId = 'EmployeeModal'
+                    $('#' + modalId).modal('show', 'fit');
+                    var formData = EmployeeDataSource.list.array[index];
+                    window.renderForm('#' + formId, formData)
+                    $('#' + formId + ' .flag').val('edit')
+                    $('#' + formId + ' .index').val(index)
+                })
+            }
+        })
+    }
+
+ //创建
+ window.createEmployeeForm=function () { //调起创建弹窗
+        var formId = 'EmployeeForm'
+        var modalId = 'EmployeeModal'
+        $('#' + modalId).modal('show')
+        var data = {"id":"","work_number":"","name":"","gender":"","departmentName":"","position":"","mobile":"","id_num":"","inDate":""};
+        window.renderForm('#' + formId, data);
+        $('#' + formId + ' .flag').val('new')
+        $('#' + formId + ' .id').val('')
+    }
+
+ //保存
+ window.saveEmployeeForm=function () { //创建或保存
+        var formId = 'EmployeeForm'
+        var flag = $('#' + formId + ' .flag').val()
+        var formData = window.getFormData('#' + formId)
+        if (flag == 'new') { //创建状态
+            EmployeeDataSource.list.array.push(formData)
+            var event = events['rq2111']
+            event.requiredParams = {model: 'Employee'}
+            event.optionalParams = {data: formData}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("创建成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Employee'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                EmployeeDataSource.list.array = result.data;
+                                window.renderEmployeeTable('#table_Employee', EmployeeDataSource.list)
+                            })
+                    }, 1000)
+                })
+        } else {
+            var index = $('#' + formId + ' .index').val()
+            var data = EmployeeDataSource.list.array[index]
+            for (var x in formData) {
+                try {
+                    data[x] = formData[x]
+                } catch (e) {
+                }
+            }
+            var event = events['rq2112']
+            event.requiredParams = {model: 'Employee'}
+            event.optionalParams = {data: data}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("保存成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Employee'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                EmployeeDataSource.list.array = result.data;
+                                window.renderEmployeeTable('#table_Employee', EmployeeDataSource.list)
+                            })
+                    }, 1000)
+                })
+        }
+        var modalId = 'EmployeeModal'
+        $('#' + modalId).modal('hide')
+    }
+
+ //删除
+ window.deleteEmployeeForm=function () { //删除
+        var formId = 'EmployeeForm'
+        var index = $(formId + ' .index').val()
+        var data = EmployeeDataSource.list.array[index]
+
+        if (index) { //调用接口从服务器删除
+            var modelName = 'Employee';
+            var id = data.id;
+            if (!id) {
+                return
+            } else {
+                var event = events['rq2115']
+                event.requiredParams = {model: modelName}
+                event.optionalParams = {items: [{id: id}]}
+                window.ajax(event)
+                    .then(function () {
+                        setTimeout(function () {
+                            new $.zui.Messager("删除成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            $('.modal').modal('hide');
+
+                        }, 1000)
+                    })
+            }
+            EmployeeDataSource.list.array.splice(index, 1);
+            window.renderEmployeeTable('#table_Employee', EmployeeDataSource.list)
+        }
+
+        var modalId = 'EmployeeModal'
+        $('#' + modalId).modal('hide');
+    }
+
+ //批量删除
+ window.batchDeleteEmployee=function () { //批量删除
+        var formId = 'EmployeeForm'
+        var index = $(formId + ' .index').val()
+        var data = EmployeeDataSource.list.array[index]
+
+        var tableId = 'table_Employee'
+        var items = window.getSelectedTableItems('#' + tableId + ' .table')
+        if (items.length == 0) {
+            new $.zui.Messager("请至少选择一个记录", {
+                icon: 'info' // 定义消息图标
+            }).show();
+            return
+        }
+        var batchDeleteEvent = events['rq2115'] //通用删除接口
+        batchDeleteEvent.requiredParams = {model: 'Employee'}
+        batchDeleteEvent.optionalParams = {items: items}
+        window.ajax(batchDeleteEvent)
+            .then(function () {
+                var getEvent = events['rq2114'] //通用查找接口
+                getEvent.requiredParams = {model: 'Employee'}
+                getEvent.optionalParams = {items: items}
+                return window.ajax(getEvent)
+            })
+            .then(function (result) {
+                EmployeeDataSource.list.array = result.data;
+                window.renderEmployeeTable('#table_Employee', EmployeeDataSource.list)
+            })
+    }
+
+ //搜索
+ window.searchEmployee=function (limit) { //搜索
+        var formId = 'EmployeesearchForm'
+        var formData = limit ? window.getFormData('#' + formId) : {}
+
+        var searchEvent = events['rq2114'] //通用查询接口
+        searchEvent.requiredParams = {model: 'Employee'}
+        searchEvent.optionalParams = formData
+        window.ajax(searchEvent)
+            .then(function (result) {
+                EmployeeDataSource.list.array = result.data;
+                window.renderEmployeeTable('#table_Employee', EmployeeDataSource.list)
+            })
+    }
+
+</script>

@@ -1,0 +1,450 @@
+<style>
+    @media screen and (max-width: 330px) {
+        .btn2 {
+            width: 27% !important;
+        }
+    }
+
+
+    @media screen and (max-width: 415px) {
+        .blue {
+            width: 90% !important;
+            height: 180px !important;
+        }
+
+    }
+</style>
+<div class="finacialTab1">
+    <div class="container " style="margin:0;padding:0">
+
+        <div style="margin:15px 10px 0px 10px ;font-size: 17px;color:#666;"><span
+                style="font-weight: bolder;color: red">筛选:</span></div>
+
+        <div class="input-group col-md-5" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">下单日期开始</span>
+            <input type="text" class="form-control datetimepicker tab1CreateAtDateStart" placeholder="点击选择">
+            <span class="input-group-addon cursor" onclick="$('.tab1CreateAtDateStart').val('')">x</span>
+        </div>
+
+        <div class="input-group col-md-5" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">下单日期结束</span>
+            <input type="text" class="form-control datetimepicker tab1CreateAtDateEnd" placeholder="点击选择">
+            <span class="input-group-addon cursor" onclick="$('.tab1CreateAtDateEnd').val('')">x</span>
+        </div>
+
+        <!--        <div class="input-group col-md-5" style="float:left;margin:10px 10px 10px 10px">-->
+        <!--            <span class="input-group-addon">&nbsp;制 单 员&nbsp</span>-->
+        <!--            <input type="text" class="form-control tab1Creator">-->
+        <!--            <span class="input-group-addon cursor" onclick="$('.tab1Creator').removeAttr('customerId').val('')">x</span>-->
+
+        <!--        </div>-->
+
+        <div style="clear: both"></div>
+
+        <div class="input-group col-md-5" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">交付日期</span>
+            <input type="text" class="form-control datetimepicker deleveredDateSearch" placeholder="点击选择">
+            <span class="input-group-addon cursor" onclick="$('.deleveredDateSearch').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">客户名称</span>
+            <input type="text" class="form-control tab1ClientName" placeholder="点击获取下拉选项">
+            <span class="input-group-addon cursor"
+                  onclick="$('.tab1ClientName').removeAttr('clientId').val('')">x</span>
+        </div>
+
+        <div style="clear: both"></div>
+
+        <div class="input-group col-md-5" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">订单编号</span>
+            <input type="text" class="form-control" placeholder="请准确输入编号">
+        </div>
+        <div class="input-group col-md-5" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">产品型号</span>
+            <input type="text" class="form-control tab1Model" placeholder="点击获取下拉选项">
+            <span class="input-group-addon cursor" onclick="$('.tab1Model').removeAttr('productId').val('')">x</span>
+
+        </div>
+
+        <div style="clear: both"></div>
+
+        <button onclick="window.searchYingshou()" class="btn btn-primary col-md-1 col-sm-2 exBtn"
+                style="float:left;margin:0 2px;margin-top:10px">搜索
+        </button>
+        <button onclick="window.doExport('yingshou','ftab1','#fitable1')" class="btn btn-success col-md-1 col-sm-2 exBtn" style="float:left;margin:0 2px;margin-top:10px">导出
+        </button>
+
+        <button class="btn  btn-warning col-md-1 col-sm-2 exBtn chuZhang"
+                style="float:left;margin:0 2px;margin-top:10px"
+                id="daikuan">货款入账
+        </button>
+
+
+    </div>
+
+
+    <div class="container" style="margin:0;padding:0">
+        <!-- <div id="remoteDataGridExample" class="datagrid"style=""></div> -->
+        <div style="margin:10px 10px 0px 10px;font-size: 17px;color:#666;"><span
+                style="font-weight: bolder;color: red">订单表格:</span></div>
+        <div id='fitable1' class="col-md-11" style="margin:10px 10px 10px 2px"></div>
+    </div>
+    <br>
+
+
+    <!-- 对话框——1——HTML -->
+    <div class="modal fade modal-moveable" id="myModal">
+        <div class="modal-dialog  modal-moveable modal-lg">
+            <div class="modal-content">
+                <div style="margin:15px 10px 0px 10px ;font-size: 17px;color:#666;"><span
+                        style="font-weight: bolder;color: red">订单详情:</span></div>
+
+                <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px;">
+                    <span class="input-group-addon">收货单位</span>
+                    <input type="text" class="form-control department" name="department">
+                </div>
+                <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">
+                    <span class="input-group-addon">下单日期</span>
+                    <!-- 下单日期 用createdAT -->
+                    <input type="text" class="form-control createdAt" name="createdAt">
+                </div>
+                <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">
+                    <span class="input-group-addon">订单编号</span>
+                    <input type="text" class="form-control orderNo" name="orderNo">
+                </div>
+                <div style="clear: both"></div>
+
+                <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px;">
+                    <span class="input-group-addon">收货地址</span>
+                    <input type="text" class="form-control adress" name="adress">
+                </div>
+                <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">
+                    <span class="input-group-addon">交付日期</span>
+                    <input type="text" class="form-control deleveredDate" name="deleveredDate">
+                </div>
+                <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">
+                    <span class="input-group-addon ">&nbsp;&nbsp;制单员&nbsp;&nbsp;</span>
+                    <input type="text" class="form-control create_user_id" readonly name="create_user_id">
+                </div>
+                <div style="clear: both"></div>
+
+
+                <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px;">
+                    <span class="input-group-addon">&nbsp;&nbsp;&nbsp;已&nbsp;收&nbsp;&nbsp;&nbsp;</span>
+                    <input name="accepted" type="text" class="form-control accepted" id="yishou">
+                </div>
+                <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">
+                    <span class="input-group-addon">&nbsp;&nbsp;&nbsp;优&nbsp;惠&nbsp;&nbsp;&nbsp;</span>
+                    <input name="discount" type="text" class="form-control discount" id="youhui">
+                </div>
+                <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">
+                    <span class="input-group-addon">应收账款</span>
+                    <input name="account_receivale" type="text" class="form-control account_receivale"
+                           id="yinshouzhankuan">
+                </div>
+                <div style="clear: both"></div>
+
+                <div class="container" style="margin:0;padding:0">
+                    <div style="margin:10px 10px 0px 10px;font-size: 17px;color:#666;"><span
+                            style="font-weight: bolder;color: red">订单内容:</span></div>
+
+                    <!--                    <button class="btn btn-danger col-md-1 col-sm-2 btn2" style="width:100px;margin:10px 10px 10px 10px"-->
+                    <!--                            id="add_btn">添加+-->
+                    <!--                    </button>-->
+
+                    <div id='fitable2' class="col-md-11" style="margin:10px 10px 10px 2px"></div>
+                    <!--                    <button class="btn  btn-primary col-md-1 col-sm-2 btn2"-->
+                    <!--                            style="float:right;width:85px;margin:10px 10px 10px 2px" id="fon_cun">封存-->
+                    <!--                    </button>-->
+                    <button class="btn  col-md-1 col-sm-2 btn2"
+                            style="float:right;width:100px;margin:10px 10px 10px 12px"
+                            data-dismiss="modal">关闭
+                    </button>
+                    <!--                    <button class="btn btn-info col-md-1 col-sm-2 btn2" id="modal1_xiugai"-->
+                    <!--                            style="float:left;width:85px;margin:10px 10px 10px 2px">修改-->
+                    <!--                    </button>-->
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 对话框——2——HTML -->
+    <div class="modal fade modal-moveable" id="myModal2">
+        <div class="modal-dialog  modal-moveable modal-lg" style="min-width: 320px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h4 class="modal-title">入账</h4>
+            </div>
+            <div class="modal-content">
+                <!--                <div class="input-group col-md-2 col-xs-11" style="margin:10px 10px 5px 10px">-->
+                <!--                    <span class="input-group-addon">客户名称</span>-->
+                <!--                    <input type="text" class="form-control">-->
+                <!--                </div>-->
+                <div class="container" style="margin:0;padding:0">
+                    <div class="row">
+                        <!--                        <div class="col-md-2 col-xs-11 blue"-->
+                        <!--                             style="margin:10px 3px 10px 20px;background-color: lightblue;height: 400px;overflow-y:scroll;float: left;">-->
+                        <!--&lt;!&ndash;                            <ul class="tree tree-lines" data-ride="tree" style="color:black">&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                    <span><input type="checkbox">2019年（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                    <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">1月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">2月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">3月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">4月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                    </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                    <span><input type="checkbox">2018年（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                    <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">1月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">2月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">3月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">4月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                    </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                    <span><input type="checkbox">2017年（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                    <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">1月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">2月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">3月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">4月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                    </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                    <span><input type="checkbox">2016年（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                    <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">1月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">2月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">3月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                        <li><span><input type="checkbox">4月（<span></span>）</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            <ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">1日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">2日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">3日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                                <li><input type="checkbox">4日（<span></span>）</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                            </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                    </ul>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                            </ul>&ndash;&gt;-->
+                        <!--                        </div>-->
+                        <div style="float: left;" class="col-md-12 col-xs-12">
+                            <div id='table-tan' style="margin:10px 10px 10px 10px"></div>
+                        </div>
+                        <div style="clear: both"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top:none">
+                <div style="clear: both"></div>
+                <!--                <button class="btn btn-primary col-md-1 col-sm-2 btn2"-->
+                <!--                        style="float:right;width:85px;margin:10px 10px 10px 2px">确认-->
+                <!--                </button>-->
+                <button class="btn  col-md-1 col-sm-2 btn2"
+                        style="float:right;width:100px;margin:10px 10px 10px 12px" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!--对话框——修改或增加-表格里的数据-->
+    <div class="modal modal-moveable fade" id="xiugai_ModalTab1" style="height: 95%;overflow: scroll">
+        <div class="modal-dialog  modal-moveable modal-lg">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h4 class="modal-title">详情</h4>
+            </div>
+            <div class="modal-content">
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">型号</span>
+                    <input name="type" type="text" class="form-control type">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">名称</span>
+                    <input name="model" type="text" class="form-control model">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">规格</span>
+                    <input name="specifications" type="text" class="form-control unit specifications">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">装箱数</span>
+                    <input name="packingnumber" type="text" class="form-control packingnumber">
+                </div>
+                <div style="clear: both"></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">件数</span>
+                    <input name="piece" type="text" class="form-control piece">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">数量</span>
+                    <input name="number" type="text" class="form-control  number">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">单价</span>
+                    <input name="unitprice" type="text" class="form-control  unitprice">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">金额</span>
+                    <input name="price" type="text" class="form-control price">
+                </div>
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">备注</span>
+                    <input name="remarks" type="text" class="form-control remarks">
+                </div>
+
+                <input value="" name="index" type="hidden" class="form-control index">
+                <input value="" name="flag" type="hidden" class="form-control flag">
+
+                <div style="clear: both"></div>
+                <h3 style="margin-left: 10px">交付情况</h3>
+                <!--交付情况 列表-->
+                <div id="table_EndProductInOut_yingfu" style="margin: 10px"></div>
+
+            </div>
+            <div class="modal-footer" style="border-top:none">
+                <div style="clear: both"></div>
+                <!--                <button class="btn btn-primary col-md-1 col-sm-2 btn2 deliveryInfoButton"-->
+                <!--                        style="float:right;width:100px;margin:10px 10px 10px 12px">交付情况-->
+                <!--                </button>-->
+                <button id="add2_baocun" class="btn btn-primary col-md-1 col-sm-2 btn2 exBtn2"
+                        style="float:right;width:85px;margin:10px 10px 10px 2px">保存
+                </button>
+                <button class="btn  col-md-1 col-sm-2 btn2 exBtn2"
+                        style="float:right;width:100px;margin:10px 10px 10px 12px" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

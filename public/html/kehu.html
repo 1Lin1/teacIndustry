@@ -1,0 +1,397 @@
+<div class="tab1">
+
+    <div style="margin:10px 10px 0px 10px;font-size: 17px;color:#666;"><span
+            style="font-weight: bolder;color:black">客户订单搜索：</span></div>
+    <div class="container" style="margin:0;padding:0">
+        <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">客户名称</span>
+            <input type="text" class="form-control nameLetter autocomplete clientName" id="clientAutoComplete"
+                   placeholder="点击获取下拉选项">
+            <span class="input-group-addon removeInfo cursor">x</span>
+        </div>
+
+        <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon ">联系电话</span>
+            <input class="form-control clientMobile" type="text" readonly>
+        </div>
+
+        <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon ">&nbsp;联 系 人&nbsp;</span>
+            <input class="form-control clientContact" type="text" readonly>
+        </div>
+
+        <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon ">联系人电话</span>
+            <input class="form-control clientMobile" type="text" readonly>
+        </div>
+
+        <div class="input-group col-md-6" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon ">收货地址</span>
+            <input class="form-control clientAddress" type="text" readonly>
+        </div>
+
+        <div style="clear: both"></div>
+        <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">封存情况</span>
+            <div>
+                <select class="form-control" id="isCloseSelect" value="-1">
+                    <option value="-1">全部</option>
+                    <option value="1">已封存</option>
+                    <option value="0">未封存</option>
+
+                </select>
+            </div>
+        </div>
+        <form class="form-inline">
+            <div class="col-md-3 " style="margin-top:10px;">
+                <button type="button" class="btn btn-primary tab1Submit">点击搜索</button>
+                <button class="btn btn-warning newCustomerButton" type="button" style="margin-left: 10px">新增客户
+                </button>
+            </div>
+        </form>
+
+
+        <div style="clear: both"></div>
+
+    </div>
+
+    <div class="container" style="margin:0;padding:0">
+        <div style="margin:10px 10px 0px 10px;font-size: 17px;color:#666;"><span
+                style="font-weight: bolder;color: red">订单信息:</span></div>
+        <div id='sale1' class="col-md-11" style="margin:10px 10px 10px 2px"></div>
+    </div>
+
+
+    <!--   大对话框   -->
+
+
+    <div class="modal fade modal-moveable" id="myLgModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">新增客户</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">客户名称</span>
+                        <input type="text" class="form-control" placeholder="请输入客户名称" id="addkhname">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">联系电话</span>
+                        <input type="text" class="form-control" placeholder="请输入联系电话" id="addphone">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">收货地址</span>
+                        <input type="text" class="form-control" placeholder="请输入收货地址" id="addplace">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">&nbsp;联 系 人</span>
+                        <input type="text" class="form-control" placeholder="请输入联系人" id="addContacts">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">联系人电话</span>
+                        <input type="text" class="form-control" placeholder="请输入联系人电话" id="addContactsphone">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">&nbsp; 备 注 &nbsp;</span>
+                        <input type="text" class="form-control" placeholder="请输入备注" id="addRemarks">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary " onclick="window.addCustomer()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--双击弹窗口-->
+    <!-- <div class="modal fade modal-moveable" id="tab1ddxq">
+        <div class="modal-dialog">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">*****公司（后台）</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">收货单位</span>
+                        <input type="text" class="form-control department" >
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">收货地址</span>
+                        <input type="text" class="form-control adress" >
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">下单日期</span>
+                        <input type="text" class="form-control createdAT" >
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">交付日期</span>
+                        <input type="text" class="form-control deleveredDate" >
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">订单编号</span>
+                        <input type="text" class="form-control orderNo" >
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">&nbsp;制 单 员</span>
+                        <input type="text" class="form-control create_user_id" >
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">&nbsp; 已 收 &nbsp;</span>
+                        <input type="text" class="form-control accepted" >
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">&nbsp; 优 惠 &nbsp;</span>
+                        <input type="text" class="form-control discount" >
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">应收账款</span>
+                        <input type="text" class="form-control payed_amount" >
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">&nbsp; 备 注 &nbsp;</span>
+                        <input type="text" class="form-control"     >
+                    </div>
+                </div>
+
+                <div class="container" style="margin:0;padding:0">
+                    <div style="margin:10px 10px 0px 10px;font-size: 17px;color:#666;"><span
+                            style="font-weight: bolder;color:black">订单信息：</span></div>
+                    <div id='sale6' class="col-md-11" style="margin:10px 10px 10px 2px"></div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="window.Edit()">保存</button>
+                    <button type="button" class="btn btn-primary">保存到本地</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <!--双击弹窗口-->
+    <div class="modal fade modal-moveable" id="tab1MyLgModal4">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">订单</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">收货单位</span>
+                        <input name="department" type="text" class="form-control department"
+                               placeholder="收货单位">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">收货地址</span>
+                        <input name="adress" type="text" class="form-control adress" placeholder="收货地址">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">下单日期</span>
+                        <input name="createdAt" type="text" class="form-control datetimepicker createdAt"
+                               placeholder="下单日期">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">交付日期</span>
+                        <input name="deleveredDate" type="text"
+                               class="form-control datetimepicker deleveredDate" placeholder="交付日期">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">订单编号</span>
+                        <input name="orderNo" type="text" class="form-control orderNo" placeholder="订单编号">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">&nbsp;制 单 员&nbsp;</span>
+                        <input name="create_user_id" readonly type="text"
+                               class="form-control create_user_id" placeholder="制 单 员">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">&nbsp; 已 &nbsp; 收 &nbsp;</span>
+                        <input name="accepted" type="text" class="form-control accepted"
+                               placeholder="已  收">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">&nbsp; 优 &nbsp; 惠 &nbsp;</span>
+                        <input name="discount" type="text" class="form-control discount"
+                               placeholder="优  惠">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px;">
+                        <span class="input-group-addon">应收账款</span>
+                        <input name="account_receivale" readonly type="text"
+                               class="form-control account_receivale" placeholder="应收账款">
+                    </div>
+
+                    <input value="" name="id" type="hidden" class="form-control id">
+                    <input value="" name="clientId" type="hidden" class="form-control clientId">
+                    <input value="" name="index" type="hidden" class="form-control index">
+                    <input value="" name="flag" type="hidden" class="form-control flag">
+
+                </div>
+                <div class="container" style="margin:0;padding:0">
+
+                    <div style="margin:10px 10px 0px 10px;font-size: 17px;color:#666;"><span
+                            style="font-weight: bolder;color:black">产品信息：</span></div>
+                    <!--                <button type="button" class="btn btn-primary" id="tab1Addorder" style="margin-left: 10px">添加产品信息</button>-->
+                    <div id="tab1Sale10" class="col-md-11" style="margin:10px 10px 10px 2px"></div>
+
+                    <div class="input-group col-md-3" style="margin:0px 20px 10px 10px;float: left">
+                        <span class="input-group-addon">件数合计</span>
+                        <input name="pieceSum" readonly type="text"
+                               class="form-control pieceSum" placeholder="件数合计">
+                    </div>
+                    <div class="input-group col-md-3" style="margin:0px 20px 10px 10px;float: left">
+                        <span class="input-group-addon">数量合计</span>
+                        <input name="numberSum" readonly type="text"
+                               class="form-control numberSum" placeholder="数量合计">
+                    </div>
+                    <div class="input-group col-md-3" style="margin:0px 20px 10px 10px;float: left">
+                        <span class="input-group-addon">金额合计</span>
+                        <input name="priceSum" readonly type="text"
+                               class="form-control priceSum" placeholder="金额合计">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+
+                    <button type="button" class="btn btn-primary" onclick="window.tab1Rq324()">保存</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--<form class="form-inline">-->
+    <!--    <div class="col-md-3 " style="margin-top:10px;">-->
+    <!--        <button type="submit" class="btn btn-primary tab1Submit">返回主页-->
+    <!--        </button>-->
+    <!--    </div>-->
+    <!--</form>-->
+    <div class="modal fade modal-moveable" id="tab1Edit">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">修改订单信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">型 号</span>
+                        <input type="text" class="form-control" placeholder="型 号" id="Edittype">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">名 称</span>
+                        <input type="text" class="form-control" placeholder="名 称" id="Editmodel">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">规 格</span>
+                        <input type="text" class="form-control" placeholder="规 格" id="Editspecifications">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">装箱数</span>
+                        <input type="text" class="form-control" placeholder="装箱数" id="Editpackingnumber">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">件 数</span>
+                        <input type="text" class="form-control" placeholder="件 数" id="Editpiece">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">单 价</span>
+                        <input type="text" class="form-control" placeholder="单 价" id="Editunitprice">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">金 额</span>
+                        <input type="text" class="form-control" placeholder="金 额" id="Editprice">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">交付情况</span>
+                        <input type="text" class="form-control" placeholder="交付情况" id="Editdeliveried">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; ">
+                        <span class="input-group-addon">备 注</span>
+                        <input type="text" class="form-control" placeholder="备 注" id="Editremarks">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="window.tab1Edit()">保存修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade modal-moveable" id="tab1MyLgModal5">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">产品</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">型 号</span>
+                        <input name="type" type="text" class="form-control addtype type" placeholder="型 号">
+                    </div>
+
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">名 称</span>
+                        <input name="model" type="text" class="form-control model" placeholder="名 称">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">规 格</span>
+                        <input name="specifications" type="text" class="form-control specifications" placeholder="规 格">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">装箱数</span>
+                        <input name="packingnumber" type="text" class="form-control packingnumber" placeholder="装箱数">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">件 数</span>
+                        <input name="piece" type="text" class="form-control piece" placeholder="件 数">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                        <span class="input-group-addon">单 价</span>
+                        <input name="unitprice" type="text" class="form-control unitprice" placeholder="单 价">
+                    </div>
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">金 额</span>
+                        <input name="price" type="text" class="form-control price" placeholder="金 额">
+                    </div>
+
+                    <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; ">
+                        <span class="input-group-addon">备 注</span>
+                        <input name="remarks" type="text" class="form-control remarks" placeholder="备 注">
+                    </div>
+
+                    <h3>交付情况</h3>
+                    <!--交付情况 列表-->
+                    <div id="table_EndProductInOut"></div>
+
+                    <input value="" name="id" type="hidden" class="form-control id">
+                    <input value="" name="productId" type="hidden" class="form-control productId">
+                    <input value="" name="index" type="hidden" class="form-control index">
+                    <input value="" name="flag" type="hidden" class="form-control flag">
+
+                </div>
+                <div class="modal-footer">
+                    <!--                    <button type="button" class="btn btn-default">查看交付情况</button>-->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="window.addOrder_detailsTab1()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

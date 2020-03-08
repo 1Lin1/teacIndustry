@@ -1,0 +1,308 @@
+<div>
+<!--搜索表单-->
+<div class="searchForm" id="ProductHasMaterialsearchForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">undefined</span> 
+<input id="idsearchFormId" type="text" name="id" class="form-control id" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#idsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">产品外键</span> 
+<select id="productIdsearchFormId" type="text" name="productId" class="form-control productId" placeholder=""></select> 
+<span class="input-group-addon cursor" onclick="$('#productIdsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">物料外键</span> 
+<select id="materialIdsearchFormId" type="text" name="materialId" class="form-control materialId" placeholder=""></select> 
+<span class="input-group-addon cursor" onclick="$('#materialIdsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">是否勾选关联</span> 
+<input id="checksearchFormId" type="checkbox" name="check" class="form-control check" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#checksearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">undefined</span> 
+<input id="rowIdsearchFormId" type="text" name="rowId" class="form-control rowId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#rowIdsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">undefined</span> 
+<input id="colIdsearchFormId" type="text" name="colId" class="form-control colId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#colIdsearchFormId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--功能按钮-->
+<div id="ProductHasMaterialfunctions" class="functions"><button class="btn  btn-warning "type="button"onclick="window.createProductHasMaterialForm()">新增</button><button class="btn  btn-danger"type="button"onclick="window.batchDeleteProductHasMaterial()">删除</button><button class="btn  btn-primary"type="button"onclick="window.searchProductHasMaterial()">搜索</button></div>
+<!--表单-->
+<div class="form" id="ProductHasMaterialForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">undefined</span> 
+<input id="idformId" type="text" name="id" class="form-control id" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#idformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">产品外键</span> 
+<select id="productIdformId" type="text" name="productId" class="form-control productId" placeholder=""></select> 
+<span class="input-group-addon cursor" onclick="$('#productIdformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">物料外键</span> 
+<select id="materialIdformId" type="text" name="materialId" class="form-control materialId" placeholder=""></select> 
+<span class="input-group-addon cursor" onclick="$('#materialIdformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">是否勾选关联</span> 
+<input id="checkformId" type="checkbox" name="check" class="form-control check" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#checkformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">undefined</span> 
+<input id="rowIdformId" type="text" name="rowId" class="form-control rowId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#rowIdformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">undefined</span> 
+<input id="colIdformId" type="text" name="colId" class="form-control colId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#colIdformId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--弹窗-->
+<div class="modal fade modal-moveable"id="ProductHasMaterialModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button"class="close"data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button><h4 class="modal-title">ProductHasMaterial</h4></div><div class="modal-body"></div><div style="clear: both"></div> <div class="modal-footer"><button type="button"class="btn btn-default"data-dismiss="modal">关闭</button><button onclick="window.deleteProductHasMaterialForm()"type="button"class="btn btn-danger"data-dismiss="modal">删除</button><button onclick="window.saveProductHasMaterialForm()"type="button"class="btn btn-primary"data-dismiss="modal">保存</button></div></div></div></div>
+
+<!--列表-->
+<div id="table_ProductHasMaterial"></div>
+</div>
+<script>
+
+ var ProductHasMaterialDataSource={
+  "form": {
+    "id": "",
+    "productId": "",
+    "materialId": "",
+    "check": "",
+    "rowId": "",
+    "colId": ""
+  },
+  "list": {
+    "cols": [
+      {
+        "name": "id",
+        "width": 100
+      },
+      {
+        "name": "productId",
+        "label": "产品外键",
+        "width": 100
+      },
+      {
+        "name": "materialId",
+        "label": "物料外键",
+        "width": 100
+      },
+      {
+        "name": "check",
+        "label": "是否勾选关联",
+        "width": 100
+      },
+      {
+        "name": "rowId",
+        "width": 100
+      },
+      {
+        "name": "colId",
+        "width": 100
+      },
+      {
+        "name": "createdAt",
+        "label": "创建日期",
+        "width": 150
+      }
+    ],
+    "array": []
+  }
+}
+
+ //渲染列表
+ window.renderProductHasMaterialTable=function (tableId, dataSource) {
+        $(tableId).html('').append('<div class="table"></div>')
+
+        $(tableId + ' .table').datagrid({
+            dataSource: dataSource,
+            checkable: true,
+            checkByClickRow: false,
+            partialRendering: false,
+            // height: '300',
+            onRender: function () {
+                $(tableId + ' .datagrid-cell').off('click');
+                $(tableId + ' .datagrid-cell').on('click', function () {
+                    var row = $(this).attr('data-row')
+                    var col = $(this).attr('data-col')
+                    if (row == 0 || col == 0) return
+                    var index = row - 1
+                    var formId = 'ProductHasMaterialForm'
+                    var modalId = 'ProductHasMaterialModal'
+                    $('#' + modalId).modal('show', 'fit');
+                    var formData = ProductHasMaterialDataSource.list.array[index];
+                    window.renderForm('#' + formId, formData)
+                    $('#' + formId + ' .flag').val('edit')
+                    $('#' + formId + ' .index').val(index)
+                })
+            }
+        })
+    }
+
+ //创建
+ window.createProductHasMaterialForm=function () { //调起创建弹窗
+        var formId = 'ProductHasMaterialForm'
+        var modalId = 'ProductHasMaterialModal'
+        $('#' + modalId).modal('show')
+        var data = {"id":"","productId":"","materialId":"","check":"","rowId":"","colId":""};
+        window.renderForm('#' + formId, data);
+        $('#' + formId + ' .flag').val('new')
+        $('#' + formId + ' .id').val('')
+    }
+
+ //保存
+ window.saveProductHasMaterialForm=function () { //创建或保存
+        var formId = 'ProductHasMaterialForm'
+        var flag = $('#' + formId + ' .flag').val()
+        var formData = window.getFormData('#' + formId)
+        if (flag == 'new') { //创建状态
+            ProductHasMaterialDataSource.list.array.push(formData)
+            var event = events['rq2111']
+            event.requiredParams = {model: 'ProductHasMaterial'}
+            event.optionalParams = {data: formData}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("创建成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'ProductHasMaterial'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                ProductHasMaterialDataSource.list.array = result.data;
+                                window.renderProductHasMaterialTable('#table_ProductHasMaterial', ProductHasMaterialDataSource.list)
+                            })
+                    }, 1000)
+                })
+        } else {
+            var index = $('#' + formId + ' .index').val()
+            var data = ProductHasMaterialDataSource.list.array[index]
+            for (var x in formData) {
+                try {
+                    data[x] = formData[x]
+                } catch (e) {
+                }
+            }
+            var event = events['rq2112']
+            event.requiredParams = {model: 'ProductHasMaterial'}
+            event.optionalParams = {data: data}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("保存成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'ProductHasMaterial'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                ProductHasMaterialDataSource.list.array = result.data;
+                                window.renderProductHasMaterialTable('#table_ProductHasMaterial', ProductHasMaterialDataSource.list)
+                            })
+                    }, 1000)
+                })
+        }
+        var modalId = 'ProductHasMaterialModal'
+        $('#' + modalId).modal('hide')
+    }
+
+ //删除
+ window.deleteProductHasMaterialForm=function () { //删除
+        var formId = 'ProductHasMaterialForm'
+        var index = $(formId + ' .index').val()
+        var data = ProductHasMaterialDataSource.list.array[index]
+
+        if (index) { //调用接口从服务器删除
+            var modelName = 'ProductHasMaterial';
+            var id = data.id;
+            if (!id) {
+                return
+            } else {
+                var event = events['rq2115']
+                event.requiredParams = {model: modelName}
+                event.optionalParams = {items: [{id: id}]}
+                window.ajax(event)
+                    .then(function () {
+                        setTimeout(function () {
+                            new $.zui.Messager("删除成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            $('.modal').modal('hide');
+
+                        }, 1000)
+                    })
+            }
+            ProductHasMaterialDataSource.list.array.splice(index, 1);
+            window.renderProductHasMaterialTable('#table_ProductHasMaterial', ProductHasMaterialDataSource.list)
+        }
+
+        var modalId = 'ProductHasMaterialModal'
+        $('#' + modalId).modal('hide');
+    }
+
+ //批量删除
+ window.batchDeleteProductHasMaterial=function () { //批量删除
+        var formId = 'ProductHasMaterialForm'
+        var index = $(formId + ' .index').val()
+        var data = ProductHasMaterialDataSource.list.array[index]
+
+        var tableId = 'table_ProductHasMaterial'
+        var items = window.getSelectedTableItems('#' + tableId + ' .table')
+        if (items.length == 0) {
+            new $.zui.Messager("请至少选择一个记录", {
+                icon: 'info' // 定义消息图标
+            }).show();
+            return
+        }
+        var batchDeleteEvent = events['rq2115'] //通用删除接口
+        batchDeleteEvent.requiredParams = {model: 'ProductHasMaterial'}
+        batchDeleteEvent.optionalParams = {items: items}
+        window.ajax(batchDeleteEvent)
+            .then(function () {
+                var getEvent = events['rq2114'] //通用查找接口
+                getEvent.requiredParams = {model: 'ProductHasMaterial'}
+                getEvent.optionalParams = {items: items}
+                return window.ajax(getEvent)
+            })
+            .then(function (result) {
+                ProductHasMaterialDataSource.list.array = result.data;
+                window.renderProductHasMaterialTable('#table_ProductHasMaterial', ProductHasMaterialDataSource.list)
+            })
+    }
+
+ //搜索
+ window.searchProductHasMaterial=function (limit) { //搜索
+        var formId = 'ProductHasMaterialsearchForm'
+        var formData = limit ? window.getFormData('#' + formId) : {}
+
+        var searchEvent = events['rq2114'] //通用查询接口
+        searchEvent.requiredParams = {model: 'ProductHasMaterial'}
+        searchEvent.optionalParams = formData
+        window.ajax(searchEvent)
+            .then(function (result) {
+                ProductHasMaterialDataSource.list.array = result.data;
+                window.renderProductHasMaterialTable('#table_ProductHasMaterial', ProductHasMaterialDataSource.list)
+            })
+    }
+
+</script>

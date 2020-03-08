@@ -1,0 +1,39 @@
+<div class="leftNav btn-group btn-group-vertical col-md-2 col-xs-12" style="margin-bottom: 15px;margin-top: 5px;">
+
+    <button target="rq201" type="button" class="btn rq201"><a>销售信息</a></button>
+    <button target="rq202" type="button" class="btn rq202"><a>生产信息</a></button>
+    <button target="rq203" type="button" class="btn rq203"><a>库存信息</a></button>
+
+    <% if(user.type == 'supervisor' ){ %>
+        <button target="rq204" type="button" class="btn rq204"><a>黑匣子</a></button>
+    <% }else{ %>
+    <% } %>
+
+    <% if(user.isRoot ){ %>
+        <button target="rq205" type="button" class="btn rq205"><a>充值产品</a></button>
+    <% }else{ %>
+    <% } %>
+
+
+
+</div>
+<div class="clear">
+
+</div>
+<script>
+    if (document.body.clientWidth < 798) {
+        $('.leftNav').removeClass("btn-group-vertical")
+        $('.clear').css('clear', "both")
+        $('.leftNav button').css('width','70px')
+        $('.leftNav button').css('font-size','12px')
+    }
+
+    //为已选页面添加高亮
+    var configId = window.config.id
+    $('.' + configId).addClass('active')
+
+    $('.leftNav button').click(function () {
+        var target = $(this).attr('target')
+        location.href = target
+    })
+</script>

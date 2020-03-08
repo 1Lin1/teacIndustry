@@ -1,0 +1,431 @@
+<div>
+<!--搜索表单-->
+<div class="searchForm" id="EndProductInOutsearchForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">订单编号</span> 
+<input id="snsearchFormId" type="text" name="sn" class="form-control sn" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#snsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">客户名称</span> 
+<input id="namesearchFormId" type="text" name="name" class="form-control name" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#namesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">员工id</span> 
+<input id="employeeIdsearchFormId" type="text" name="employeeId" class="form-control employeeId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#employeeIdsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">单据经手人</span> 
+<input id="document_handlersearchFormId" type="text" name="document_handler" class="form-control document_handler" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#document_handlersearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">产品型号</span> 
+<input id="product_modelsearchFormId" type="text" name="product_model" class="form-control product_model" placeholder=""> 
+<input id="product_modelsearchFormIdcallback" type="hidden" name="product_modelId" class="form-control product_modelId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#product_modelsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">产品批次</span> 
+<input id="product_batchsearchFormId" type="text" name="product_batch" class="form-control product_batch" placeholder=""> 
+<input id="product_batchsearchFormIdcallback" type="hidden" name="product_batchId" class="form-control product_batchId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#product_batchsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">装箱数</span> 
+<input id="packing_quantitysearchFormId" type="text" name="packing_quantity" class="form-control packing_quantity" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#packing_quantitysearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">箱数</span> 
+<input id="packing_amountsearchFormId" type="text" name="packing_amount" class="form-control packing_amount" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#packing_amountsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">数量</span> 
+<input id="numbersearchFormId" type="text" name="number" class="form-control number" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#numbersearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">单价</span> 
+<input id="pricesearchFormId" type="text" name="price" class="form-control price" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#pricesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">金额</span> 
+<input id="sumsearchFormId" type="text" name="sum" class="form-control sum" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#sumsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">出库或者入库类型</span> 
+<select id="typesearchFormId" type="text" name="type" class="form-control type" placeholder=""><option value="in">入库</option>
+<option value="out">出库</option>
+</select> 
+<span class="input-group-addon cursor" onclick="$('#typesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">备注</span> 
+<input id="notesearchFormId" type="text" name="note" class="form-control note" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#notesearchFormId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--功能按钮-->
+<div id="EndProductInOutfunctions" class="functions"><button class="btn  btn-warning "type="button"onclick="window.createEndProductInOutForm()">新增</button><button class="btn  btn-danger"type="button"onclick="window.batchDeleteEndProductInOut()">删除</button><button class="btn  btn-primary"type="button"onclick="window.searchEndProductInOut()">搜索</button></div>
+<!--表单-->
+<div class="form" id="EndProductInOutForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">订单编号</span> 
+<input id="snformId" type="text" name="sn" class="form-control sn" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#snformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">客户名称</span> 
+<input id="nameformId" type="text" name="name" class="form-control name" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#nameformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">员工id</span> 
+<input id="employeeIdformId" type="text" name="employeeId" class="form-control employeeId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#employeeIdformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">单据经手人</span> 
+<input id="document_handlerformId" type="text" name="document_handler" class="form-control document_handler" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#document_handlerformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">产品型号</span> 
+<input id="product_modelformId" type="text" name="product_model" class="form-control product_model" placeholder=""> 
+<input id="product_modelformIdcallback" type="hidden" name="product_modelId" class="form-control product_modelId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#product_modelformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">产品批次</span> 
+<input id="product_batchformId" type="text" name="product_batch" class="form-control product_batch" placeholder=""> 
+<input id="product_batchformIdcallback" type="hidden" name="product_batchId" class="form-control product_batchId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#product_batchformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">装箱数</span> 
+<input id="packing_quantityformId" type="text" name="packing_quantity" class="form-control packing_quantity" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#packing_quantityformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">箱数</span> 
+<input id="packing_amountformId" type="text" name="packing_amount" class="form-control packing_amount" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#packing_amountformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">数量</span> 
+<input id="numberformId" type="text" name="number" class="form-control number" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#numberformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">单价</span> 
+<input id="priceformId" type="text" name="price" class="form-control price" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#priceformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">金额</span> 
+<input id="sumformId" type="text" name="sum" class="form-control sum" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#sumformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">出库或者入库类型</span> 
+<select id="typeformId" type="text" name="type" class="form-control type" placeholder=""><option value="in">入库</option>
+<option value="out">出库</option>
+</select> 
+<span class="input-group-addon cursor" onclick="$('#typeformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">备注</span> 
+<input id="noteformId" type="text" name="note" class="form-control note" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#noteformId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--弹窗-->
+<div class="modal fade modal-moveable"id="EndProductInOutModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button"class="close"data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button><h4 class="modal-title">EndProductInOut</h4></div><div class="modal-body"></div><div style="clear: both"></div> <div class="modal-footer"><button type="button"class="btn btn-default"data-dismiss="modal">关闭</button><button onclick="window.deleteEndProductInOutForm()"type="button"class="btn btn-danger"data-dismiss="modal">删除</button><button onclick="window.saveEndProductInOutForm()"type="button"class="btn btn-primary"data-dismiss="modal">保存</button></div></div></div></div>
+
+<!--列表-->
+<div id="table_EndProductInOut"></div>
+</div>
+<script>
+
+ var EndProductInOutDataSource={
+  "form": {
+    "sn": "",
+    "name": "",
+    "employeeId": "",
+    "document_handler": "",
+    "product_model": "",
+    "product_batch": "",
+    "packing_quantity": "",
+    "packing_amount": "",
+    "number": "",
+    "price": "",
+    "sum": "",
+    "type": "",
+    "note": ""
+  },
+  "list": {
+    "cols": [
+      {
+        "name": "sn",
+        "label": "订单编号",
+        "width": 100
+      },
+      {
+        "name": "name",
+        "label": "客户名称",
+        "width": 100
+      },
+      {
+        "name": "employeeId",
+        "label": "员工id",
+        "width": 100
+      },
+      {
+        "name": "document_handler",
+        "label": "单据经手人",
+        "width": 100
+      },
+      {
+        "name": "product_model",
+        "label": "产品型号",
+        "width": 100
+      },
+      {
+        "name": "product_batch",
+        "label": "产品批次",
+        "width": 100
+      },
+      {
+        "name": "packing_quantity",
+        "label": "装箱数",
+        "width": 100
+      },
+      {
+        "name": "packing_amount",
+        "label": "箱数",
+        "width": 100
+      },
+      {
+        "name": "number",
+        "label": "数量",
+        "width": 100
+      },
+      {
+        "name": "price",
+        "label": "单价",
+        "width": 100
+      },
+      {
+        "name": "sum",
+        "label": "金额",
+        "width": 100
+      },
+      {
+        "name": "type",
+        "label": "出库或者入库类型",
+        "width": 100
+      },
+      {
+        "name": "note",
+        "label": "备注",
+        "width": 100
+      },
+      {
+        "name": "createdAt",
+        "label": "创建日期",
+        "width": 150
+      }
+    ],
+    "array": []
+  }
+}
+
+ //渲染列表
+ window.renderEndProductInOutTable=function (tableId, dataSource) {
+        $(tableId).html('').append('<div class="table"></div>')
+
+        $(tableId + ' .table').datagrid({
+            dataSource: dataSource,
+            checkable: true,
+            checkByClickRow: false,
+            partialRendering: false,
+            // height: '300',
+            onRender: function () {
+                $(tableId + ' .datagrid-cell').off('click');
+                $(tableId + ' .datagrid-cell').on('click', function () {
+                    var row = $(this).attr('data-row')
+                    var col = $(this).attr('data-col')
+                    if (row == 0 || col == 0) return
+                    var index = row - 1
+                    var formId = 'EndProductInOutForm'
+                    var modalId = 'EndProductInOutModal'
+                    $('#' + modalId).modal('show', 'fit');
+                    var formData = EndProductInOutDataSource.list.array[index];
+                    window.renderForm('#' + formId, formData)
+                    $('#' + formId + ' .flag').val('edit')
+                    $('#' + formId + ' .index').val(index)
+                })
+            }
+        })
+    }
+
+ //创建
+ window.createEndProductInOutForm=function () { //调起创建弹窗
+        var formId = 'EndProductInOutForm'
+        var modalId = 'EndProductInOutModal'
+        $('#' + modalId).modal('show')
+        var data = {"id":"","sn":"","name":"","employeeId":"","document_handler":"","product_model":"","product_batch":"","packing_quantity":"","packing_amount":"","number":"","price":"","sum":"","type":"","note":""};
+        window.renderForm('#' + formId, data);
+        $('#' + formId + ' .flag').val('new')
+        $('#' + formId + ' .id').val('')
+    }
+
+ //保存
+ window.saveEndProductInOutForm=function () { //创建或保存
+        var formId = 'EndProductInOutForm'
+        var flag = $('#' + formId + ' .flag').val()
+        var formData = window.getFormData('#' + formId)
+        if (flag == 'new') { //创建状态
+            EndProductInOutDataSource.list.array.push(formData)
+            var event = events['rq2111']
+            event.requiredParams = {model: 'EndProductInOut'}
+            event.optionalParams = {data: formData}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("创建成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'EndProductInOut'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                EndProductInOutDataSource.list.array = result.data;
+                                window.renderEndProductInOutTable('#table_EndProductInOut', EndProductInOutDataSource.list)
+                            })
+                    }, 1000)
+                })
+        } else {
+            var index = $('#' + formId + ' .index').val()
+            var data = EndProductInOutDataSource.list.array[index]
+            for (var x in formData) {
+                try {
+                    data[x] = formData[x]
+                } catch (e) {
+                }
+            }
+            var event = events['rq2112']
+            event.requiredParams = {model: 'EndProductInOut'}
+            event.optionalParams = {data: data}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("保存成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'EndProductInOut'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                EndProductInOutDataSource.list.array = result.data;
+                                window.renderEndProductInOutTable('#table_EndProductInOut', EndProductInOutDataSource.list)
+                            })
+                    }, 1000)
+                })
+        }
+        var modalId = 'EndProductInOutModal'
+        $('#' + modalId).modal('hide')
+    }
+
+ //删除
+ window.deleteEndProductInOutForm=function () { //删除
+        var formId = 'EndProductInOutForm'
+        var index = $(formId + ' .index').val()
+        var data = EndProductInOutDataSource.list.array[index]
+
+        if (index) { //调用接口从服务器删除
+            var modelName = 'EndProductInOut';
+            var id = data.id;
+            if (!id) {
+                return
+            } else {
+                var event = events['rq2115']
+                event.requiredParams = {model: modelName}
+                event.optionalParams = {items: [{id: id}]}
+                window.ajax(event)
+                    .then(function () {
+                        setTimeout(function () {
+                            new $.zui.Messager("删除成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            $('.modal').modal('hide');
+
+                        }, 1000)
+                    })
+            }
+            EndProductInOutDataSource.list.array.splice(index, 1);
+            window.renderEndProductInOutTable('#table_EndProductInOut', EndProductInOutDataSource.list)
+        }
+
+        var modalId = 'EndProductInOutModal'
+        $('#' + modalId).modal('hide');
+    }
+
+ //批量删除
+ window.batchDeleteEndProductInOut=function () { //批量删除
+        var formId = 'EndProductInOutForm'
+        var index = $(formId + ' .index').val()
+        var data = EndProductInOutDataSource.list.array[index]
+
+        var tableId = 'table_EndProductInOut'
+        var items = window.getSelectedTableItems('#' + tableId + ' .table')
+        if (items.length == 0) {
+            new $.zui.Messager("请至少选择一个记录", {
+                icon: 'info' // 定义消息图标
+            }).show();
+            return
+        }
+        var batchDeleteEvent = events['rq2115'] //通用删除接口
+        batchDeleteEvent.requiredParams = {model: 'EndProductInOut'}
+        batchDeleteEvent.optionalParams = {items: items}
+        window.ajax(batchDeleteEvent)
+            .then(function () {
+                var getEvent = events['rq2114'] //通用查找接口
+                getEvent.requiredParams = {model: 'EndProductInOut'}
+                getEvent.optionalParams = {items: items}
+                return window.ajax(getEvent)
+            })
+            .then(function (result) {
+                EndProductInOutDataSource.list.array = result.data;
+                window.renderEndProductInOutTable('#table_EndProductInOut', EndProductInOutDataSource.list)
+            })
+    }
+
+ //搜索
+ window.searchEndProductInOut=function (limit) { //搜索
+        var formId = 'EndProductInOutsearchForm'
+        var formData = limit ? window.getFormData('#' + formId) : {}
+
+        var searchEvent = events['rq2114'] //通用查询接口
+        searchEvent.requiredParams = {model: 'EndProductInOut'}
+        searchEvent.optionalParams = formData
+        window.ajax(searchEvent)
+            .then(function (result) {
+                EndProductInOutDataSource.list.array = result.data;
+                window.renderEndProductInOutTable('#table_EndProductInOut', EndProductInOutDataSource.list)
+            })
+    }
+
+</script>

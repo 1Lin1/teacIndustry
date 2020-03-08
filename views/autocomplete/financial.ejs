@@ -1,0 +1,439 @@
+<script>
+    window.setTab1ClientAutoComplete = function () {
+        events['rq311'].requiredParams = {}
+        events['rq311'].optionalParams = {}
+        var clients;
+        window.ajax(events['rq311'])
+            .then(function (data) {
+                var source = []
+                var items = data.data.rows;
+                clients = data.data.rows;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab1ClientName").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var client = clients[index]
+                        //console.log(client);
+                        $('.tab1ClientName').attr("clientId", client.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab1ClientName').attr("clientId", '');
+                    }
+                });
+
+            })
+    }
+
+    window.setTab1ModelAutoComplete = function (data) {
+        var models = data;
+
+        window.ajax(events['rq2012'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                models = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab1Model").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = models[index]
+                        //console.log(model);
+                        $('.tab1Model').attr("productId", model.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab1Model').attr("productId", '');
+                    }
+                });
+            })
+    }
+
+    window.setTab1CreatorAutoComplete = function () {
+        var customers
+        var source = []
+
+        window.ajax(events['rq2015'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                customers = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + '(' + item.nickName + ')' + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab1Creator").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var customer = customers[index]
+                        //console.log(customer);
+                        $('.tab1Creator').attr("customerId", customer.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab1Creator').attr("customerId", '');
+                    }
+                });
+            })
+
+
+    }
+
+    window.setTab2ModelAutoComplete = function (data) {
+        var models = data;
+
+        window.ajax(events['rq2012'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                models = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab2Model").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = models[index]
+                        //console.log(model);
+                        $('.tab2Model').attr("productId", model.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab2Model').attr("productId", '');
+                    }
+                });
+            })
+    }
+
+    window.setTab2ProcessAutoComplete = function (data) {
+        var processes = data;
+
+        window.ajax(events['rq2013'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                processes = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.product_batch + " ",
+                        value: item.product_batch,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab2OBatchNo").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var process = processes[index]
+                        //console.log(process);
+                        $('.tab2OBatchNo').attr("processId", process.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab2OBatchNo').attr("processId", '');
+                    }
+                });
+            })
+    }
+
+    window.setTab2ProcedureAutoComplete = function () {
+        var procedures
+        var source = []
+
+        window.ajax(events['rq2014'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                procedures = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab2ProcedureName").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var procedure = procedures[index]
+                        //console.log(procedure);
+                        $('.tab2ProcedureName').attr("procedureName", procedure.name);
+                    }
+                    ,
+                    notInSourceCallback: function () {
+                        $('.tab2ProcedureName').attr("procedureName", '');
+                    }
+                });
+            })
+
+
+    }
+
+    window.setTab2SupplierAutoComplete = function () {
+        var suppliers;
+
+        window.ajax(events['rq229'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                suppliers = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $("#supplierAutoCompletef").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var supplier = suppliers[index]
+                        //console.log(supplier);
+
+                        $("#supplierAutoCompletef").val(supplier.name);
+                        $("#supplierAutoCompletef").attr('supplierId', supplier.id);
+                    }
+                    ,
+                    notInSourceCallback: function () {
+                        $("#supplierAutoCompletef").val('');
+                        $("#supplierAutoCompletef").attr('supplierId');
+                    }
+                });
+            })
+    }
+
+
+    window.setTab3EmployeeAutoComplete = function (data) {
+        var employees = data;
+
+        window.ajax(events['rq2016'])
+            .then(function (data) {
+                var source = []
+                var sourceWorkNumber = []
+                var items = data.data;
+                employees = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    var disWorkNumber = {
+                        label: item.work_number + "" +"("+ item.name+")" + " ",
+                        value: item.work_number,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                    sourceWorkNumber.push(disWorkNumber);
+                }
+
+                //console.log(source);
+
+                $(".tab3WorkNumber1").autocomplete({
+                    source: sourceWorkNumber,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var employee = employees[index]
+                        //console.log(employee);
+                        $('.tab3WorkNumber1').attr("employeeId", employee.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab3WorkNumber1').attr("employeeId", '');
+                    }
+                });
+
+                $(".tab3WorkNumber2").autocomplete({
+                    source: sourceWorkNumber,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var employee = employees[index]
+                        //console.log(employee);
+                        $('.tab3WorkNumber2').attr("employeeId", employee.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab3WorkNumber2').attr("employeeId", '');
+                    }
+                });
+
+
+                $(".tab3Employee1").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var employee = employees[index]
+                        //console.log(employee);
+                        $('.tab3Employee1').attr("employeeId", employee.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab3Employee1').attr("employeeId", '');
+                    }
+                });
+
+                $(".tab3Employee2").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var employee = employees[index]
+                        //console.log(employee);
+                        $('.tab3Employee2').attr("employeeId", employee.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab3Employee2').attr("employeeId", '');
+                    }
+                });
+
+                $("#myModal4 .work_number").autocomplete({
+                    source: sourceWorkNumber,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var employee = employees[index]
+                        //console.log(employee);
+                        $('#myModal4 .employeeId').val(employee.id);
+                        $('#myModal4 .name').val(employee.name);
+                        $('#myModal4 .department').val(employee.departmentName);
+                    },
+                    notInSourceCallback: function () {
+                        $('#myModal4 .employeeId').val('');
+                        $('#myModal4 .name').val('');
+                        $('#myModal4 .department').val('');
+                    }
+                });
+
+            })
+    }
+
+    window.setTab3DepartmentsAutoComplete = function () {
+        var departments
+        var source = []
+
+        window.ajax(events['rq2017'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                departments = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab3Department1").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var department = departments[index]
+                        //console.log(department);
+                        $('.tab3Department1').attr("departmentId", department.id);
+                    }
+                    ,
+                    notInSourceCallback: function () {
+                        $('.tab3Department1').attr("departmentId", '');
+                    }
+                });
+
+                $(".tab3Department2").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var department = departments[index]
+                        //console.log(department);
+                        $('.tab3Department2').attr("departmentId", department.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab3Department2').attr("departmentId", '');
+                    }
+                });
+
+            })
+
+
+    }
+
+
+</script>

@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/bower_components/zui/dist/css/zui.css" rel="stylesheet">
+
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/zui/dist/js/zui.js"></script>
+    <link href="/bower_components/zui/dist/lib/tabs/zui.tabs.css" rel="stylesheet">
+    <script src="/bower_components/zui/dist/lib/tabs/zui.tabs.js"></script>
+
+    <link href="/bower_components/zui/dist/lib/datagrid/zui.datagrid.css" rel="stylesheet">
+    <script src="/bower_components/zui/dist/lib/datagrid/zui.datagrid.js"></script>
+
+    <link href="lib/datagrid/zui.datagrid.min.css" rel="stylesheet">
+    <script src="lib/datagrid/zui.datagrid.min.js"></script>
+
+    <style>
+
+
+    </style>
+</head>
+<body>
+
+<!--<div style="margin-left: 960px">-->
+<!--    <button   class="btn btn-lg btn-success" type="button"><i class="icon icon-reply"></i>返回主页</button>-->
+<!--</div>-->
+<div style="margin:auto" class="tabs" id="tabsExample">
+
+</div>
+
+
+</body>
+
+
+<script>
+
+    $(document).ready(function () {
+        //定义标签页
+
+
+        var tab1Data;
+
+
+        var tabs = [
+            {
+                title: '未交付订单',
+                icon: 'icon-star',
+                type: 'custom',
+                forbidClose: true,
+
+                onOpen: function () {
+
+
+                    tab1Data = [
+                        {
+                            id: '1',
+                            saledate: '2020/2/1',
+                            paydate: '2020/3/1',
+                            paynum: '120',
+                            saleman: 'mike',
+                            payman: 'rose',
+                            payconent: 'A01',
+                        },
+                        {
+                            id: '2',
+                            saledate: '2010/2/1',
+                            paydate: '2010/4/2',
+                            paynum: '500',
+                            saleman: 'joon',
+                            payman: 'bob',
+                            payconent: 'A02',
+                        },
+                        {
+                            id: '1',
+                            saledate: '2050/2/1',
+                            paydate: '2055/3/1',
+                            paynum: '120',
+                            saleman: 'pop',
+                            payman: 'bobo',
+                            payconent: 'A11',
+                        },
+
+
+                    ];
+
+                    var htmlhead =
+                        '<div id="rq401">' + '<table class="table table-bordered table1" >' +
+                        '    <thead>' +
+                        '    <tr>' +
+                        '        <!-- 以下两列左侧固定 -->' +
+                        '<th class="table_date">下单日期</th>' +
+                        '<th class="table_date">交付日期</th>' +
+
+                        '        <!-- 以下三列中间可滚动 -->' +
+                        '        <th  data-width="100">订单编号</th>' +
+                        '        <th  data-width="200">制单员</th>' +
+                        '        <th  data-width="300">客户名称</th>' +
+                        '        <th  data-width="300">订单内容</th></tr></thead>'
+                        + '<tbody>'
+
+                    //未交付订单部分
+                    var htmlBody = ''
+                    for (var i = 0; i < tab1Data.length; i++) {
+                        var item = tab1Data[i];
+                        var string = '<tr class="table-item" index="' + i + '" >' +
+                            '<td class="table_date">' + item.saledate + '</td>' +
+                            '<td class="table_date">' + item.paydate + '</td>' +
+                            '<td>' + item.paynum + '</td>' +
+                            '<td>' + item.saleman + '</td>' +
+                            '<td>' + item.payman + '</td>' +
+                            '<td>' + item.payconent + '</td>' +
+                            '</tr>';
+
+                        htmlBody = htmlBody + string;//数据叠加
+                    }
+
+                    //未交付产品部分
+
+                    var noPayPrdHead = '<div id="rq402">' + '<table class="table table-bordered table1" >' +
+                        '    <thead>' +
+                        '    <tr>' +
+                        '        <!-- 以下两列左侧固定 -->' +
+                        '<th class="table_date">型号</th>' +
+                        '<th class="table_date">数量</th>' +
+                        '<th class="table_date">订单数</th>'
+
+                        + '<tbody>'
+
+                    var noPayPrdBody = ''
+                    for (var i = 0; i < tab1Data.length; i++) {
+                        var item = tab1Data[i];
+                        var string = '<tr class="table-item" index="' + i + '" >' +
+                            '<td class="table_date">' + item.saledate + '</td>' +
+                            '<td class="table_date">' + item.paydate + '</td>' +
+                            '<td>' + item.paynum + '</td>' +
+
+                            '</tr>';
+
+                        noPayPrdBody = noPayPrdBody + string;//数据叠加
+                    }
+
+                    var finalhtml = htmlhead + htmlBody + '</tbody></table>'
+                        + noPayPrdHead + noPayPrdBody + '</tbody></table>'
+
+                        + '<div style="text-align:center;width: 100%">\n' +
+                        '    <button style="margin: auto" class="btn btn-block btn-success " type="button"><i class="icon icon-zoom-in"></i>订单搜索</button>\n' +
+                        '</div>' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="下单日期">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="交付日期">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="订单编号">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="制单员">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="客户名称">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="产品型号">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '</div>';
+
+
+                    $('#rq123').html('');//清空 防止重复
+                    $('#rq123').append(finalhtml);
+
+
+                    //console.log(finalhtml);
+
+                    $('.table1').datagrid({
+                        sortable: true
+                    });
+                    setTimeout(function () {
+                        $('#tabsExample .datagrid-row').click(function () {
+                            var index = $(this).attr("data-row") - 1
+                            alert(tab1Data[index].saleman);
+                        })
+                    }, 1000)
+
+
+                },
+
+                content: function () {
+                    return '<div id="rq123"></div>'
+                },
+
+
+            },
+            {
+                title: '产品生产进度',
+                icon: 'icon-star',
+                type: 'custom',
+                forbidClose: true,
+                forceReload: true,
+                onOpen: function () {
+
+                    tab1Data = [
+                        {
+                            id: '1',
+                            date: '2020/2/1',
+                            name: 'mike',
+                            pnum: '120',
+                            depart: 'chinese',
+                            pinum: '100',
+                            xnum: 'A01',
+                            workmth: '包装',
+                            wnum: '10000',
+                            wprice: '0.06',
+                            wcash: '1700',
+                            ps: '备注',
+                            isDone: '已出仓',
+                            isInRep: '已入库'
+
+
+                        },
+                        {
+                            id: '2',
+                            date: '2017/2/1',
+                            name: 'Rose',
+                            pnum: '121',
+                            depart: 'math',
+                            pinum: '100',
+                            xnum: 'A02',
+                            workmth: '包装',
+                            wnum: '10000',
+                            wprice: '0.06',
+                            wcash: '1700',
+                            ps: '备注',
+                            isDone: '已出仓',
+                            isInRep: '已入库'
+
+
+                        },
+                        {
+                            id: '3',
+                            date: '2019/2/1',
+                            name: 'Bob',
+                            pnum: '123',
+                            depart: 'english',
+                            pinum: '100',
+                            xnum: 'A03',
+                            workmth: '包装',
+                            wnum: '10000',
+                            wprice: '0.06',
+                            wcash: '1700',
+                            ps: '备注',
+                            isDone: '已出仓',
+                            isInRep: '已入库'
+
+
+                        },
+
+
+                    ];
+
+                    var htmlhead =
+                        '</div>' + '<table class="table table-bordered table2" >' +
+                        '    <thead>' +
+                        '    <tr>' +
+                        '        <!-- 以下两列左侧固定 -->' +
+                        '<th class="table_date">日期</th>' +
+                        '<th class="table_date">姓名</th>' +
+
+                        '        <!-- 以下三列中间可滚动 -->' +
+                        '        <th  data-width="100">编号</th>' +
+                        '        <th  data-width="200">部门</th>' +
+                        '        <th  data-width="300">批次</th>' +
+                        '        <th  data-width="300">型号</th>' +
+                        '        <th  data-width="300">工序</th>' +
+                        '        <th  data-width="300">数量</th>' +
+                        '        <th  data-width="300">工价</th>' +
+                        '        <th  data-width="300">酬金</th>' +
+                        '        <th  data-width="300">备注</th>' +
+                        '        <th  data-width="300">物品消耗</th>' +
+                        '        <th  data-width="300">成品入库</th></tr></thead>'
+                        + '<tbody>'
+
+
+                    var htmlBody = ''
+                    for (var i = 0; i < tab1Data.length; i++) {
+                        var item = tab1Data[i];
+                        var string = '<tr class="table-item" index="' + i + '" >' +
+                            '<td class="table_date">' + item.date + '</td>' +
+                            '<td class="table_date">' + item.name + '</td>' +
+                            '<td>' + item.pnum + '</td>' +
+                            '<td>' + item.depart + '</td>' +
+                            '<td>' + item.pinum + '</td>' +
+                            '<td>' + item.xnum + '</td>' +
+                            '<td>' + item.workmth + '</td>' +
+                            '<td>' + item.wnum + '</td>' +
+                            '<td>' + item.wprice + '</td>' +
+                            '<td>' + item.wcash + '</td>' +
+                            '<td>' + item.ps + '</td>' +
+                            '<td>' + item.isDone + '</td>' +
+                            '<td>' + item.isInRep + '</td>' +
+                            '</tr>';
+
+                        htmlBody = htmlBody + string;//数据叠加
+                    }
+
+                    var finalhtml = htmlhead + htmlBody + '</tbody></table>'
+                        + '<div style="text-align: center;width: 100%">\n' +
+                        '    <button style="margin: auto" class="btn btn-block btn-success " type="button"><i class="icon icon-zoom-in"></i>进度搜索</button>\n' +
+                        '</div>' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="产品型号">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="产品批次">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="产品工序">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n'
+                        + '<div style="margin-top: 10px;text-align: center;width: 100%">\n' +
+                        '    <button  style="margin:auto" class="btn btn-lg btn-success" type="button"><i class="icon icon-file"></i>新增进度</button>\n' +
+                        '</div>'
+
+
+                    $('#rq124').html('');//清空 防止重复
+                    $('#rq124').append(finalhtml);
+
+
+                    //console.log(finalhtml);
+
+                    $('.table2').datagrid({
+                        sortable: true
+                    });
+
+                    setTimeout(function () {
+                        $('#tabsExample .datagrid-row').click(function () {
+                            var index = $(this).attr("data-row") - 1
+                            alert(tab1Data[index].name);
+                        })
+                    }, 1000)
+
+
+                },
+
+                content: function () {
+                    return '<div id="rq124"></div>'
+                },
+
+
+            },
+            {
+                title: '工单管理',
+                icon: 'icon-star',
+                type: 'custom',
+                forbidClose: true,
+
+                onClose: function () {
+
+                },
+                onOpen: function () {
+
+
+                    tab1Data = [
+                        {
+                            id: '1',
+                            date: '2020/2/1',
+                            name: 'mike',
+                            pnum: '120',
+                            depart: 'chinese',
+                            pinum: '100',
+                            xnum: 'A01',
+                            workmth: '包装',
+                            wnum: '10000',
+                            wprice: '0.06',
+                            wcash: '1700',
+                            ps: '备注',
+                            isDone: '已出仓',
+                            isInRep: '已入库'
+
+
+                        },
+                        {
+                            id: '2',
+                            date: '2017/2/1',
+                            name: 'Rose',
+                            pnum: '121',
+                            depart: 'math',
+                            pinum: '100',
+                            xnum: 'A02',
+                            workmth: '包装',
+                            wnum: '10000',
+                            wprice: '0.06',
+                            wcash: '1700',
+                            ps: '备注',
+                            isDone: '已出仓',
+                            isInRep: '已入库'
+
+
+                        },
+                        {
+                            id: '3',
+                            date: '2019/2/1',
+                            name: 'Bob',
+                            pnum: '123',
+                            depart: 'english',
+                            pinum: '100',
+                            xnum: 'A03',
+                            workmth: '包装',
+                            wnum: '10000',
+                            wprice: '0.06',
+                            wcash: '1700',
+                            ps: '备注',
+                            isDone: '已出仓',
+                            isInRep: '已入库'
+
+
+                        },
+
+
+                    ];
+
+                    var htmlhead =
+                        '</div>' + '<table class="table table-bordered table3" >' +
+                        '    <thead>' +
+                        '    <tr>' +
+                        '        <!-- 以下两列左侧固定 -->' +
+                        '<th class="table_date">日期</th>' +
+                        '<th class="table_date">姓名</th>' +
+
+                        '        <!-- 以下三列中间可滚动 -->' +
+                        '        <th  data-width="100">编号</th>' +
+                        '        <th  data-width="200">部门</th>' +
+                        '        <th  data-width="300">批次</th>' +
+                        '        <th  data-width="300">型号</th>' +
+                        '        <th  data-width="300">工序</th>' +
+                        '        <th  data-width="300">数量</th>' +
+                        '        <th  data-width="300">工价</th>' +
+                        '        <th  data-width="300">酬金</th>' +
+                        '        <th  data-width="300">备注</th>' +
+                        '        <th  data-width="300">物品消耗</th>' +
+                        '        <th  data-width="300">成品入库</th></tr></thead>'
+                        + '<tbody>'
+
+
+                    var htmlBody = ''
+                    for (var i = 0; i < tab1Data.length; i++) {
+                        var item = tab1Data[i];
+                        var string = '<tr class="table-item" index="' + i + '" >' +
+                            '<td class="table_date">' + item.date + '</td>' +
+                            '<td class="table_date">' + item.name + '</td>' +
+                            '<td>' + item.pnum + '</td>' +
+                            '<td>' + item.depart + '</td>' +
+                            '<td>' + item.pinum + '</td>' +
+                            '<td>' + item.xnum + '</td>' +
+                            '<td>' + item.workmth + '</td>' +
+                            '<td>' + item.wnum + '</td>' +
+                            '<td>' + item.wprice + '</td>' +
+                            '<td>' + item.wcash + '</td>' +
+                            '<td>' + item.ps + '</td>' +
+                            '<td>' + item.isDone + '</td>' +
+                            '<td>' + item.isInRep + '</td>' +
+                            '</tr>';
+
+                        htmlBody = htmlBody + string;//数据叠加
+                    }
+
+                    var finalhtml = htmlhead + htmlBody + '</tbody></table>'
+                        + '<div style="text-align: center;width: 100%">\n' +
+                        '    <button style="margin: auto" class="btn btn-block btn-success " type="button"><i class="icon icon-zoom-in"></i>工单搜索</button>\n' +
+                        '</div>' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="日期">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="姓名">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="编号">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="制单员">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="批次">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="型号">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '    <div class="input-control has-icon-right">\n' +
+                        '        <input id="inputPasswordExample1" type="text" class="form-control" placeholder="工序">\n' +
+                        '        <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-check"></i></label>\n' +
+                        '    </div>\n' +
+                        '</div>'
+                        + '<div style="margin-top: 10px;text-align: center;width: 100%">\n' +
+                        '    <button  style="margin:auto" class="btn btn-lg btn-success" type="button"><i class="icon icon-file"></i>新增工单</button>\n' +
+                        '</div>'
+
+
+                    $('#rq125').html('');//清空 防止重复
+                    $('#rq125').append(finalhtml);
+
+
+                    //console.log(finalhtml);
+
+                    $('.table3').datagrid({
+                        sortable: true
+                    });
+
+                    setTimeout(function () {
+                        $('#tabsExample .datagrid-row').click(function () {
+                            var index = $(this).attr("data-row") - 1
+                            alert(tab1Data[index].name);
+                        })
+                    }, 1000)
+
+
+                },
+
+                content: function () {
+                    return '<div id="rq125"></div>'
+                },
+
+
+            },
+            {
+                title: '返回主页',
+                icon: 'icon-reply-all',
+                type: 'custom',
+                forbidClose: true,
+
+                onOpen: function () {
+                    window.location.href = 'https://www.baidu.com'
+                },
+
+
+            },
+
+        ];
+
+        // 初始化标签页管理器
+        $('#tabsExample').tabs({tabs: tabs});
+        //表格排序
+
+    })
+
+
+    // // 控制部分
+    // $(document).ready(function () {
+    //
+    //     $.ajax({
+    //         url: '/production/getUnDeliveryOrders',
+    //         type: 'get',
+    //         timeout: 180000,
+    //         data: '',
+    //         dataType: 'json',
+    //         success:function (data) {
+    //
+    //             for (var i = 0; i < data.length(); i++) {
+    //
+    //             }
+    //         }
+    //
+    //     })
+    //
+    //
+    //
+    // })
+
+</script>
+</html>

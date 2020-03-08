@@ -1,0 +1,393 @@
+<div>
+<!--搜索表单-->
+<div class="searchForm" id="Order_ProductsearchForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">型号</span> 
+<input id="typesearchFormId" type="text" name="type" class="form-control type" placeholder=""> 
+<input id="typesearchFormIdcallback" type="hidden" name="typeId" class="form-control typeId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#typesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">名称</span> 
+<input id="modelsearchFormId" type="text" name="model" class="form-control model" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#modelsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">规格</span> 
+<input id="specificationssearchFormId" type="text" name="specifications" class="form-control specifications" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#specificationssearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">装箱数</span> 
+<input id="packingnumbersearchFormId" type="text" name="packingnumber" class="form-control packingnumber" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#packingnumbersearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">箱数</span> 
+<input id="packing_amountsearchFormId" type="text" name="packing_amount" class="form-control packing_amount" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#packing_amountsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">件数</span> 
+<input id="piecesearchFormId" type="text" name="piece" class="form-control piece" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#piecesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">数量</span> 
+<input id="numbersearchFormId" type="text" name="number" class="form-control number" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#numbersearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">单价</span> 
+<input id="unitpricesearchFormId" type="text" name="unitprice" class="form-control unitprice" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#unitpricesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">金额</span> 
+<input id="pricesearchFormId" type="text" name="price" class="form-control price" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#pricesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">备注</span> 
+<input id="remarkssearchFormId" type="text" name="remarks" class="form-control remarks" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#remarkssearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">交付情况</span> 
+<input id="deliveriedsearchFormId" type="text" name="deliveried" class="form-control deliveried" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#deliveriedsearchFormId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--功能按钮-->
+<div id="Order_Productfunctions" class="functions"><button class="btn  btn-warning "type="button"onclick="window.createOrder_ProductForm()">新增</button><button class="btn  btn-danger"type="button"onclick="window.batchDeleteOrder_Product()">删除</button><button class="btn  btn-primary"type="button"onclick="window.searchOrder_Product()">搜索</button></div>
+<!--表单-->
+<div class="form" id="Order_ProductForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">型号</span> 
+<input id="typeformId" type="text" name="type" class="form-control type" placeholder=""> 
+<input id="typeformIdcallback" type="hidden" name="typeId" class="form-control typeId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#typeformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">名称</span> 
+<input id="modelformId" type="text" name="model" class="form-control model" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#modelformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">规格</span> 
+<input id="specificationsformId" type="text" name="specifications" class="form-control specifications" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#specificationsformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">装箱数</span> 
+<input id="packingnumberformId" type="text" name="packingnumber" class="form-control packingnumber" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#packingnumberformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">箱数</span> 
+<input id="packing_amountformId" type="text" name="packing_amount" class="form-control packing_amount" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#packing_amountformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">件数</span> 
+<input id="pieceformId" type="text" name="piece" class="form-control piece" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#pieceformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">数量</span> 
+<input id="numberformId" type="text" name="number" class="form-control number" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#numberformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">单价</span> 
+<input id="unitpriceformId" type="text" name="unitprice" class="form-control unitprice" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#unitpriceformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">金额</span> 
+<input id="priceformId" type="text" name="price" class="form-control price" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#priceformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">备注</span> 
+<input id="remarksformId" type="text" name="remarks" class="form-control remarks" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#remarksformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">交付情况</span> 
+<input id="deliveriedformId" type="text" name="deliveried" class="form-control deliveried" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#deliveriedformId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--弹窗-->
+<div class="modal fade modal-moveable"id="Order_ProductModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button"class="close"data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button><h4 class="modal-title">Order_Product</h4></div><div class="modal-body"></div><div style="clear: both"></div> <div class="modal-footer"><button type="button"class="btn btn-default"data-dismiss="modal">关闭</button><button onclick="window.deleteOrder_ProductForm()"type="button"class="btn btn-danger"data-dismiss="modal">删除</button><button onclick="window.saveOrder_ProductForm()"type="button"class="btn btn-primary"data-dismiss="modal">保存</button></div></div></div></div>
+
+<!--列表-->
+<div id="table_Order_Product"></div>
+</div>
+<script>
+
+ var Order_ProductDataSource={
+  "form": {
+    "type": "",
+    "model": "",
+    "specifications": "",
+    "packingnumber": "",
+    "packing_amount": "",
+    "piece": "",
+    "number": "",
+    "unitprice": "",
+    "price": "",
+    "remarks": "",
+    "deliveried": ""
+  },
+  "list": {
+    "cols": [
+      {
+        "name": "type",
+        "label": "型号",
+        "width": 100
+      },
+      {
+        "name": "model",
+        "label": "名称",
+        "width": 100
+      },
+      {
+        "name": "specifications",
+        "label": "规格",
+        "width": 100
+      },
+      {
+        "name": "packingnumber",
+        "label": "装箱数",
+        "width": 100
+      },
+      {
+        "name": "packing_amount",
+        "label": "箱数",
+        "width": 100
+      },
+      {
+        "name": "piece",
+        "label": "件数",
+        "width": 100
+      },
+      {
+        "name": "number",
+        "label": "数量",
+        "width": 100
+      },
+      {
+        "name": "unitprice",
+        "label": "单价",
+        "width": 100
+      },
+      {
+        "name": "price",
+        "label": "金额",
+        "width": 100
+      },
+      {
+        "name": "remarks",
+        "label": "备注",
+        "width": 100
+      },
+      {
+        "name": "deliveried",
+        "label": "交付情况",
+        "width": 100
+      },
+      {
+        "name": "createdAt",
+        "label": "创建日期",
+        "width": 150
+      }
+    ],
+    "array": []
+  }
+}
+
+ //渲染列表
+ window.renderOrder_ProductTable=function (tableId, dataSource) {
+        $(tableId).html('').append('<div class="table"></div>')
+
+        $(tableId + ' .table').datagrid({
+            dataSource: dataSource,
+            checkable: true,
+            checkByClickRow: false,
+            partialRendering: false,
+            // height: '300',
+            onRender: function () {
+                $(tableId + ' .datagrid-cell').off('click');
+                $(tableId + ' .datagrid-cell').on('click', function () {
+                    var row = $(this).attr('data-row')
+                    var col = $(this).attr('data-col')
+                    if (row == 0 || col == 0) return
+                    var index = row - 1
+                    var formId = 'Order_ProductForm'
+                    var modalId = 'Order_ProductModal'
+                    $('#' + modalId).modal('show', 'fit');
+                    var formData = Order_ProductDataSource.list.array[index];
+                    window.renderForm('#' + formId, formData)
+                    $('#' + formId + ' .flag').val('edit')
+                    $('#' + formId + ' .index').val(index)
+                })
+            }
+        })
+    }
+
+ //创建
+ window.createOrder_ProductForm=function () { //调起创建弹窗
+        var formId = 'Order_ProductForm'
+        var modalId = 'Order_ProductModal'
+        $('#' + modalId).modal('show')
+        var data = {"id":"","type":"","model":"","specifications":"","packingnumber":"","packing_amount":"","piece":"","number":"","unitprice":"","price":"","remarks":"","deliveried":""};
+        window.renderForm('#' + formId, data);
+        $('#' + formId + ' .flag').val('new')
+        $('#' + formId + ' .id').val('')
+    }
+
+ //保存
+ window.saveOrder_ProductForm=function () { //创建或保存
+        var formId = 'Order_ProductForm'
+        var flag = $('#' + formId + ' .flag').val()
+        var formData = window.getFormData('#' + formId)
+        if (flag == 'new') { //创建状态
+            Order_ProductDataSource.list.array.push(formData)
+            var event = events['rq2111']
+            event.requiredParams = {model: 'Order_Product'}
+            event.optionalParams = {data: formData}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("创建成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Order_Product'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                Order_ProductDataSource.list.array = result.data;
+                                window.renderOrder_ProductTable('#table_Order_Product', Order_ProductDataSource.list)
+                            })
+                    }, 1000)
+                })
+        } else {
+            var index = $('#' + formId + ' .index').val()
+            var data = Order_ProductDataSource.list.array[index]
+            for (var x in formData) {
+                try {
+                    data[x] = formData[x]
+                } catch (e) {
+                }
+            }
+            var event = events['rq2112']
+            event.requiredParams = {model: 'Order_Product'}
+            event.optionalParams = {data: data}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("保存成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Order_Product'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                Order_ProductDataSource.list.array = result.data;
+                                window.renderOrder_ProductTable('#table_Order_Product', Order_ProductDataSource.list)
+                            })
+                    }, 1000)
+                })
+        }
+        var modalId = 'Order_ProductModal'
+        $('#' + modalId).modal('hide')
+    }
+
+ //删除
+ window.deleteOrder_ProductForm=function () { //删除
+        var formId = 'Order_ProductForm'
+        var index = $(formId + ' .index').val()
+        var data = Order_ProductDataSource.list.array[index]
+
+        if (index) { //调用接口从服务器删除
+            var modelName = 'Order_Product';
+            var id = data.id;
+            if (!id) {
+                return
+            } else {
+                var event = events['rq2115']
+                event.requiredParams = {model: modelName}
+                event.optionalParams = {items: [{id: id}]}
+                window.ajax(event)
+                    .then(function () {
+                        setTimeout(function () {
+                            new $.zui.Messager("删除成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            $('.modal').modal('hide');
+
+                        }, 1000)
+                    })
+            }
+            Order_ProductDataSource.list.array.splice(index, 1);
+            window.renderOrder_ProductTable('#table_Order_Product', Order_ProductDataSource.list)
+        }
+
+        var modalId = 'Order_ProductModal'
+        $('#' + modalId).modal('hide');
+    }
+
+ //批量删除
+ window.batchDeleteOrder_Product=function () { //批量删除
+        var formId = 'Order_ProductForm'
+        var index = $(formId + ' .index').val()
+        var data = Order_ProductDataSource.list.array[index]
+
+        var tableId = 'table_Order_Product'
+        var items = window.getSelectedTableItems('#' + tableId + ' .table')
+        if (items.length == 0) {
+            new $.zui.Messager("请至少选择一个记录", {
+                icon: 'info' // 定义消息图标
+            }).show();
+            return
+        }
+        var batchDeleteEvent = events['rq2115'] //通用删除接口
+        batchDeleteEvent.requiredParams = {model: 'Order_Product'}
+        batchDeleteEvent.optionalParams = {items: items}
+        window.ajax(batchDeleteEvent)
+            .then(function () {
+                var getEvent = events['rq2114'] //通用查找接口
+                getEvent.requiredParams = {model: 'Order_Product'}
+                getEvent.optionalParams = {items: items}
+                return window.ajax(getEvent)
+            })
+            .then(function (result) {
+                Order_ProductDataSource.list.array = result.data;
+                window.renderOrder_ProductTable('#table_Order_Product', Order_ProductDataSource.list)
+            })
+    }
+
+ //搜索
+ window.searchOrder_Product=function (limit) { //搜索
+        var formId = 'Order_ProductsearchForm'
+        var formData = limit ? window.getFormData('#' + formId) : {}
+
+        var searchEvent = events['rq2114'] //通用查询接口
+        searchEvent.requiredParams = {model: 'Order_Product'}
+        searchEvent.optionalParams = formData
+        window.ajax(searchEvent)
+            .then(function (result) {
+                Order_ProductDataSource.list.array = result.data;
+                window.renderOrder_ProductTable('#table_Order_Product', Order_ProductDataSource.list)
+            })
+    }
+
+</script>

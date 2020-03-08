@@ -1,0 +1,1 @@
+ssh root@120.24.84.162 'mysqldump -uroot -p --databases industry_client| gzip > industry_client.sql.gz '

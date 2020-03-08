@@ -1,0 +1,295 @@
+<div>
+<!--搜索表单-->
+<div class="searchForm" id="SuppliersearchForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">供应商名称</span> 
+<input id="namesearchFormId" type="text" name="name" class="form-control name" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#namesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">联系电话</span> 
+<input id="mobilesearchFormId" type="text" name="mobile" class="form-control mobile" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#mobilesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">联系人</span> 
+<input id="contactsearchFormId" type="text" name="contact" class="form-control contact" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#contactsearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">地址</span> 
+<input id="addresssearchFormId" type="text" name="address" class="form-control address" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#addresssearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">备注</span> 
+<input id="notesearchFormId" type="text" name="note" class="form-control note" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#notesearchFormId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--功能按钮-->
+<div id="Supplierfunctions" class="functions"><button class="btn  btn-warning "type="button"onclick="window.createSupplierForm()">新增</button><button class="btn  btn-danger"type="button"onclick="window.batchDeleteSupplier()">删除</button><button class="btn  btn-primary"type="button"onclick="window.searchSupplier()">搜索</button></div>
+<!--表单-->
+<div class="form" id="SupplierForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">供应商名称</span> 
+<input id="nameformId" type="text" name="name" class="form-control name" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#nameformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">联系电话</span> 
+<input id="mobileformId" type="text" name="mobile" class="form-control mobile" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#mobileformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">联系人</span> 
+<input id="contactformId" type="text" name="contact" class="form-control contact" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#contactformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">地址</span> 
+<input id="addressformId" type="text" name="address" class="form-control address" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#addressformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">备注</span> 
+<input id="noteformId" type="text" name="note" class="form-control note" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#noteformId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--弹窗-->
+<div class="modal fade modal-moveable"id="SupplierModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button"class="close"data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button><h4 class="modal-title">Supplier</h4></div><div class="modal-body"></div><div style="clear: both"></div> <div class="modal-footer"><button type="button"class="btn btn-default"data-dismiss="modal">关闭</button><button onclick="window.deleteSupplierForm()"type="button"class="btn btn-danger"data-dismiss="modal">删除</button><button onclick="window.saveSupplierForm()"type="button"class="btn btn-primary"data-dismiss="modal">保存</button></div></div></div></div>
+
+<!--列表-->
+<div id="table_Supplier"></div>
+</div>
+<script>
+
+ var SupplierDataSource={
+  "form": {
+    "name": "",
+    "mobile": "",
+    "contact": "",
+    "address": "",
+    "note": ""
+  },
+  "list": {
+    "cols": [
+      {
+        "name": "name",
+        "label": "供应商名称",
+        "width": 100
+      },
+      {
+        "name": "mobile",
+        "label": "联系电话",
+        "width": 100
+      },
+      {
+        "name": "contact",
+        "label": "联系人",
+        "width": 100
+      },
+      {
+        "name": "address",
+        "label": "地址",
+        "width": 100
+      },
+      {
+        "name": "note",
+        "label": "备注",
+        "width": 100
+      },
+      {
+        "name": "createdAt",
+        "label": "创建日期",
+        "width": 150
+      }
+    ],
+    "array": []
+  }
+}
+
+ //渲染列表
+ window.renderSupplierTable=function (tableId, dataSource) {
+        $(tableId).html('').append('<div class="table"></div>')
+
+        $(tableId + ' .table').datagrid({
+            dataSource: dataSource,
+            checkable: true,
+            checkByClickRow: false,
+            partialRendering: false,
+            // height: '300',
+            onRender: function () {
+                $(tableId + ' .datagrid-cell').off('click');
+                $(tableId + ' .datagrid-cell').on('click', function () {
+                    var row = $(this).attr('data-row')
+                    var col = $(this).attr('data-col')
+                    if (row == 0 || col == 0) return
+                    var index = row - 1
+                    var formId = 'SupplierForm'
+                    var modalId = 'SupplierModal'
+                    $('#' + modalId).modal('show', 'fit');
+                    var formData = SupplierDataSource.list.array[index];
+                    window.renderForm('#' + formId, formData)
+                    $('#' + formId + ' .flag').val('edit')
+                    $('#' + formId + ' .index').val(index)
+                })
+            }
+        })
+    }
+
+ //创建
+ window.createSupplierForm=function () { //调起创建弹窗
+        var formId = 'SupplierForm'
+        var modalId = 'SupplierModal'
+        $('#' + modalId).modal('show')
+        var data = {"id":"","name":"","mobile":"","contact":"","address":"","note":""};
+        window.renderForm('#' + formId, data);
+        $('#' + formId + ' .flag').val('new')
+        $('#' + formId + ' .id').val('')
+    }
+
+ //保存
+ window.saveSupplierForm=function () { //创建或保存
+        var formId = 'SupplierForm'
+        var flag = $('#' + formId + ' .flag').val()
+        var formData = window.getFormData('#' + formId)
+        if (flag == 'new') { //创建状态
+            SupplierDataSource.list.array.push(formData)
+            var event = events['rq2111']
+            event.requiredParams = {model: 'Supplier'}
+            event.optionalParams = {data: formData}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("创建成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Supplier'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                SupplierDataSource.list.array = result.data;
+                                window.renderSupplierTable('#table_Supplier', SupplierDataSource.list)
+                            })
+                    }, 1000)
+                })
+        } else {
+            var index = $('#' + formId + ' .index').val()
+            var data = SupplierDataSource.list.array[index]
+            for (var x in formData) {
+                try {
+                    data[x] = formData[x]
+                } catch (e) {
+                }
+            }
+            var event = events['rq2112']
+            event.requiredParams = {model: 'Supplier'}
+            event.optionalParams = {data: data}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("保存成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Supplier'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                SupplierDataSource.list.array = result.data;
+                                window.renderSupplierTable('#table_Supplier', SupplierDataSource.list)
+                            })
+                    }, 1000)
+                })
+        }
+        var modalId = 'SupplierModal'
+        $('#' + modalId).modal('hide')
+    }
+
+ //删除
+ window.deleteSupplierForm=function () { //删除
+        var formId = 'SupplierForm'
+        var index = $(formId + ' .index').val()
+        var data = SupplierDataSource.list.array[index]
+
+        if (index) { //调用接口从服务器删除
+            var modelName = 'Supplier';
+            var id = data.id;
+            if (!id) {
+                return
+            } else {
+                var event = events['rq2115']
+                event.requiredParams = {model: modelName}
+                event.optionalParams = {items: [{id: id}]}
+                window.ajax(event)
+                    .then(function () {
+                        setTimeout(function () {
+                            new $.zui.Messager("删除成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            $('.modal').modal('hide');
+
+                        }, 1000)
+                    })
+            }
+            SupplierDataSource.list.array.splice(index, 1);
+            window.renderSupplierTable('#table_Supplier', SupplierDataSource.list)
+        }
+
+        var modalId = 'SupplierModal'
+        $('#' + modalId).modal('hide');
+    }
+
+ //批量删除
+ window.batchDeleteSupplier=function () { //批量删除
+        var formId = 'SupplierForm'
+        var index = $(formId + ' .index').val()
+        var data = SupplierDataSource.list.array[index]
+
+        var tableId = 'table_Supplier'
+        var items = window.getSelectedTableItems('#' + tableId + ' .table')
+        if (items.length == 0) {
+            new $.zui.Messager("请至少选择一个记录", {
+                icon: 'info' // 定义消息图标
+            }).show();
+            return
+        }
+        var batchDeleteEvent = events['rq2115'] //通用删除接口
+        batchDeleteEvent.requiredParams = {model: 'Supplier'}
+        batchDeleteEvent.optionalParams = {items: items}
+        window.ajax(batchDeleteEvent)
+            .then(function () {
+                var getEvent = events['rq2114'] //通用查找接口
+                getEvent.requiredParams = {model: 'Supplier'}
+                getEvent.optionalParams = {items: items}
+                return window.ajax(getEvent)
+            })
+            .then(function (result) {
+                SupplierDataSource.list.array = result.data;
+                window.renderSupplierTable('#table_Supplier', SupplierDataSource.list)
+            })
+    }
+
+ //搜索
+ window.searchSupplier=function (limit) { //搜索
+        var formId = 'SuppliersearchForm'
+        var formData = limit ? window.getFormData('#' + formId) : {}
+
+        var searchEvent = events['rq2114'] //通用查询接口
+        searchEvent.requiredParams = {model: 'Supplier'}
+        searchEvent.optionalParams = formData
+        window.ajax(searchEvent)
+            .then(function (result) {
+                SupplierDataSource.list.array = result.data;
+                window.renderSupplierTable('#table_Supplier', SupplierDataSource.list)
+            })
+    }
+
+</script>

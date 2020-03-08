@@ -1,0 +1,45 @@
+<script>
+
+    window.setTab2DepartmentsAutoComplete = function () {
+        var departments
+        var source = []
+
+        window.ajax(events['rq2017'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                departments = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $("#employInfoModal2_2 .departmentName").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var department = departments[index]
+                        //console.log(department);
+                        $('#employInfoModal2_2 .departmentId').val(department.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('#employInfoModal2_2 .departmentId').val('');
+                    }
+                });
+
+            })
+
+
+    }
+
+
+</script>

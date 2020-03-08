@@ -1,0 +1,133 @@
+<div class="container" style="margin:0;padding:0">
+
+    <div class="btn-group " style="margin:20px 10px 10px 10px;float: left;">
+        <button onclick="window.doExport('chenpinruku','inforepot3','#canku-table3')" class="btn btn-success" style="width:100px"
+                id="xinzeng">导出
+        </button>
+    </div>
+    <div class="btn-group " style="margin:20px 10px 10px 10px;float: left;">
+        <button class="btn btn-success" style="width:100px" id="xiugai">导入</button>
+    </div>
+    <button onclick="window.doExportTemplate('chenpinruku','inforepot3','#canku-table3')" style="margin: 20px 10px" class="btn  btn-info" type="button">下载导入模板</button>
+
+    <!--成品入库-->
+    <div class="modal fade modal-moveable" id="productInModal">
+        <div class="modal-dialog  modal-moveable modal-lg">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h4 class="modal-title">成品入库单</h4>
+            </div>
+            <div class="modal-content">
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">录入日期</span>
+                    <input name="createdAt" type="text" class="form-control datetimepicker createdAt">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">签收日期</span>
+                    <input name="receiverDate" type="text" class="form-control datetimepicker receiverDate"
+                           placeholder="  年  月  日">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">收货人</span>
+                    <input name="receiver" type="text" class="form-control receiver">
+                </div>
+                <div style="clear: both"></div>
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">单据编号</span>
+                    <input name="sn" type="text" class="form-control sn">
+<!--                    <span class="input-group-addon cursor"-->
+<!--                          onclick="$('#productInModal .sn').val(window.generateUUID())">生成</span>-->
+                </div>
+                <div style="clear: both"></div>
+                <div style="margin:15px 10px 0px 10px ;font-size: 17px;color:#666;"><span
+                        style="font-weight: bolder;color: red">送货单位:</span></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">&nbsp;&nbsp;名称&nbsp;&nbsp;</span>
+                    <input name="supplierName" type="text" class="form-control supplierName">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">联系人</span>
+                    <input name="supplierContact" type="text" class="form-control supplierContact">
+                </div>
+                <div style="clear: both"></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">&nbsp;&nbsp;地址&nbsp;&nbsp;</span>
+                    <input name="supplierAddress" type="text" class="form-control supplierAddress">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">&nbsp;&nbsp;电话&nbsp;&nbsp;</span>
+                    <input name="supplierPhone" type="text" class="form-control supplierPhone">
+                </div>
+                <div style="clear: both"></div>
+
+<!--                <button onclick="window.clickProductInEditModal()"-->
+<!--                        class="btn btn-danger col-md-1 col-sm-2 btn2 clickAddMaterial"-->
+<!--                        style="float:left;width:100px;margin:10px 10px 10px 10px">添加产品-->
+<!--                </button>-->
+
+
+                <div style="clear: both"></div>
+
+                <div id='table-productsIn' class="col-md-10" style="margin:10px 10px 10px 2px"></div>
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;">
+                    <span class="input-group-addon">金额合计</span>
+                    <input name="sum" type="text" class="form-control sum" placeholder="金额合计">
+                </div>
+                <div style="margin:15px 10px 0px 10px ;font-size: 17px;color:#666;"><span
+                        style="font-weight: bolder;color: red">收货单位:</span></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">&nbsp;&nbsp;名称&nbsp;&nbsp;</span>
+                    <input name="receiverDep" type="text" class="form-control receiverDep">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">地址、电话</span>
+                    <input name="receiverAddressPhone" type="text" class="form-control receiverAddressPhone">
+                </div>
+                <div style="clear: both"></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">&nbsp;&nbsp;备注&nbsp;&nbsp;</span>
+                    <input name="note" type="text" class="form-control note">
+                </div>
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">录入人</span>
+                    <input name="recorder" type="text" class="form-control recorder">
+                </div>
+
+                <input value="" name="id" type="hidden" class="form-control id">
+                <input value="in" name="type" type="hidden" class="form-control type">
+                <input value="" name="supplierId" type="hidden" class="form-control supplierId">
+                <input value="" name="index" type="hidden" class="form-control index">
+                <input value="" name="flag" type="hidden" class="form-control flag">
+
+                <div style="clear: both"></div>
+            </div>
+            <div class="modal-footer" style="border-top:none">
+                <div style="clear: both"></div>
+<!--                <button onclick="window.saveProductIn()" class="btn btn-primary col-md-1 col-sm-2 btn2 exBtn2"-->
+<!--                        style="float:right;width:85px;margin:10px 10px 10px 2px">保存单据-->
+<!--                </button>-->
+<!--                <button onclick="window.deleteProductInOut('in')" class="btn btn-danger col-md-1 col-sm-2 btn2 exBtn2"-->
+<!--                        style="float:right;width:85px;margin:10px 10px 10px 2px">删除单据-->
+<!--                </button>-->
+                <button class="btn  col-md-1 col-sm-2 btn2 exBtn2"
+                        style="float:right;width:100px;margin:10px 10px 10px 12px" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!--    <div class="input-group col-md-2 col-sm-5" style="margin:20px 10px 10px 10px;float: left;">-->
+    <!--        <span class="input-group-addon">搜索</span>-->
+    <!--        <input type="text" class="form-control" >-->
+    <!--    </div>-->
+    <div style="clear: both"></div>
+</div>
+
+
+<div class="container" style="margin:0;padding:0">
+    <div id='canku-table3' class="col-md-12 col-xs-12" style="margin:10px 10px 10px 2px"></div>
+</div>

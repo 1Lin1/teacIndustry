@@ -1,0 +1,517 @@
+<div>
+    <!--搜索表单-->
+    <div class="searchForm" id="Material_In_Out_RecordsearchForm">
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">产品型号</span>
+            <input id="product_modelsearchFormId" type="text" name="product_model" class="form-control product_model"
+                   placeholder="">
+            <input id="product_modelsearchFormIdcallback" type="hidden" name="product_modelId"
+                   class="form-control product_modelId" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#product_modelsearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">工序</span>
+            <input id="proceduresearchFormId" type="text" name="procedure" class="form-control procedure"
+                   placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#proceduresearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">物料名称</span>
+            <select id="namesearchFormId" type="text" name="name" class="form-control name" placeholder=""></select>
+            <span class="input-group-addon cursor" onclick="$('#namesearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">单位</span>
+            <input id="unitsearchFormId" type="text" name="unit" class="form-control unit" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#unitsearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">数量</span>
+            <input id="numbersearchFormId" type="text" name="number" class="form-control number" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#numbersearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">单价</span>
+            <input id="pricesearchFormId" type="text" name="price" class="form-control price" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#pricesearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">金额</span>
+            <input id="sumsearchFormId" type="text" name="sum" class="form-control sum" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#sumsearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">识别id</span>
+            <input id="uuidsearchFormId" type="text" name="uuid" class="form-control uuid" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#uuidsearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">收货人</span>
+            <input id="receiversearchFormId" type="text" name="receiver" class="form-control receiver" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#receiversearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">收货单位</span>
+            <input id="receiverDepsearchFormId" type="text" name="receiverDep" class="form-control receiverDep"
+                   placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#receiverDepsearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">收货单位地址电话</span>
+            <input id="receiverAddressPhonesearchFormId" type="text" name="receiverAddressPhone"
+                   class="form-control receiverAddressPhone" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#receiverAddressPhonesearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">备注</span>
+            <input id="notesearchFormId" type="text" name="note" class="form-control note" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#notesearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">收货日期</span>
+            <input id="receiverDatesearchFormId" type="text" name="receiverDate" class="form-control receiverDate"
+                   placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#receiverDatesearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">录入人</span>
+            <input id="recordersearchFormId" type="text" name="recorder" class="form-control recorder" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#recordersearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">出库或者入库类型</span>
+            <select id="typesearchFormId" type="text" name="type" class="form-control type" placeholder="">
+                <option value="in">入库</option>
+                <option value="out">出库</option>
+            </select>
+            <span class="input-group-addon cursor" onclick="$('#typesearchFormId').val('')">x</span>
+        </div>
+        <input name="id" class="id" type="hidden">
+        <input name="flag" class="flag" type="hidden">
+        <input name="index" class="index" type="hidden">
+    </div>
+    <!--功能按钮-->
+    <div id="Material_In_Out_Recordfunctions" class="functions">
+        <button class="btn  btn-warning " type="button" onclick="window.createMaterial_In_Out_RecordForm()">新增</button>
+        <button class="btn  btn-danger" type="button" onclick="window.batchDeleteMaterial_In_Out_Record()">删除</button>
+        <button class="btn  btn-primary" type="button" onclick="window.searchMaterial_In_Out_Record()">搜索</button>
+    </div>
+    <!--表单-->
+    <div class="form" id="Material_In_Out_RecordForm">
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">产品型号</span>
+            <input id="product_modelformId" type="text" name="product_model" class="form-control product_model"
+                   placeholder="">
+            <input id="product_modelformIdcallback" type="hidden" name="product_modelId"
+                   class="form-control product_modelId" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#product_modelformId').val('')">x</span>
+        </div>
+        <div class="￿input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">工序</span>
+            <input id="procedureformId" type="text" name="procedure" class="form-control procedure" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#procedureformId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">物料名称</span>
+            <select id="nameformId" type="text" name="name" class="form-control name" placeholder=""></select>
+            <span class="input-group-addon cursor" onclick="$('#nameformId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">单位</span>
+            <input id="unitformId" type="text" name="unit" class="form-control unit" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#unitformId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">数量</span>
+            <input id="numberformId" type="text" name="number" class="form-control number" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#numberformId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">单价</span>
+            <input id="priceformId" type="text" name="price" class="form-control price" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#priceformId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">金额</span>
+            <input id="sumformId" type="text" name="sum" class="form-control sum" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#sumformId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">识别id</span>
+            <input id="uuidformId" type="text" name="uuid" class="form-control uuid" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#uuidformId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">收货人</span>
+            <input id="receiverformId" type="text" name="receiver" class="form-control receiver" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#receiverformId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">收货单位</span>
+            <input id="receiverDepformId" type="text" name="receiverDep" class="form-control receiverDep"
+                   placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#receiverDepformId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">收货单位地址电话</span>
+            <input id="receiverAddressPhoneformId" type="text" name="receiverAddressPhone"
+                   class="form-control receiverAddressPhone" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#receiverAddressPhoneformId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">备注</span>
+            <input id="noteformId" type="text" name="note" class="form-control note" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#noteformId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">收货日期</span>
+            <input id="receiverDateformId" type="text" name="receiverDate" class="form-control receiverDate"
+                   placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#receiverDateformId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">录入人</span>
+            <input id="recorderformId" type="text" name="recorder" class="form-control recorder" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#recorderformId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">出库或者入库类型</span>
+            <select id="typeformId" type="text" name="type" class="form-control type" placeholder="">
+                <option value="in">入库</option>
+                <option value="out">出库</option>
+            </select>
+            <span class="input-group-addon cursor" onclick="$('#typeformId').val('')">x</span>
+        </div>
+        <input name="id" class="id" type="hidden">
+        <input name="flag" class="flag" type="hidden">
+        <input name="index" class="index" type="hidden">
+    </div>
+    <!--弹窗-->
+    <div class="modal fade modal-moveable" id="Material_In_Out_RecordModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">Material_In_Out_Record</h4></div>
+                <div class="modal-body"></div>
+                <div style="clear: both"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button onclick="window.deleteMaterial_In_Out_RecordForm()" type="button" class="btn btn-danger"
+                            data-dismiss="modal">删除
+                    </button>
+                    <button onclick="window.saveMaterial_In_Out_RecordForm()" type="button" class="btn btn-primary"
+                            data-dismiss="modal">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--列表-->
+    <div id="table_Material_In_Out_Record"></div>
+</div>
+<script>
+
+    var Material_In_Out_RecordDataSource = {
+        "form": {
+            "product_model": "",
+            "procedure": "",
+            "name": "",
+            "unit": "",
+            "number": "",
+            "price": "",
+            "sum": "",
+            "uuid": "",
+            "receiver": "",
+            "receiverDep": "",
+            "receiverAddressPhone": "",
+            "note": "",
+            "receiverDate": "",
+            "recorder": "",
+            "type": ""
+        },
+        "list": {
+            "cols": [
+                {
+                    "name": "product_model",
+                    "label": "产品型号",
+                    "width": 100
+                },
+                {
+                    "name": "procedure",
+                    "label": "工序",
+                    "width": 100
+                },
+                {
+                    "name": "name",
+                    "label": "物料名称",
+                    "width": 100
+                },
+                {
+                    "name": "unit",
+                    "label": "单位",
+                    "width": 100
+                },
+                {
+                    "name": "number",
+                    "label": "数量",
+                    "width": 100
+                },
+                {
+                    "name": "price",
+                    "label": "单价",
+                    "width": 100
+                },
+                {
+                    "name": "sum",
+                    "label": "金额",
+                    "width": 100
+                },
+                {
+                    "name": "uuid",
+                    "label": "识别id",
+                    "width": 100
+                },
+                {
+                    "name": "receiver",
+                    "label": "收货人",
+                    "width": 100
+                },
+                {
+                    "name": "receiverDep",
+                    "label": "收货单位",
+                    "width": 100
+                },
+                {
+                    "name": "receiverAddressPhone",
+                    "label": "收货单位地址电话",
+                    "width": 100
+                },
+                {
+                    "name": "note",
+                    "label": "备注",
+                    "width": 100
+                },
+                {
+                    "name": "receiverDate",
+                    "label": "收货日期",
+                    "width": 100
+                },
+                {
+                    "name": "recorder",
+                    "label": "录入人",
+                    "width": 100
+                },
+                {
+                    "name": "type",
+                    "label": "出库或者入库类型",
+                    "width": 100
+                },
+                {
+                    "name": "createdAt",
+                    "label": "创建日期",
+                    "width": 150
+                }
+            ],
+            "array": []
+        }
+    }
+
+    //渲染列表
+    window.renderMaterial_In_Out_RecordTable = function (tableId, dataSource) {
+        $(tableId).html('').append('<div class="table"></div>')
+
+        $(tableId + ' .table').datagrid({
+            dataSource: dataSource,
+            checkable: true,
+            checkByClickRow: false,
+            partialRendering: false,
+            // height: '300',
+            onRender: function () {
+                $(tableId + ' .datagrid-cell').off('click');
+                $(tableId + ' .datagrid-cell').on('click', function () {
+                    var row = $(this).attr('data-row')
+                    var col = $(this).attr('data-col')
+                    if (row == 0 || col == 0) return
+                    var index = row - 1
+                    var formId = 'Material_In_Out_RecordForm'
+                    var modalId = 'Material_In_Out_RecordModal'
+                    $('#' + modalId).modal('show', 'fit');
+                    var formData = Material_In_Out_RecordDataSource.list.array[index];
+                    window.renderForm('#' + formId, formData)
+                    $('#' + formId + ' .flag').val('edit')
+                    $('#' + formId + ' .index').val(index)
+                })
+            }
+        })
+    }
+
+    //创建
+    window.createMaterial_In_Out_RecordForm = function () { //调起创建弹窗
+        var formId = 'Material_In_Out_RecordForm'
+        var modalId = 'Material_In_Out_RecordModal'
+        $('#' + modalId).modal('show')
+        var data = {
+            "id": "",
+            "product_model": "",
+            "procedure": "",
+            "name": "",
+            "unit": "",
+            "number": "",
+            "price": "",
+            "sum": "",
+            "uuid": "",
+            "receiver": "",
+            "receiverDep": "",
+            "receiverAddressPhone": "",
+            "note": "",
+            "receiverDate": "",
+            "recorder": "",
+            "type": ""
+        };
+        window.renderForm('#' + formId, data);
+        $('#' + formId + ' .flag').val('new')
+        $('#' + formId + ' .id').val('')
+    }
+
+    //保存
+    window.saveMaterial_In_Out_RecordForm = function () { //创建或保存
+        var formId = 'Material_In_Out_RecordForm'
+        var flag = $('#' + formId + ' .flag').val()
+        var formData = window.getFormData('#' + formId)
+        if (flag == 'new') { //创建状态
+            Material_In_Out_RecordDataSource.list.array.push(formData)
+            var event = events['rq2111']
+            event.requiredParams = {model: 'Material_In_Out_Record'}
+            event.optionalParams = {data: formData}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("创建成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Material_In_Out_Record'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                Material_In_Out_RecordDataSource.list.array = result.data;
+                                window.renderMaterial_In_Out_RecordTable('#table_Material_In_Out_Record', Material_In_Out_RecordDataSource.list)
+                            })
+                    }, 1000)
+                })
+        } else {
+            var index = $('#' + formId + ' .index').val()
+            var data = Material_In_Out_RecordDataSource.list.array[index]
+            for (var x in formData) {
+                try {
+                    data[x] = formData[x]
+                } catch (e) {
+                }
+            }
+            var event = events['rq2112']
+            event.requiredParams = {model: 'Material_In_Out_Record'}
+            event.optionalParams = {data: data}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("保存成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Material_In_Out_Record'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                Material_In_Out_RecordDataSource.list.array = result.data;
+                                window.renderMaterial_In_Out_RecordTable('#table_Material_In_Out_Record', Material_In_Out_RecordDataSource.list)
+                            })
+                    }, 1000)
+                })
+        }
+        var modalId = 'Material_In_Out_RecordModal'
+        $('#' + modalId).modal('hide')
+    }
+
+    //删除
+    window.deleteMaterial_In_Out_RecordForm = function () { //删除
+        var formId = 'Material_In_Out_RecordForm'
+        var index = $(formId + ' .index').val()
+        var data = Material_In_Out_RecordDataSource.list.array[index]
+
+        if (index) { //调用接口从服务器删除
+            var modelName = 'Material_In_Out_Record';
+            var id = data.id;
+            if (!id) {
+                return
+            } else {
+                var event = events['rq2115']
+                event.requiredParams = {model: modelName}
+                event.optionalParams = {items: [{id: id}]}
+                window.ajax(event)
+                    .then(function () {
+                        setTimeout(function () {
+                            new $.zui.Messager("删除成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            $('.modal').modal('hide');
+
+                        }, 1000)
+                    })
+            }
+            Material_In_Out_RecordDataSource.list.array.splice(index, 1);
+            window.renderMaterial_In_Out_RecordTable('#table_Material_In_Out_Record', Material_In_Out_RecordDataSource.list)
+        }
+
+        var modalId = 'Material_In_Out_RecordModal'
+        $('#' + modalId).modal('hide');
+    }
+
+    //批量删除
+    window.batchDeleteMaterial_In_Out_Record = function () { //批量删除
+        var formId = 'Material_In_Out_RecordForm'
+        var index = $(formId + ' .index').val()
+        var data = Material_In_Out_RecordDataSource.list.array[index]
+
+        var tableId = 'table_Material_In_Out_Record'
+        var items = window.getSelectedTableItems('#' + tableId + ' .table')
+        if (items.length == 0) {
+            new $.zui.Messager("请至少选择一个记录", {
+                icon: 'info' // 定义消息图标
+            }).show();
+            return
+        }
+        var batchDeleteEvent = events['rq2115'] //通用删除接口
+        batchDeleteEvent.requiredParams = {model: 'Material_In_Out_Record'}
+        batchDeleteEvent.optionalParams = {items: items}
+        window.ajax(batchDeleteEvent)
+            .then(function () {
+                var getEvent = events['rq2114'] //通用查找接口
+                getEvent.requiredParams = {model: 'Material_In_Out_Record'}
+                getEvent.optionalParams = {items: items}
+                return window.ajax(getEvent)
+            })
+            .then(function (result) {
+                Material_In_Out_RecordDataSource.list.array = result.data;
+                window.renderMaterial_In_Out_RecordTable('#table_Material_In_Out_Record', Material_In_Out_RecordDataSource.list)
+            })
+    }
+
+    //搜索
+    window.searchMaterial_In_Out_Record = function (limit) { //搜索
+        var formId = 'Material_In_Out_RecordsearchForm'
+        var formData = limit ? window.getFormData('#' + formId) : {}
+
+        var searchEvent = events['rq2114'] //通用查询接口
+        searchEvent.requiredParams = {model: 'Material_In_Out_Record'}
+        searchEvent.optionalParams = formData
+        window.ajax(searchEvent)
+            .then(function (result) {
+                Material_In_Out_RecordDataSource.list.array = result.data;
+                window.renderMaterial_In_Out_RecordTable('#table_Material_In_Out_Record', Material_In_Out_RecordDataSource.list)
+            })
+    }
+
+</script>

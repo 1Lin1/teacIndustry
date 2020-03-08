@@ -1,0 +1,101 @@
+<style>
+
+    @media screen and (max-width: 699px) {
+        .tab-nav-link > .title{
+            left: 5px;
+            font-size: 8px !important;
+        }
+    }
+
+
+</style>
+
+<div class="container" style="margin:0;padding:0">
+    <div class="btn-group " style="margin:20px 10px 10px 10px;float: left;">
+        <button onclick="window.createSupplierForm()" class="btn btn-warning" style="width:100px">新增</button>
+    </div>
+
+    <div class="btn-group " style="margin:20px 10px 10px 10px;float: left;">
+        <button onclick="window.batchDeleteSupplier()" class="btn btn-danger" style="width:100px">删除</button>
+    </div>
+
+<!--    <div class="btn-group " style="margin:20px 10px 10px 10px;float: left;">-->
+<!--        <button onclick="window.searchSupplier()" class="btn btn-primary" style="width:100px">搜索</button>-->
+<!--    </div>-->
+
+    <div class="btn-group " style="margin:20px 10px 10px 10px;float: left;">
+        <button onclick="window.doExport('supplier','inforepot1','#table_Supplier')" class="btn btn-success" style="width:100px">导出</button>
+    </div>
+    <div class="btn-group " style="margin:20px 10px 10px 10px;float: left;">
+        <button class="btn btn-success" style="width:100px">导入</button>
+
+    </div>
+    <button onclick="window.doExportTemplate('supplier','inforepot1','#table_Supplier')" style="margin: 20px 10px" class="btn  btn-info" type="button">下载导入模板</button>
+<!--    <div class="input-group col-md-2 col-sm-5" style="margin:20px 10px 10px 10px;float: left;">-->
+<!--        <span class="input-group-addon">搜索</span>-->
+<!--        <input type="text" class="form-control">-->
+<!--    </div>-->
+    <div style="clear: both"></div>
+</div>
+
+
+<!--弹窗-->
+<div class="modal fade modal-moveable" id="SupplierModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h4 class="modal-title">供应商</h4></div>
+            <div class="modal-body">
+                <!--表单-->
+                <div class="form" id="SupplierForm">
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">供应商名称</span>
+                        <input id="nameformId" type="text" name="name" class="form-control name" placeholder="">
+                        <span class="input-group-addon cursor" onclick="$('#nameformId').val('')">x</span>
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">联系电话</span>
+                        <input id="mobileformId" type="text" name="mobile" class="form-control mobile" placeholder="">
+                        <span class="input-group-addon cursor" onclick="$('#mobileformId').val('')">x</span>
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">联系人</span>
+                        <input id="contactformId" type="text" name="contact" class="form-control contact"
+                               placeholder="">
+                        <span class="input-group-addon cursor" onclick="$('#contactformId').val('')">x</span>
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">地址</span>
+                        <input id="addressformId" type="text" name="address" class="form-control address"
+                               placeholder="">
+                        <span class="input-group-addon cursor" onclick="$('#addressformId').val('')">x</span>
+                    </div>
+                    <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                        <span class="input-group-addon">备注</span>
+                        <input id="noteformId" type="text" name="note" class="form-control note" placeholder="">
+                        <span class="input-group-addon cursor" onclick="$('#noteformId').val('')">x</span>
+                    </div>
+                    <input name="id" class="id" type="hidden">
+                    <input name="flag" class="flag" type="hidden">
+                    <input name="index" class="index" type="hidden">
+                </div>
+            </div>
+            <div style="clear: both"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button onclick="window.deleteSupplierForm()" type="button" class="btn btn-danger"
+                        data-dismiss="modal">删除
+                </button>
+                <button onclick="window.saveSupplierForm()" type="button" class="btn btn-primary"
+                        >保存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--列表-->
+<div id="table_Supplier"></div>
+

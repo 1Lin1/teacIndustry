@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+
+    <%- include head/head %>
+
+    <style>
+    </style>
+
+
+</head>
+
+<body>
+<%- include header/header %>
+
+<%- include left/nav %>
+
+<div class="col-md-10">
+    <div class="tabs" id="tabsExample"></div>
+</div>
+
+
+</body>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        var events = '<%- JSON.stringify(events) %>'//转化成字符串？疑问
+        events = JSON.parse(events);//转化成JSON对象
+        //console.log('可操作的事件 ++++++', events);
+
+        var clientDataList;
+
+        var renderTable4 = function (data) {
+
+            $('#sale4').html('').append('<div class="table"><div class="input-control search-box search-box-circle has-icon-left has-icon-right"id="searchboxExample2"style="margin-bottom: 10px; max-width: 300px"><input id="inputSearchExample2"type="search"class="form-control search-input"placeholder="关键字过滤(区分大小写)"><label for="inputSearchExample2"class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a href="#"class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a></div><div class="datagrid-container"></div></div>')
+
+            var dataSource = {
+                cols: [
+                    {name: 'name', label: '客户名称', width: 100},
+                    {name: 'mobile', label: '联系电话', width: 100},
+                    {name: 'contact', label: '联系人', width: 100},
+                    {name: 'contact_phone', label: '联系人电话', width: 100},
+                    {name: 'address', label: '收货地址', width: 100},
+                    {name: 'lastOrderCreatedAt', label: '最近订单', width: 130},
+                    {name: 'remarks', label: '备注', width: 100},
+                    {name: 'createdAt', label: '创建时间', width: 130},
+
+                ],
+                array: data
+            }
+            window.exportDataSource.infosalet1 = dataSource;
+            $('#sale4 .table').datagrid({
+
+                dataSource: dataSource,
+
+                checkable: true,
+                checkByClickRow: false,
+                sortable: true,
+                onCellClick: function (cellData, $cell, datagrid) {
+                    $cell.off('click')
+                    $cell.on('click', function () {
+                        var form = cellData.config.data
+                        var index = datagrid.getDataIndex(form.id);
+                        var colIndex = cellData.colIndex;
+                        if (colIndex > 0) {
+                            $(".h4").html("<h4>客户修改</h4>");
+                            $('#myLgModal3').modal('show', 'fit')
+                            window.renderForm('#myLgModal3', form);
+                            $('#myLgModal3 .flag').val('edit')
+                            //console.log('index:', index);
+                            $('#myLgModal3 .index').val(index)
+                        }
+
+                    })
+                },
+            });
+        };
+
+        var renderTable5 = function (data) {
+
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                try {
+                    item.clientName = item.client.name;
+                } catch (e) {
+                }
+            }
+
+            var dataSource = {
+                cols: [
+                    {name: 'createdAt', label: '下单日期', width: 100},
+                    {name: 'deleveredDate', label: '交付日期', width: 100},
+                    {name: 'orderNo', label: '订单编号', width: 100},
+                    {name: 'clientName', label: '客户名称', width: 100},
+                    {name: 'create_user_id', label: '制单员', width: 100},
+                    {name: 'payed_amount', label: '订单总金额', width: 100, valueType: 'money'},
+                    {name: 'delivered', label: '已交付金额', width: 100},
+                    {name: 'accepted', label: '已收账款', width: 100},
+                    {name: 'discount', label: ' 优惠 ', width: 100},
+                    {name: 'account_receivale', label: '应收账款', width: 100},
+                    {name: 'Remarks', label: '备注', width: 100},
+                    {name: 'close', label: '封存情况', width: 100},
+                ],
+                array: data
+            }
+            window.exportDataSource.infosalet2 = dataSource
+            $('#sale5').html('').append('<div class="table"><div class="input-control search-box search-box-circle has-icon-left has-icon-right"id="searchboxExample2"style="margin-bottom: 10px; max-width: 300px"><input id="inputSearchExample2"type="search"class="form-control search-input"placeholder="关键字过滤(区分大小写)"><label for="inputSearchExample2"class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a href="#"class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a></div><div class="datagrid-container"></div></div>')
+            $('#sale5 .table').datagrid({
+                dataSource: dataSource,
+                checkable: true,
+                checkByClickRow: false,
+                sortable: true,
+                onCellClick: function (cellData, $cell, datagrid) {
+                    $cell.off('click')
+                    $cell.on('click', function () {
+                        var form = cellData.config.data
+                        var index = datagrid.getDataIndex(form.id);
+                        var colIndex = cellData.colIndex;
+                        if (colIndex > 0) {
+                            $('#info-tab2ddxq').modal({
+                                backdrop: "static",
+                                keyboard: false,
+                            })
+                            $('#info-tab2ddxq .index').val(index)
+                            $('#info-tab2ddxq .flag').val('edit')
+
+                            window.renderForm('#info-tab2ddxq', form)
+                            renderTable9(form.order_products)
+                        }
+                    })
+                },
+            });
+        };
+
+        var renderTable9 = function (data) {
+            $('#sale9').html('').append('<div class="table"></div>')
+            $('#sale9 .table').datagrid({
+                height: 200,
+                dataSource: {
+                    cols: [
+                        {
+                            "name": "type",
+                            "label": "型号",
+                            "width": 100
+                        },
+                        {
+                            "name": "model",
+                            "label": "名称",
+                            "width": 100
+                        },
+                        {
+                            "name": "specifications",
+                            "label": "规格",
+                            "width": 100
+                        },
+                        {
+                            "name": "packingnumber",
+                            "label": "装箱数",
+                            "width": 100
+                        },
+                        // {
+                        //     "name": "packing_amount",
+                        //     "label": "箱数",
+                        //     "width": 100
+                        // },
+                        {
+                            "name": "piece",
+                            "label": "件数",
+                            "width": 100
+                        },
+                        {
+                            "name": "number",
+                            "label": "数量",
+                            "width": 100
+                        },
+                        {
+                            "name": "unitprice",
+                            "label": "单价",
+                            "width": 100
+                        },
+                        {
+                            "name": "price",
+                            "label": "金额",
+                            "width": 100
+                        },
+                        {
+                            "name": "remarks",
+                            "label": "备注",
+                            "width": 100
+                        },
+                        {
+                            "name": "deliveried",
+                            "label": "交付情况",
+                            "width": 100
+                        }
+
+                    ],
+                    array: data
+                },
+
+            });
+        };
+
+        var renderCustomerPriceTable = function (data) {
+
+
+            var cols = [{name: 'product', label: '产品 \\ 客户', width: 180}]
+
+            var clients = data.clients;
+            for (var i = 0; i < clients.length; i++) {
+                var client = clients[i];
+                var colClient = {name: client.id, label: client.name, width: 100}
+                cols.push(colClient)
+            }
+            //console.log('cols', cols);
+
+            var products = data.products;
+            var rowObject = {}
+            for (var i = 0; i < products.length; i++) {
+                var item = products[i];
+                var itemDisplay = {}
+                if (!rowObject[item.id]) {
+                    rowObject[item.id] = []
+                } else {
+                }
+            }
+            //console.log('rowObject', rowObject);
+
+            var rows = []
+            for (var x in rowObject) {
+                var row = {}
+                var candidates = []
+                for (var i = 0; i < data.rows.length; i++) {
+                    var item = data.rows[i];
+                    if (item.product.id == x) {
+                        candidates.push(item)
+                    }
+                }
+                for (var i = 0; i < candidates.length; i++) {
+                    var candidate = candidates[i];
+                    row[candidate.clientId] = candidate.price
+                }
+
+
+                for (var i = 0; i < products.length; i++) {
+                    var product = products[i];
+                    if (x == product.id) {
+                        //console.log('product:', product);
+                        row['product'] = product.model + ' (标准价格：' + product.unitprice + ')';
+                        row['productIndex'] = i
+                    }
+                }
+                rows.push(row)
+            }
+            //console.log('rows', rows);
+
+            var dataSource = {
+                cols: cols,
+                array: rows,
+            }
+
+            var myDataGridOld = $('#datagridCheckableExample .table').data('zui.datagrid');
+            var scrollTop = 0
+            var scrollLeft = 0
+            if (myDataGridOld) {
+                scrollTop = myDataGridOld.layout.scrollTop;
+                scrollLeft = myDataGridOld.layout.scrollLeft
+            }
+
+
+            window.exportDataSource.infoprot1 = dataSource;
+            $('#datagridCheckableExample').html('').append('<div class="table"><div class="input-control search-box search-box-circle has-icon-left has-icon-right"id="searchboxExample2"style="margin-bottom: 10px; max-width: 300px"><input id="inputSearchExample2"type="search"class="form-control search-input"placeholder="关键字过滤(区分大小写)"><label for="inputSearchExample2"class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a href="#"class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a></div><div class="datagrid-container"></div></div>')
+            $('#datagridCheckableExample .table').datagrid({
+                dataSource: dataSource,
+                checkable: true,
+                checkByClickRow: false,
+                hoverCell: true,
+                partialRendering: true,
+                sortable: true,
+                states: {
+                    sortBy: 'product',
+                    order: 'asc',
+                    fixedLeftUntil: 1,    // 固定左侧第一列
+                },
+                cellFormator: function ($cell, cell, datagrid) {
+
+                    var col = cell.colIndex;
+                    var row = cell.rowIndex;
+                    var form = cell.config.data
+                    var value = cell.value;
+
+
+                    if (col == 1) {
+
+                    } else if (row == 0) {
+
+                    } else {
+
+                    }
+
+                    if (col > 1 && row > 0) {
+                        var config = cell.config
+                        $cell.html('<input value="' + value + '">');
+                        $cell.find('input').off('change')
+                        $cell.find('input').on('change', function () {
+                            var index = form.productIndex;
+                            var productId = products[index].id
+                            var clientId = clients[col - 2].id
+                            var id = ''
+                            for (var i = 0; i < data.rows.length; i++) {
+                                var relation = data.rows[i];
+                                if (relation.productId == productId && relation.clientId == clientId) {
+                                    id = relation.id
+                                }
+                            }
+                            var oldVal = cell.config.data[cell.config.name];
+                            var newVal = $(this).val()
+                            try {
+                                if (newVal === '' || newVal == '0') {
+                                    $(this).val('')
+                                } else {
+                                    newVal = parseFloat(newVal)
+                                    $(this).val(newVal)
+                                }
+                            } catch (e) {
+                            }
+                            if (newVal != oldVal) {
+                                cell.config.data[cell.config.name] = newVal
+                                console.log(newVal);
+                                var event = events['rq254']
+                                var dataToPost = {
+                                    productId: productId,
+                                    clientId: clientId,
+                                    price: newVal
+                                }
+                                event.requiredParams = dataToPost
+                                event.optionalParams = {}
+                                window.ajax(event)
+                                    .then(function () {
+
+                                    })
+                            }
+                        })
+
+                    } else {
+                        var config = cell.config
+                        var isCheckbox = config.checkbox;
+                        var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                        $cell[cell.config.html ? 'html' : 'text'](value);
+                        if (config.className) {
+                            $cell.addClass(config.className);
+                        }
+                    }
+
+                    window.saveProductHasProcedure = function () {
+                        var val = $('.tab10Value').val()
+
+                        //tab1修改工价验证
+                        if (val == '') {
+                            new $.zui.Messager("工价不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+
+                            return;
+                        }
+
+                        var col = $('#InfoModal1_10 .col').val()
+                        var row = $('#InfoModal1_10 .row').val()
+
+                        // if (col == 1) { //修改产品
+                        //     var event = events['rq2112']
+                        //     event.requiredParams = {}
+                        //     var index = form.productIndex;
+                        //     var productId = products[index].id
+                        //     var dataToSave = window.getFormData("#ProductModal");
+                        //     dataToSave.id = productId;
+                        //     //console.log(dataToSave);
+                        //     event.optionalParams = {model: "Product", data: {id: productId, model: val}}
+                        //     window.ajax(event)
+                        //         .then(function (data) {
+                        //             //console.log(data);
+                        //         })
+                        // } else
+                        if (row == 0) { //修改工序
+                            var event = events['rq2112']
+                            event.requiredParams = {}
+                            var procedureId = clients[col - 2].id
+                            var dataToSave = {id: procedureId, name: val.trim()};
+                            //console.log(dataToSave);
+                            event.optionalParams = {
+                                model: "Working_Procedure",
+                                data: dataToSave
+                            }
+                            window.ajax(event)
+                                .then(function (data) {
+                                    //console.log(data);
+                                })
+                            $('#InfoModal1_10').modal('hide')
+
+                        } else {
+                            var productIndex = $('#InfoModal1_10 .productIndex').val();
+                            var productId = products[productIndex].id
+                            var procedureId = clients[col - 2].id
+                            var items = data.rows;
+                            var index;
+                            for (var i = 0; i < items.length; i++) {
+                                var item = items[i];
+                                //console.log(item, productId, procedureId);
+                                if (item.productId == productId && item.workingProcedureId == procedureId) {
+                                    index = i;
+                                }
+                            }
+                            //console.log(productId, procedureId);
+                            var productHasWorkingProcedure = data.rows[index];
+
+                            if (productHasWorkingProcedure) { //更新
+                                var event = events['rq2112']
+                                event.requiredParams = {}
+                                var procedureId = productHasWorkingProcedure.id
+                                var dataToSave = {id: procedureId, price: val ? val : ""};
+                                //console.log(dataToSave);
+                                event.optionalParams = {
+                                    model: "ProductHasWorkingProcedure",
+                                    data: dataToSave
+                                }
+                                window.ajax(event)
+                                    .then(function (data) {
+                                        //console.log(data);
+                                    })
+                            } else {//创建
+                                var event = events['rq2111']
+                                event.requiredParams = {}
+                                var dataToSave = {
+                                    productId: productId,
+                                    workingProcedureId: procedureId,
+                                    price: val,
+                                    factoryId: window.user.factory.id,
+                                };
+                                //console.log(dataToSave);
+                                event.optionalParams = {
+                                    model: "ProductHasWorkingProcedure",
+                                    data: dataToSave,
+                                }
+                                window.ajax(event)
+                                    .then(function (data) {
+                                        //console.log(data);
+                                    })
+                            }
+                            $('#InfoModal1_10').modal('hide')
+                        }
+
+                        setTimeout(function () {
+                            window.getTab1Data()
+                        }, 1000)
+                    }
+                },
+                onRender: function () {
+                    var myDataGrid = $('#datagridCheckableExample .table').data('zui.datagrid');
+                    myDataGrid.scroll(scrollLeft, scrollTop);
+
+                }
+            });
+        }
+
+
+//定义标签页
+        var tabs1 = [
+            {
+                title: '客户信息',
+                url: '/html/info-kehu.html',
+                type: 'ajax',
+                forbidClose: true,
+
+                onOpen: function () {
+
+
+                    events['rq316'].requiredParams = {factoryId: 1}
+                    events['rq316'].optionalParams = {}
+                    window.ajax(events['rq316'])
+                        .then(function (data) {
+                            //渲染表单
+                            clientDataList = data.data;
+
+                            for (var i = 0; i < clientDataList.length; i++) {
+                                var client = clientDataList[i];
+                                if (client.orders.length > 0) {
+                                    client.lastOrderCreatedAt = new Date(client.orders[0].createdAt).format("yyyy-MM-dd");
+                                } else {
+                                    client.lastOrderCreatedAt = '-'
+                                }
+                            }
+                            renderTable4(data.data);
+
+                            //绑定客户姓名录入
+                            $('.nameLetter').off('change');
+                            $('.nameLetter').on("change", function () {
+                                var nameLetter = $(this).val();
+                                events['rq317'].optionalParams.name = nameLetter;
+                                window.ajax(events['rq317'])
+                                    .then(function (data) {
+                                        // 把用户信息填上页面
+                                    })
+                            });
+
+                            //新增客户
+
+                            $('.newCustomerButton').off('click');
+                            $('.newCustomerButton').on('click', function (params) {
+
+                                var form = {
+                                    //客户表
+                                    name: '', // 客户名称
+                                    mobile: '', //联系电话
+                                    address: '', //收货地址
+                                    contact: '',      //联系人
+                                    contact_phone: '',   //联系电话
+                                    remarks: '',   //备注
+                                }
+
+
+                                window.renderForm('#myLgModal3', form)
+                                $(".h4").html("<h4>客户新增</h4>");
+                                $('#myLgModal3 .flag').val('new')
+                                $('#myLgModal3').modal('show', 'fit')
+                            });
+
+
+                            //绑定添加按钮
+                            $('.info-modifyCustomerButton').off('click');
+                            $('.info-modifyCustomerButton').on('click', function (params) {
+                                // window.ajax(events['rq313'])
+                                $('#myLgModal3').modal('show', 'fit')
+
+                            });
+
+
+                            window.saveClient = function () {
+
+                                var flag = $('#myLgModal3 .flag').val()
+                                var client = window.getFormData('#myLgModal3')
+                                //信息板块客户添加检测
+                                if (client.name == "") {
+                                    new $.zui.Messager("客户名称不能为空", {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    return
+                                }
+                                if (client.mobile == "") {
+                                    new $.zui.Messager("联系电话不能为空", {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    return
+                                }
+                                if (client.address == "") {
+                                    new $.zui.Messager("收货地址不能为空", {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    return
+                                }
+                                if (client.contact == "") {
+                                    new $.zui.Messager("联系人不能为空", {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    return
+                                }
+                                if (client.contact_phone == "") {
+                                    new $.zui.Messager("联系人电话不能为空", {
+
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    return
+                                }
+
+
+                                if (flag == 'edit') {
+
+                                    var index = $('#myLgModal3 .index').val()
+                                    var form = window.getFormData('#myLgModal3')
+
+                                    var id = form.id
+                                    var name = form.name
+                                    var items = clientDataList;
+                                    for (var i = 0; i < items.length; i++) {
+                                        var item = items[i];
+                                        if (item.name == name && ((item.id != id))) {
+                                            new $.zui.Messager("客户名称必须是唯一的", {
+                                                icon: 'info' // 定义消息图标
+                                            }).show();
+                                            return;
+                                        }
+                                    }
+
+                                    var event = events['rq315'];
+                                    event.requiredParams = {}
+                                    event.optionalParams = {client: form}
+                                    //console.log(event);
+                                    window.ajax(event)
+                                        .then(function (result) {
+                                            new $.zui.Messager(result.msg, {
+                                                icon: 'info' // 定义消息图标
+                                            }).show();
+
+                                            window.ajax(events['rq316'])
+                                                .then(function (data) {
+                                                    renderTable4(data.data);
+                                                });
+                                        })
+                                    //console.log(client);
+                                } else {
+
+                                    var name = client.name
+                                    var items = clientDataList;
+                                    for (var i = 0; i < items.length; i++) {
+                                        var item = items[i];
+                                        if (item.name == name) {
+                                            new $.zui.Messager("客户名称必须是唯一的", {
+                                                icon: 'info' // 定义消息图标
+                                            }).show();
+                                            return;
+                                        }
+                                    }
+
+                                    var event = events['rq313'];
+                                    event.requiredParams = {}
+                                    event.optionalParams = {client: client}
+                                    //console.log(event);
+                                    window.ajax(event)
+                                        .then(function (result) {
+                                            new $.zui.Messager(result.msg, {
+                                                icon: 'info' // 定义消息图标
+                                            }).show();
+
+                                            window.ajax(events['rq316'])
+                                                .then(function (data) {
+                                                    renderTable4(data.data);
+                                                });
+                                        })
+                                }
+
+
+                                $('#myLgModal3').modal('hide');
+                                // TODO rq313 新增客户 完成 jq获取数据
+                            }
+                        })
+
+                    window.deleteClients = function () {
+                        var items = window.getSelectedTableItems('#sale4 .table')
+                        //console.log(items);
+                        if (items.length == 0) {
+                            new $.zui.Messager("请至少选择一个记录", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        var event = events['rq2115']
+                        event.requiredParams = {model: 'Client'}
+                        event.optionalParams = {items: items}
+                        window.ajax(event)
+                            .then(function () {
+
+                                window.ajax(events['rq316'])
+                                    .then(function (data) {
+                                        renderTable4(data.data);
+                                    });
+
+
+                            })
+                    }
+
+                }
+            },
+            {
+                title: '订单信息',
+                url: '/html/info-dingdan.html',
+                type: 'ajax',
+                forbidClose: true,
+                onOpen: function () {
+                    events['rq322'].requiredParams = {factoryId: 1}
+                    events['rq322'].optionalParams = {}
+                    window.ajax(events['rq322'])
+                        .then(function (data) {
+                            //渲染表单
+                            renderTable5(data.data.rows);
+                        })
+
+                    window.deleteOrders = function () {
+                        var items = window.getSelectedTableItems('#sale5 .table')
+                        //console.log(items);
+                        if (items.length == 0) {
+                            new $.zui.Messager("请至少选择一个记录", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        var event = events['rq2115']
+                        event.requiredParams = {model: 'Order'}
+                        event.optionalParams = {items: items}
+                        window.ajax(event)
+                            .then(function () {
+                                window.ajax(events['rq322'])
+                                    .then(function (data) {
+                                        renderTable5(data.data.rows);
+                                    });
+                            })
+                    }
+                }
+            },
+            {
+                title: '产品价格',
+                icon: 'icon-star',
+                type: 'ajax',
+                forbidClose: true,
+                url: '/html/info-kehu-price.html',
+                onOpen: function () {
+                    var getTab3Data = function () {
+                        var event = events['rq253'];
+                        event.requiredParams = {}
+                        window.ajax(event)
+                            .then(function (data) {
+                                renderCustomerPriceTable(data.data)
+                            })
+                    }
+                    window.getTab3Data = getTab3Data
+                    getTab3Data();
+
+                    // window.deleteProduct = function () {
+                    //     var modelName = "Product"
+                    //     var id = $('#ProductModal .id').val();
+                    //     if (!id) {
+                    //         return
+                    //     } else {
+                    //         var event = events['rq2115']
+                    //         event.requiredParams = {model: modelName}
+                    //         event.optionalParams = {items: [{id: id}]}
+                    //         window.ajax(event)
+                    //             .then(function () {
+                    //                 setTimeout(function () {
+                    //                     new $.zui.Messager("删除成功", {
+                    //                         icon: 'info' // 定义消息图标
+                    //                     }).show();
+                    //                     $('#ProductModal').modal('hide');
+                    //                     getTab1Data();
+                    //                 }, 1000)
+                    //             })
+                    //     }
+                    // }
+                    // window.deleteModel = function (modelName, id) {
+                    //     var modelName = $('#InfoModal1_10 .modelName').val();
+                    //     var id = $('#InfoModal1_10 .id').val();
+                    //     if (!id) {
+                    //         return
+                    //     } else {
+                    //         var event = events['rq2115']
+                    //         event.requiredParams = {model: modelName}
+                    //         event.optionalParams = {items: [{id: id}]}
+                    //         window.ajax(event)
+                    //             .then(function () {
+                    //                 setTimeout(function () {
+                    //                     new $.zui.Messager("删除成功", {
+                    //                         icon: 'info' // 定义消息图标
+                    //                     }).show();
+                    //                     $('.modal').modal('hide');
+                    //                     getTab1Data();
+                    //                 }, 1000)
+                    //             })
+                    //     }
+                    // }
+                    //
+                    //
+                    // window.addProduct = function () {
+                    //     var form = {
+                    //         "model": "",
+                    //         "name": "",
+                    //         "specifications": "",
+                    //         "packingnumber": "",
+                    //         "packing_amount": "",
+                    //         "unitprice": "",
+                    //         "rowId": ""
+                    //     }
+                    //     form.flag = 'new'
+                    //     window.renderForm('#ProductModal', form)
+                    //     $('.orderDrag').hide()
+                    //     $('#ProductModal').modal('show', 'fit')
+                    //
+                    // }
+                    // window.saveProduct = function () {
+                    //     var data = window.getFormData("#ProductModal")
+                    //     //console.log(data);
+                    //     // tab1型号增加验证
+                    //     if (data.model == '') {
+                    //         new $.zui.Messager("型号不能为空", {
+                    //             icon: 'info' // 定义消息图标
+                    //         }).show();
+                    //         return;
+                    //     }
+                    //     // if (data.name == '') {
+                    //     //     new $.zui.Messager("名称不能为空", {
+                    //     //         icon: 'info' // 定义消息图标
+                    //     //     }).show();
+                    //     //     return;
+                    //     // }
+                    //     for (var x in data) {
+                    //         if (data[x] == '') {
+                    //             data[x] = 0;
+                    //         }
+                    //     }
+                    //
+                    //     $('#ProductModal').modal('hide', 'fit')
+                    //     var event
+                    //     if (data.flag == 'new') {
+                    //         event = events['rq2111'];
+                    //     } else {
+                    //         event = events['rq2112'];
+                    //     }
+                    //     event.requiredParams = {model: "Product"}
+                    //     event.optionalParams = {data: data}
+                    //     window.ajax(event)
+                    //         .then(function (data) {
+                    //             new $.zui.Messager(data.msg, {
+                    //                 icon: 'info' // 定义消息图标
+                    //             }).show();
+                    //             getTab1Data()
+                    //         })
+                    //
+                    // }
+                    //
+                    // window.addProcedure = function () {
+                    //     $('#prdInfoModal1_6 .name').val('')
+                    //     $('#prdInfoModal1_6').modal('show', 'fit')
+                    //
+                    //
+                    // }
+                    // window.saveProcedure = function () {
+                    //
+                    //     var proVal = $("#prdInfoModal1_6 .name").val()
+                    //     // tab1工序增加验证
+                    //     if (proVal == '') {
+                    //
+                    //         new $.zui.Messager("工序不能为空", {
+                    //             icon: 'info' // 定义消息图标
+                    //         }).show();
+                    //         return;
+                    //     }
+                    //
+                    //     $('#prdInfoModal1_6').modal('hide', 'fit')
+                    //     var event = events['rq2111'];
+                    //     event.requiredParams = {model: "Working_Procedure"}
+                    //     event.optionalParams = {data: {name: $("#prdInfoModal1_6 .name").val()}}
+                    //     window.ajax(event)
+                    //         .then(function (data) {
+                    //             new $.zui.Messager(data.msg, {
+                    //                 icon: 'info' // 定义消息图标
+                    //             }).show();
+                    //             getTab1Data()
+                    //         })
+                    // }
+
+
+                },
+
+
+            }
+        ]
+// 初始化标签页管理器
+        $('#tabsExample').tabs({tabs: tabs1});
+    })
+</script>
+
+</html>

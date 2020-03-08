@@ -1,0 +1,418 @@
+<div class="tab1">
+
+    <div style="margin: 10px 0">
+    <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+        <span class="input-group-addon">日期开始</span>
+        <input type="text" class="form-control datetimepicker tab1CreateAtDateStart" placeholder="点击选择">
+        <span class="input-group-addon cursor" onclick="$('.tab1CreateAtDateStart').val('')">x</span>
+    </div>
+
+    <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+        <span class="input-group-addon">日期结束</span>
+        <input type="text" class="form-control datetimepicker tab1CreateAtDateEnd" placeholder="点击选择">
+        <span class="input-group-addon cursor" onclick="$('.tab1CreateAtDateEnd').val('')">x</span>
+    </div>
+
+        <button onclick="window.searchMaterial()" class="btn btn-primary col-md-2 col-xs-12 exBtn"
+                style="float:left;margin:0 2px;margin:10px 0">按日期搜索
+        </button>
+    </div>
+
+    <!--弹窗-->
+    <div class="modal fade modal-moveable" id="Material_In_Out_RecordModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">工单消耗</h4></div>
+                <div class="modal-body">
+
+                    <div class="form" id="Material_In_Out_RecordForm">
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">产品型号</span>
+                            <input id="product_modelformId" type="text" name="product_model" class="form-control product_model"
+                                   placeholder="">
+                            <input id="product_modelformIdcallback" type="hidden" name="product_modelId"
+                                   class="form-control product_modelId" placeholder="">
+                        </div>
+
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">工序</span>
+                            <input id="procedureformId" type="text" name="procedure" class="form-control procedure"
+                                   placeholder="">
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">物料名称</span>
+                            <input id="nameformId" type="text" name="name" class="form-control name" placeholder="">
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">数量</span>
+                            <input id="numberformId" type="text" name="number" class="form-control number" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#numberformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-10" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">备注</span>
+                            <input id="note" type="text" name="note" class="form-control note" placeholder="">
+                        </div>
+
+                        <input name="id" class="id" type="hidden">
+                        <input name="flag" class="flag" type="hidden">
+                        <input name="index" class="index" type="hidden">
+                    </div>
+
+                </div>
+                <div style="clear: both"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button onclick="window.deleteMaterial_In_Out_RecordForm()" type="button" class="btn btn-danger"
+                            data-dismiss="modal">删除
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!--物料修正弹窗-->
+    <div class="modal fade modal-moveable" id="myModal1" style="height: 125%; ">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h4 class="modal-title">物料修正</h4>
+            </div>
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div>
+                        <div class="input-group">
+                            <span class="input-group-addon">日期 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <input readonly name="data" type="text" class="form-control createdAt" placeholder="日期">
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-addon">型号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <input name="product_model" type="text" class="form-control product_model" placeholder="型号">
+
+                        </div>
+
+
+                        <div class="input-group ">
+                            <span class="input-group-addon">物料类型</span>
+                            <select id="nameId" type="text" name="name"
+                                    class="form-control name"
+                                    placeholder="">
+                            </select>
+                        </div>
+
+                        <div class="input-group" style="float: left; width: 50%;">
+                            <span class="input-group-addon">现有数量</span>
+                            <input name="currentNumber" type="text" class="form-control currentNumber"
+                                   placeholder="现有数量">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">修正数量&nbsp;</span>
+                            <input name="number" type="text" class="form-control number" placeholder="修正数量">
+
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">修正后数量</span>
+                            <input name="fixedNumber" type="text" class="form-control fixedNumber" placeholder="修正后数量">
+                        </div>
+
+                        <input type="hidden" name="productId" class="productId">
+                        <input type="hidden" name="materialId" class="materialId">
+
+                        <div class="input-group">
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button onclick="window.fixMaterial()" class="btn btn-primary" type="button"
+                            style="margin-left: 50%">
+                        确认
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--物料进库弹窗-->
+    <div class="modal fade modal-moveable" id="myModal2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">物料进仓(入库单)</h4>
+                </div>
+                <div class="modal-body">
+                    <h2 style="text-align: center">送货单位</h2>
+                    <div style="float: left">
+                        <div class="input-group">
+                            <span class="input-group-addon">名称 </span>
+                            <input name="data" type="text" class="form-control model" placeholder="名称">
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-addon">地址 </span>
+                            <input name="data" type="text" class="form-control" placeholder="地址"
+                                   style="display: inline;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="input-group">
+                            <span class="input-group-addon">联系人</span>
+                            <input name="data" type="text" class="form-control" placeholder="联系人">
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-addon">电话 </span>
+                            <input name="data" type="text" class="form-control" placeholder="电话"
+                                   style="display: inline;">
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--物料进出仓详情弹窗-->
+    <div class="modal fade modal-moveable" id="materialInOutModal">
+        <div class="modal-dialog">
+            <div class="modal-content" style="min-width: 320px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title"><span class="productModalSpan"></span> 物料详情</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div id="tables"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--物料进仓 入库单-->
+    <div class="modal fade modal-moveable" id="materialInModal">
+        <div class="modal-dialog  modal-moveable modal-lg">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h4 class="modal-title">物料进仓(入库单)</h4>
+            </div>
+            <div class="modal-content">
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">录入日期</span>
+                    <input name="createdAt" type="text" class="form-control createdAt datetimepicker">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">签收日期</span>
+                    <input name="receiverDate" type="text" class="form-control receiverDate datetimepicker"
+                           placeholder="  年  月  日">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">收货人</span>
+                    <input name="receiver" type="text" class="form-control receiver">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">单据编号</span>
+                    <input name="sn" type="text" class="form-control sn">
+                    <span class="input-group-addon cursor"
+                          onclick="$('#materialInModal .sn').val(window.generateUUID())">生成</span>
+                </div>
+                <div style="clear: both"></div>
+                <div style="margin:15px 10px 0px 10px ;font-size: 17px;color:#666;"><span
+                        style="font-weight: bolder;color: red">送货单位:</span></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">&nbsp;&nbsp;名称&nbsp;&nbsp;</span>
+                    <input name="supplierName" type="text" class="form-control supplierName">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">联系人</span>
+                    <input name="supplierContact" type="text" class="form-control supplierContact">
+                </div>
+                <div style="clear: both"></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">&nbsp;&nbsp;地址&nbsp;&nbsp;</span>
+                    <input name="supplierAddress" type="text" class="form-control supplierAddress">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">&nbsp;&nbsp;电话&nbsp;&nbsp;</span>
+                    <input name="supplierPhone" type="text" class="form-control supplierPhone">
+                </div>
+                <div style="clear: both"></div>
+
+                <button onclick="window.clickAddMaterial()"
+                        class="btn btn-warning col-md-1 col-sm-2 btn2 clickAddMaterial"
+                        style="float:left;width:100px;margin:10px 10px 10px 10px">添加产品
+                </button>
+                <div style="clear: both"></div>
+
+                <div id='table-products' class="col-md-10" style="margin:10px 10px 10px 2px"></div>
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;">
+                    <span class="input-group-addon">合计</span>
+                    <input name="sum" type="text" class="form-control sum" placeholder="合计">
+                </div>
+                <div style="margin:15px 10px 0px 10px ;font-size: 17px;color:#666;"><span
+                        style="font-weight: bolder;color: red">收货单位:</span></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">&nbsp;&nbsp;名称&nbsp;&nbsp;</span>
+                    <input name="receiverDep" type="text" class="form-control receiverDep">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">地址、电话</span>
+                    <input name="receiverAddressPhone" type="text" class="form-control receiverAddressPhone">
+                </div>
+                <div style="clear: both"></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">&nbsp;&nbsp;备注&nbsp;&nbsp;</span>
+                    <input name="note" type="text" class="form-control note">
+                </div>
+
+                <div style="clear: both"></div>
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">录入人</span>
+                    <input name="recorder" type="text" class="form-control recorder">
+                </div>
+
+                <input value="" name="id" type="hidden" class="form-control id">
+                <input value="" name="supplierId" type="hidden" class="form-control supplierId">
+                <input value="" name="index" type="hidden" class="form-control index">
+                <input value="" name="flag" type="hidden" class="form-control flag">
+
+
+                <div style="clear: both"></div>
+            </div>
+            <div class="modal-footer" style="border-top:none">
+                <div style="clear: both"></div>
+                <button onclick="window.saveMaterialInOutRecord()" class="btn btn-primary col-md-1 col-sm-2 btn2 exBtn2"
+                        style="float:right;width:85px;margin:10px 10px 10px 2px">保存单据
+                </button>
+                <button onclick="window.deleteMaterialOrder()" class="btn btn-danger col-md-1 col-sm-2 btn2 exBtn2"
+                        style="float:right;width:85px;margin:10px 10px 10px 2px">删除单据
+                </button>
+                <button class="btn  col-md-1 col-sm-2 btn2 exBtn2"
+                        style="float:right;width:100px;margin:10px 10px 10px 12px" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!--主页面-->
+    <div class="row col-md-12">
+        <div class="col-md-6 col-xs-12">
+
+            <div style="margin: 10px 0">
+                <button type="button" class="btn btn-info tab1Submit" onclick="window.clickFixMaterial()">物料修正
+                </button>
+            </div>
+            <div style="margin:10px 10px 0px 10px;font-size: 17px;color:#666;"><span
+                    style="font-weight: bolder;color: red">物料记录:</span></div>
+            <div id="table1"></div>
+        </div>
+
+        <div class="col-md-6 col-xs-12">
+            <div style="margin: 10px 0">
+                <button type="button" class="btn btn-warning tab1Submit" onclick="window.clickMaterialInPopup()">物料进仓
+                </button>
+            </div>
+            <div style="margin:10px 10px 0px 10px;font-size: 17px;color:#666;"><span
+                    style="font-weight: bolder;color: red">进仓记录:</span></div>
+            <div id="table2"></div>
+        </div>
+    </div>
+
+    <!--物料进仓 入库单 新增物料弹窗-->
+    <div class="modal modal-moveable fade" id="myProductEditModal" style="height: 95%;overflow: scroll">
+        <!--        追踪productId-->
+        <div class="modal-dialog  modal-moveable modal-lg">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h4 class="modal-title">物料</h4>
+            </div>
+            <div class="modal-content">
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">型号</span>
+                    <input name="product_model" type="text" class="form-control product_model">
+                </div>
+                <!--            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">-->
+                <!--                <span class="input-group-addon">物料</span>-->
+                <!--                <input type="text" class="form-control">-->
+                <!--            </div>-->
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">物料</button>
+                            </span>
+                    <select name="name" class="form-control name">
+
+                    </select>
+
+                </div>
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">单位</span>
+                    <input name="unit" type="text" class="form-control unit">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">数量</span>
+                    <input name="number" type="text" class="form-control number">
+                </div>
+                <div style="clear: both"></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">单价</span>
+                    <input name="price" type="text" class="form-control price">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">金额</span>
+                    <input name="sum" type="text" class="form-control sum">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">备注</span>
+                    <input name="note" type="text" class="form-control note">
+                </div>
+
+                <input value="" name="id" type="hidden" class="form-control id">
+                <input value="" name="productId" type="hidden" class="form-control productId">
+                <input value="" name="materialId" type="hidden" class="form-control materialId">
+                <input value="" name="index" type="hidden" class="form-control index">
+                <input value="" name="flag" type="hidden" class="form-control flag">
+
+            </div>
+            <div class="modal-footer" style="border-top:none">
+                <div style="clear: both"></div>
+                <button onclick="window.addMaterial()" class="btn btn-primary col-md-1 col-sm-2 btn2 exBtn2"
+                        style="float:right;width:85px;margin:10px 10px 10px 2px">保存
+                </button>
+                <button onclick="window.deleteMaterialProduct()"
+                        class="btn btn-danger col-md-1 col-sm-2 btn2 exBtn2 delete"
+                        style="float:right;width:85px;margin:10px 10px 10px 2px;">删除
+                </button>
+                <button class="btn  col-md-1 col-sm-2 btn2 exBtn2"
+                        style="float:right;width:100px;margin:10px 10px 10px 12px" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

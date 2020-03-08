@@ -1,0 +1,396 @@
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title><%= title %></title>
+<link href="/bower_components/zui/dist/css/zui.css" rel="stylesheet">
+<script src="/bower_components/jquery/dist/jquery.js"></script>
+
+<link rel="stylesheet" href="/bower_components/jquery-ui/jquery-ui.css">
+<script src="/bower_components/lib/jquery-ui.js"></script>
+
+<script src="/bower_components/lib/pinyin.js"></script>
+
+<script src="/bower_components/zui/dist/js/zui.js"></script>
+<link href="/bower_components/zui/dist/lib/tabs/zui.tabs.css" rel="stylesheet">
+<script src="/bower_components/lib/zui.tabs.js"></script>
+<link href="/bower_components/zui/dist/lib/datagrid/zui.datagrid.css" rel="stylesheet">
+<script src="/bower_components/lib/zui.datagrid.js"></script>
+
+<link href="/bower_components/zui/dist/lib/datetimepicker/datetimepicker.min.css" rel="stylesheet">
+<script src="/bower_components/zui/dist/lib/datetimepicker/datetimepicker.min.js"></script>
+
+<script src="/bower_components/lib/zui.sortable.js"></script>
+
+<script src="/controller/ajax.js"></script>
+
+<style>
+
+    .redText {
+        color: red;
+    }
+
+    .datagrid-cell-cell input {
+        border: none;
+        border-bottom: none;
+        width: 100%;
+    }
+
+    .tab-nav-link > .title {
+        left: 15px;
+    }
+
+    .hideGen {
+        visibility: hidden;
+    }
+
+    @media screen and (max-width: 500px) {
+        .tab-nav-link > .title {
+            left: 5px;
+            font-size: 12px;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .container {
+            max-width: 98%;
+        }
+    }
+
+    @media (max-width: 1920px) {
+        .container {
+            max-width: 98%;
+        }
+    }
+</style>
+
+<script>
+    Number.prototype.toFixed = function (n) {
+        if (n > 20 || n < 0) {
+            throw new RangeError('toFixed() digits argument must be between 0 and 20');
+        }
+        const number = this;
+        if (isNaN(number) || number >= Math.pow(10, 21)) {
+            return number.toString();
+        }
+        if (typeof (n) == 'undefined' || n == 0) {
+            return (Math.round(number)).toString();
+        }
+        let result = number.toString();
+        const arr = result.split('.');
+        // 整数的情况
+        if (arr.length < 2) {
+            result += '.';
+            for (let i = 0; i < n; i += 1) {
+                result += '0';
+            }
+            return result;
+        }
+        const integer = arr[0];
+        const decimal = arr[1];
+        if (decimal.length == n) {
+            return result;
+        }
+        if (decimal.length < n) {
+            for (let i = 0; i < n - decimal.length; i += 1) {
+                result += '0';
+            }
+            return result;
+        }
+        result = integer + '.' + decimal.substr(0, n);
+        const last = decimal.substr(n, 1);
+        // // 四舍五入，转换为整数再处理，避免浮点数精度的损失
+        // if (parseInt(last, 10) >= 5) {
+        //     const x = Math.pow(10, n);
+        //     result = (Math.round((parseFloat(result) * x)) + 1) / x;
+        //     result = result.toFixed(n);
+        // }
+        return result;
+
+    }
+</script>
+
+
+<script>
+
+    $(document).on('show.zui.modal', '.modal', function (event) {
+        $(this).appendTo($('body'));
+    }).on('shown.zui.modal', '.modal.in', function (event) {
+        //console.log('shown.zui.modal');
+        $('.modal').css('overflow-y', 'scroll')
+    }).on('hidden.zui.modal', '.modal', function (event) {
+        //console.log('hidden.zui.modal');
+        $('.modal').css('overflow-y', 'scroll')
+    });
+
+</script>
+
+<script>
+    window.setTips = function (selector, text, keep) {
+        $(selector).tooltip('show', text);
+        if (keep) {
+        } else {
+            setTimeout(function () {
+                $(selector).tooltip('destroy');
+            }, 5000)
+        }
+    }
+</script>
+
+<script>
+    window.generateUUID = function () {
+        var d = new Date().getTime();
+        if (window.performance && typeof window.performance.now === "function") {
+            d += performance.now(); //use high-precision timer if available
+        }
+        var uuid = 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = (d + Math.random() * 16) % 16 | 0;
+            d = Math.floor(d / 16);
+            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+        var addNum = function (s) {
+            if (parseInt(s) < 10) {
+                return '0' + s;
+            } else {
+                return s
+            }
+        }
+        var year = new Date().getFullYear();
+        var month = new Date().getMonth() + 1;
+        var date = new Date().getDate();
+        // var dateString = year.toString() + addNum(month).toString() + addNum(date).toString();
+        var dateString = new Date().format("yyyyMMddhhmmss");
+        return dateString + '-' + uuid.replace('-', '').substring(0, 3);
+    }
+
+</script>
+
+<script>
+
+    window.renderForm = function (selector, data) {
+        $(selector + ' input, ' + selector + ' select').val('')
+        $(selector + ' select').html('');
+        for (var x in data) {
+            $(selector + ' .' + x).val(data[x])
+        }
+    }
+
+    window.getFormData = function (selector) {
+        var data = {}
+        $(selector + ' input, ' + selector + ' select').each(function () {
+            var key = $(this).attr('name');
+            var val = $.trim($(this).val().trim())
+            data[key] = val;
+        })
+        return data;
+    }
+
+    window.deleteModel = function (id, modelName, callback) {
+
+        var event = events['rq2113'];
+        event.requiredParams = {model: modelName}
+        event.optionalParams = {data: {id: id}}
+        window.ajax(event)
+            .then(function (data) {
+                callback()
+            })
+    }
+
+    window.deleteEmptyProperties = function (data) {
+        for (var x in data) {
+            if (data[x] === '') {
+                delete data[x]
+            }
+        }
+    }
+
+</script>
+
+<script>
+    window.getSelectedTableItems = function (selector) {
+        var instance = $(selector).data('zui.datagrid');
+        var selectedItems = instance.getCheckItems();
+        return selectedItems;
+    }
+</script>
+
+<script>
+    window.console = window.console || (function () {
+        var c = {};
+        c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile = c.clear = c.exception = c.trace = c.assert = function () {
+        };
+        return c;
+    })();
+</script>
+
+<% if(user){ %>
+    <script>
+        var user = '<%- JSON.stringify(user) %>'//转化成字符串？疑问
+        user = JSON.parse(user);//转化成JSON对象
+        window.user = user;
+        //console.log('用户信息 ++++++', user);
+    </script>
+<% } %>
+
+<script>
+    var config = '<%- JSON.stringify(config) %>'//转化成字符串？疑问
+    config = JSON.parse(config);//转化成JSON对象
+    window.config = config;
+    //console.log('当前页面配置 ++++++', config);
+</script>
+
+<script>
+    var events = '<%- JSON.stringify(events) %>'//转化成字符串？疑问
+    events = JSON.parse(events);//转化成JSON对象
+    window.events = events;
+    //console.log('可操作的事件 ++++++', events);
+</script>
+
+<script>
+    window.exportDataSource = {}
+    window.doExport = function (name, dataKey, tableSelector) {
+        var $datagrid = $(tableSelector + ' .table').data('zui.datagrid');
+        var dataSource = {
+            cols: $datagrid.options.dataSource.cols,
+            array: $datagrid.getCheckItems()
+        };
+        if (dataSource.array.length == 0) {
+            new $.zui.Messager('请勾选相应选项以便导出！', {
+                icon: 'info' // 定义消息图标
+            }).show();
+            return
+        }
+        var event = events['rq2116']
+        event.requiredParams = {name: name, data: dataSource}
+        event.optionalParams = {}
+        window.ajax(event)
+            .then(function (data) {
+                var truthBeTold = window.confirm("单击“确定”继续。 \n请允许弹出窗口以便下载文件！\n下载链接于3分钟后会自动删除！")
+                if (truthBeTold) {
+                    window.location.href = data.data;
+                } else {
+
+                }
+            })
+
+
+    }
+    window.doExportAll = function (name, dataKey, tableSelector) {
+        var $datagrid = $(tableSelector + ' .table').data('zui.datagrid');
+        var dataSource = {
+            cols: JSON.parse(JSON.stringify($datagrid.options.dataSource.cols)),
+            array: $datagrid.options.dataSource.array
+        };
+        dataSource.cols.push({name: 'start', label: '开始日期'},)
+        dataSource.cols.push({name: 'end', label: '结束日期'},)
+        if (dataSource.array.length == 0) {
+            new $.zui.Messager('请勾选相应选项以便导出！', {
+                icon: 'info' // 定义消息图标
+            }).show();
+            return
+        }
+        var event = events['rq2116']
+        event.requiredParams = {name: name, data: dataSource}
+        event.optionalParams = {}
+        window.ajax(event)
+            .then(function (data) {
+                var truthBeTold = window.confirm("单击“确定”继续。 \n请允许弹出窗口以便下载文件！\n下载链接于3分钟后会自动删除！")
+                if (truthBeTold) {
+                    window.location.href = data.data;
+                } else {
+
+                }
+            })
+
+
+    }
+    window.doExportTemplate = function (name, dataKey, tableSelector) {
+        var $datagrid = $(tableSelector + ' .table').data('zui.datagrid');
+        var cols = $datagrid.options.dataSource.cols;
+        cols.unshift({name: 'id', label: 'id', width: 132},)
+        var dataSource = {
+            cols: $datagrid.options.dataSource.cols,
+            array: []
+        };
+        var event = events['rq2116']
+        event.requiredParams = {name: name, data: dataSource}
+        event.optionalParams = {}
+        window.ajax(event)
+            .then(function (data) {
+                window.location.href = data.data;
+            })
+
+
+    }
+</script>
+
+<style>
+    .cursor {
+        cursor: pointer
+    }
+
+    .ui-autocomplete {
+        max-height: 300px !important;
+        overflow: scroll !important;
+        z-index: 9999999;
+    }
+</style>
+
+<script>
+    window.autoParseFloat = function (selector) {
+        setTimeout(function () {
+            $(selector).on('blur', function () {
+                try {
+                    var val = $(this).val()
+                    if (val == '') {
+
+                    } else {
+                        val = parseFloat(val).toFixed(2)
+                        $(this).val(val);
+                    }
+
+                } catch (e) {
+                }
+            })
+        }, 3000)
+
+
+    }
+    window.autoParseFloat4 = function (selector) {
+        setTimeout(function () {
+            $(selector).on('blur', function () {
+                try {
+                    var val = $(this).val()
+                    if (val == '') {
+
+                    } else {
+                        val = parseFloat(val).toFixed(4)
+                        $(this).val(val);
+                    }
+
+                } catch (e) {
+                }
+            })
+        }, 3000)
+
+
+    }
+
+</script>
+
+<script>
+    function accMul(arg1, arg2) {
+        var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
+        try {
+            m += s1.split(".")[1].length
+        } catch (e) {
+        }
+        try {
+            m += s2.split(".")[1].length
+        } catch (e) {
+        }
+        return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
+    }
+
+    window.accMul = accMul;
+</script>

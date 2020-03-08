@@ -1,0 +1,995 @@
+<script>
+    window.setTab1ClientAutoComplete = function () {
+        events['rq311'].requiredParams = {}
+        events['rq311'].optionalParams = {}
+        var clients;
+        window.ajax(events['rq311'])
+            .then(function (data) {
+                var source = []
+                var items = data.data.rows;
+                clients = data.data.rows;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab1ClientName").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var client = clients[index]
+                        //console.log(client);
+                        $('.tab1ClientName').attr("clientId", client.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab1ClientName').attr("clientId", '');
+                    }
+                });
+
+            })
+    }
+
+    window.setTab1ModelAutoComplete = function (data) {
+        var models = data;
+
+        window.ajax(events['rq2012'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                models = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab1Model").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = models[index]
+                        //console.log(model);
+                        $('.tab1Model').attr("productId", model.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab1Model').attr("productId", '');
+                    }
+                });
+            })
+    }
+
+    window.setTab1CreatorAutoComplete = function () {
+        var customers
+        var source = []
+
+        window.ajax(events['rq2015'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                customers = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + '(' + item.nickName + ')' + " ",
+                        value: item.name,
+                        id: item.id,
+                        nickName: item.nickName,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab1Creator").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var customer = customers[index]
+                        //console.log(customer);
+                        $('.tab1Creator').attr("customerId", customer.id);
+                        $('.tab1Creator').attr("nickName", customer.nickName);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab1Creator').attr("customerId", '');
+                        $('.tab1Creator').attr("nickName", '');
+                    }
+                });
+            })
+
+
+    }
+
+    window.setTab2ModelAutoComplete = function (data) {
+        var models = data;
+
+        window.ajax(events['rq2012'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                models = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab2Model").autocomplete({
+                    source: source,
+                    allowNotCorrect: true,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = models[index]
+                        //console.log(model);
+                        $('.tab2Model').attr("productId", model.id);
+                    }
+                    ,
+                    notInSourceCallback: function () {
+                        $('.tab2Model').attr("productId", '');
+                    }
+                });
+
+
+            })
+    }
+
+    window.setTab2PopUpModelAutoComplete = function (data) {
+        var models = data;
+
+        window.ajax(events['rq2012'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                models = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab2PopupModel").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = models[index]
+                        var productId = model.id;
+                        //追踪productId
+                        $('.tab2PopupModel').attr('productId', productId)
+
+                        var procedures = model.working_procedures;
+                        $('.procedures').html('')
+                        for (var i = 0; i < procedures.length; i++) {
+                            var procedure = procedures[i];
+                            $('.procedures').append("<button class='btn btn-danger'>" + procedure.name + "</button>")
+                        }
+
+
+                    },
+                    notInSourceCallback: function () {
+                        $('.procedures').html('')
+                        $('#prdCode_Tab2_1').removeAttr('productId')
+                        $('#prdCode_Tab2_1').val('')
+                    }
+                });
+
+                // $("#myModal2 .product_model").autocomplete({
+                //     source: source,
+                //     select: function (event, ui) {
+                //         //console.log("Selected: ", ui);
+                //         var index = ui.item.index
+                //         var model = models[index]
+                //         var productId = model.id;
+                //         //追踪productId
+                //         $('#myModal2 .product_model').attr('productId', productId)
+                //         $('#myModal2 .productId').val(productId)
+                //     },
+                //     notInSourceCallback: function () {
+                //         $('#myModal2 .product_model').removeAttr('productId')
+                //         $('#myModal2 .productId').val('')
+                //     }
+                // });
+            })
+    }
+
+    window.setTab2ProcessAutoComplete = function (data) {
+        var processes = data;
+
+        window.ajax(events['rq2013'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                processes = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.product_batch + " ",
+                        value: item.product_batch,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab2OBatchNo").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var process = processes[index]
+                        //console.log(process);
+                        $('.tab2OBatchNo').attr("processId", process.id);
+                    }
+                    ,
+                    notInSourceCallback: function () {
+                        $('.tab2OBatchNo').attr("processId", '');
+                    }
+                });
+
+
+            })
+    }
+
+    window.setTab2ProcedureAutoComplete = function () {
+        var procedures
+        var source = []
+
+        window.ajax(events['rq2014'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                procedures = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab2ProcedureName").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var procedure = procedures[index]
+                        //console.log(procedure);
+                        $('.tab2ProcedureName').attr("procedureName", procedure.name);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab2ProcedureName').attr("procedureName", '');
+                    }
+                });
+
+                $("#Production_Process_ProcedureModal .name").autocomplete({
+                    source: source,
+                    allowNotCorrect: true,
+                    // select: function (event, ui) {
+                    //     var index = ui.item.index
+                    //     var procedure = procedures[index]
+                    //     $('#Production_Process_ProcedureModal .productionProcessId').val(procedure.id);
+                    // },
+                    // notInSourceCallback: function () {
+                    //     $('#Production_Process_ProcedureModal .productionProcessId').val('');
+                    // }
+                });
+
+            })
+
+
+    }
+
+    window.setTab3ProcessAutoComplete = function (data) {
+        var processes = data;
+
+        window.ajax(events['rq2013'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                processes = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.product_batch + " ",
+                        value: item.product_batch,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab3BatchName").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var process = processes[index]
+                        //console.log(process);
+                        $('.tab3BatchName').attr("processId", process.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab3BatchName').attr("processId", '');
+                    }
+                });
+            })
+    }
+
+    window.setTab3ProcedureAutoComplete = function () {
+        var procedures
+        var source = []
+
+        window.ajax(events['rq2014'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                procedures = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        // id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab3ProcedureName").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var procedure = procedures[index]
+                        //console.log(procedure);
+                        $('.tab3ProcedureName').attr("procedureName", procedure.name);
+                        // $('.tab3ProcedureName').attr("productionProcessProcedureId", procedure.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab3ProcedureName').attr("procedureName", '');
+                        // $('.tab3ProcedureName').attr("productionProcessProcedureId", '');
+                    }
+                });
+            })
+
+
+    }
+
+    window.setTab3CreatorAutoComplete = function () {
+        var customers
+        var source = []
+
+        window.ajax(events['rq2015'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                customers = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + '(' + item.nickName + ')' + " ",
+                        value: item.name,
+                        id: item.id,
+                        nickName: item.nickName,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab3Creator").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var customer = customers[index]
+                        //console.log(customer);
+                        $('.tab3Creator').attr("customerId", customer.id);
+                        $('.tab3Creator').attr("nickName", customer.nickName);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab3Creator').attr("customerId", '');
+                        $('.tab3Creator').attr("nickName", '');
+
+                    }
+                });
+            })
+
+
+    }
+
+    window.setTab3EmployeeAutoComplete = function (data) {
+        var employees = data;
+
+        window.ajax(events['rq2016'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                employees = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + ' （工号：' + (item.work_number ? item.work_number : '暂无') + "） ",
+                        value: item.name,
+                        id: item.id,
+                        department: item.department,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+                //console.log(source);
+
+                $(".tab3Name").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var employee = employees[index]
+                        //console.log(employee);
+                        $('.tab3Name').attr("employeeId", employee.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab3Name').attr("employeeId", '');
+                    }
+                });
+
+                $("#myworkPage #employeeN").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var employee = employees[index]
+                        //console.log(employee);
+                        $('#myworkPage #employeeN').attr("employeeId", employee.id);
+                        $('#myworkPage .employeeId').val(employee.id);
+                        $('#myworkPage .department').val(ui.item.department.name);
+                        $('#myworkPage .department').attr('departmentId', ui.item.department.id);
+
+
+                    },
+                    notInSourceCallback: function () {
+                        $('#myworkPage #employeeN').attr("employeeId", '');
+                        $('#myworkPage .employeeId').val('');
+                    }
+                });
+
+                $("#Work_OrderModal .employeeN").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var employee = employees[index]
+                        //console.log(employee);
+                        $('#Work_OrderModal .employeeN').attr("employeeId", employee.id);
+                        $('#Work_OrderModal .employeeId').val(employee.id);
+                        $('#Work_OrderModal .department').val(ui.item.department.name);
+                        $('#Work_OrderModal .department').attr('departmentId', ui.item.department.id);
+
+
+                    },
+                    notInSourceCallback: function () {
+                        $('#Work_OrderModal .employeeN').attr("employeeId", '');
+                        $('#Work_OrderModal .employeeId').val('');
+                    }
+                });
+
+
+            })
+    }
+
+    window.setTab3NewWorkOrderModelAutoComplete = function () {
+        var items;
+        var models = [];
+        var items = [];
+        var processes = []
+        var sourceBatch = []
+        var production_processes = []
+        var event = events['rq2020']
+        event.optionalParams = {}
+        window.ajax(event)
+            .then(function (data) {
+
+                items = data.data;
+                processes = data.data;
+                console.log(production_processes);
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                        closed: item.closed,
+                        product_batch: item.product_batch,
+                        product_model: item.product_model,
+                        production_processes: item.production_processes,
+                        productId: item.id,
+                    }
+                    production_processes.push(dis);
+                }
+                //console.log(production_processes);
+
+                $("#myworkPage .newPrd_model").autocomplete({
+                    source: production_processes,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = ui.item;
+                        var production_processes = model.production_processes
+                        var productId = ui.item.productId
+                        // 追踪productId
+                        $('#myworkPage .productId').val(productId);
+                        sourceBatch = []
+                        for (var i = 0; i < production_processes.length; i++) {
+                            var item = production_processes[i];
+                            var dis = {
+                                label: item.product_batch + " ",
+                                value: item.product_batch,
+                                id: item.id,
+                                index: i,
+                                closed: item.closed,
+                                product_batch: item.product_batch,
+                                product_model: item.product_model,
+                                procedures: item.production_process_procedures
+                            }
+                            sourceBatch.push(dis);
+                        }
+
+
+                        var batches = sourceBatch;
+                        console.log(batches);
+                        var string = ''
+                        string = string + '<option>请选择批次</option>'
+                        for (var i = 0; i < batches.length; i++) {
+                            var batch = batches[i];
+                            if (batch.closed == 0) {
+                                string = string + '<option batchId="' + batch.id + '" index="' + i + '" value="' + batch.product_batch + '">' + batch.product_batch + '</option>'
+                            }
+                        }
+
+                        $('#myworkPage #newPrd_batch').html('').html(string);
+                        $('#myworkPage #newPrd_batch').off('change')
+                        $('#myworkPage #newPrd_batch').on('change', function () {
+                            var index = $('#myworkPage #newPrd_batch').find("option:selected").attr('index')
+                            var batch = batches[index]
+                            var procedures = batches[index].procedures;
+                            $('#myworkPage .productionProcessId').val(batch.id);
+                            //console.log(procedures);
+                            var string = ''
+                            string = string + '<option>请选择工序</option>'
+                            for (var i = 0; i < procedures.length; i++) {
+                                var procedure = procedures[i];
+                                string = string + '<option productionProcessId="' + procedure.id + '" index="' + i + '" value="' + procedure.name + '">' + procedure.name + '</option>'
+                            }
+
+                            $('#myworkPage #newPrd_procedure').html('').html(string);
+                            $('#myworkPage #newPrd_procedure').off('change')
+                            $('#myworkPage #newPrd_procedure').on('change', function () {
+
+                                var index = $('#myworkPage #newPrd_procedure').find("option:selected").attr('index')
+                                var procedure = procedures[index];
+                                $('#myworkPage .productionProcessProcedureId').val(procedure.id);
+                                var price = procedures[index].price
+                                $('#myworkPage #newWprice').val(price);
+                            })
+                        })
+
+
+                    }
+                    ,
+                    notInSourceCallback: function () {
+                        $('#myworkPage #newPrd_batch').html('')
+                        $('#myworkPage #newPrd_procedure').html('')
+                    }
+                });
+                $("#myModal3 .model").autocomplete({
+                    source: production_processes,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = ui.item.product_model;
+                        sourceBatch = []
+                        for (var i = 0; i < production_processes.length; i++) {
+                            var item = production_processes[i];
+                            var dis = {
+                                label: item.product_batch + " ",
+                                value: item.product_batch,
+                                id: item.id,
+                                index: i,
+                                product_batch: item.product_batch,
+                                product_model: item.product_model,
+                                procedures: item.production_process_procedures
+                            }
+                            sourceBatch.push(dis);
+                        }
+
+
+                        var batches = sourceBatch;
+                        var string = ''
+                        string = string + '<option>请选择批次</option>'
+                        for (var i = 0; i < batches.length; i++) {
+                            var batch = batches[i];
+                            string = string + '<option index="' + i + '" value="' + batch.product_batch + '">' + batch.product_batch + '</option>'
+                        }
+
+                        $('#myModal3 .batch').html('').html(string);
+                        $('#myModal3 .batch').off('change')
+                        $('#myModal3 .batch').on('change', function () {
+                            var index = $('#myModal3 .batch').find("option:selected").attr('index')
+                            var procedures = batches[index].procedures;
+                            //console.log(procedures);
+                            var string = ''
+                            string = string + '<option>请选择工序</option>'
+                            for (var i = 0; i < procedures.length; i++) {
+                                var procedure = procedures[i];
+                                string = string + '<option index="' + i + '" value="' + procedure.name + '">' + procedure.name + '</option>'
+                            }
+
+                            $('#myModal3 .procedure').html('').html(string);
+                            $('#myModal3 .procedure').off('change')
+                            $('#myModal3 .procedure').on('change', function () {
+
+                                var index = $('#myModal3 .procedure').find("option:selected").attr('index')
+                                var price = procedures[index].price
+                                $('#myModal3 .price').val(price);
+                            })
+
+                        })
+                    }
+                });
+
+
+                $("#Work_OrderModal .newPrd_model").autocomplete({
+                    source: production_processes,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = ui.item;
+                        var production_processes = model.production_processes
+                        var productId = ui.item.productId
+                        // 追踪productId
+                        $('#myworkPage .productId').val(productId);
+                        sourceBatch = []
+                        for (var i = 0; i < production_processes.length; i++) {
+                            var item = production_processes[i];
+                            var dis = {
+                                label: item.product_batch + " ",
+                                value: item.product_batch,
+                                id: item.id,
+                                index: i,
+                                closed: item.closed,
+                                product_batch: item.product_batch,
+                                product_model: item.product_model,
+                                procedures: item.production_process_procedures
+                            }
+                            sourceBatch.push(dis);
+                        }
+
+
+                        var batches = sourceBatch;
+                        console.log(batches);
+                        var string = ''
+                        string = string + '<option>请选择批次</option>'
+                        for (var i = 0; i < batches.length; i++) {
+                            var batch = batches[i];
+                            if (batch.closed == 0) {
+                                string = string + '<option batchId="' + batch.id + '" index="' + i + '" value="' + batch.id + '">' + batch.product_batch + '</option>'
+                            }
+                        }
+
+                        $('#Work_OrderModal .newPrd_batch').html('').html(string);
+                        $('#Work_OrderModal .newPrd_batch').off('change')
+                        $('#Work_OrderModal .newPrd_batch').on('change', function () {
+                            var index = $('#Work_OrderModal .newPrd_batch').find("option:selected").attr('index')
+                            var batch = batches[index]
+                            var procedures = batches[index].procedures;
+                            $('#Work_OrderModal .productionProcessId').val(batch.id);
+                            //console.log(procedures);
+                            var string = ''
+                            string = string + '<option>请选择工序</option>'
+                            for (var i = 0; i < procedures.length; i++) {
+                                var procedure = procedures[i];
+                                string = string + '<option productionProcessId="' + procedure.id + '" index="' + i + '" value="' + procedure.id + '">' + procedure.name + '</option>'
+                            }
+
+                            $('#Work_OrderModal .newPrd_procedure').html('').html(string);
+                            $('#Work_OrderModal .newPrd_procedure').off('change')
+                            $('#Work_OrderModal .newPrd_procedure').on('change', function () {
+
+                                var index = $('#Work_OrderModal .newPrd_procedure').find("option:selected").attr('index')
+                                var procedure = procedures[index];
+                                $('#Work_OrderModal .productionProcessProcedureId').val(procedure.id);
+                                var price = procedures[index].price
+                                $('#Work_OrderModal .price').val(price);
+                            })
+                        })
+
+
+                    }
+                    ,
+                    notInSourceCallback: function () {
+                        $('#Work_OrderModal .newPrd_batch').html('')
+                        $('#Work_OrderModal .newPrd_procedure').html('')
+                    }
+                });
+
+            })
+    }
+
+    window.setTab3OutSourcePopupModelAutoComplete = function (callback) {
+
+        var selectedModel;
+        var selectedProductId;
+        var selectedBatch;
+        var productionProcessId; //批次id
+        var selectedProcedure;
+        var models;
+        var sourceBatch = []
+        var sourceModel = []
+        var event = events['rq2020']
+        event.optionalParams = {}
+        window.ajax(event)
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                        product_batch: item.product_batch,
+                        product_model: item.product_model,
+                        production_processes: item.production_processes,
+                        productId: item.id,
+
+                    }
+                    sourceModel.push(dis);
+                }
+
+                //console.log(sourceModel);
+
+                $(".outsourceModel").autocomplete({
+                    source: sourceModel,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = ui.item;
+                        var production_processes = model.production_processes
+                        selectedModel = model.label
+                        selectedProductId = ui.item.productId
+                        sourceBatch = []
+                        for (var i = 0; i < production_processes.length; i++) {
+                            var item = production_processes[i];
+                            var dis = {
+                                label: item.product_batch + " ",
+                                value: item.product_batch,
+                                id: item.id,
+                                index: i,
+                                product_batch: item.product_batch,
+                                product_model: item.product_model,
+                                procedures: item.production_process_procedures
+                            }
+                            sourceBatch.push(dis);
+                        }
+
+
+                        var batches = sourceBatch;
+                        var string = ''
+                        string = string + '<option>请选择批次</option>'
+                        for (var i = 0; i < batches.length; i++) {
+                            var batch = batches[i];
+                            string = string + '<option index="' + i + '" value="' + batch.product_batch + '">' + batch.product_batch + '</option>'
+                        }
+
+                        $('#myOutSourceModal3 #outsourceBatch').html('').html(string);
+                        $('#myOutSourceModal3 #outsourceBatch').off('change')
+                        $('#myOutSourceModal3 #outsourceBatch').on('change', function () {
+                            var index = $('#myOutSourceModal3 #outsourceBatch').find("option:selected").attr('index')
+                            var batch = batches[index]
+                            selectedBatch = batch.product_batch
+                            productionProcessId = batch.id;
+                            var procedures = batches[index].procedures;
+                            //console.log(procedures);
+
+                            var string = ''
+                            string = string + '<option>请选择工序</option>'
+                            for (var i = 0; i < procedures.length; i++) {
+                                var procedure = procedures[i];
+                                string = string + '<option index="' + i + '" value="' + procedure.name + '">' + procedure.name + '</option>'
+                            }
+
+                            $('#myOutSourceModal3 #outsourceProcedure').html('').html(string);
+                            $('#myOutSourceModal3 #outsourceProcedure').off('change')
+                            $('#myOutSourceModal3 #outsourceProcedure').on('change', function () {
+                                var index = $('#myOutSourceModal3 #outsourceProcedure').find("option:selected").attr('index')
+                                var procedure = procedures[index];
+                                //console.log(procedure);
+                                // 追踪productId
+                                callback(selectedModel, selectedBatch, procedure, selectedProductId, productionProcessId, procedure.id) // 执行添加产品到列表
+                            })
+
+
+                        })
+                    },
+                    notInSourceCallback: function () {
+                        $('#myOutSourceModal3 #outsourceBatch').html('')
+                        $('#myOutSourceModal3 #outsourceBatch').val('')
+                        $('#myOutSourceModal3 #outsourceProcedure').html('')
+                        $('#myOutSourceModal3 #outsourceProcedure').val('')
+                    }
+                });
+            })
+    }
+
+    window.setTab3OutSourcePopupSupplierAutoComplete = function () {
+        var suppliers;
+
+        window.ajax(events['rq229'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                suppliers = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $("#myOutSourceModal3 .name").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var supplier = suppliers[index]
+                        //console.log(supplier);
+                        $('#myOutSourceModal3 .name').attr("supplierId", supplier.id);
+                        $('#myOutSourceModal3 .supplierId').val(supplier.id);
+                        $('#myOutSourceModal3 .contactPeople').val(supplier.contact);
+                        $('#myOutSourceModal3 .address').val(supplier.address);
+                        $('#myOutSourceModal3 .contactPhone').val(supplier.mobile);
+                    },
+                    notInSourceCallback: function () {
+                        $('#myOutSourceModal3 .name').attr("supplierId", '');
+                        $('#myOutSourceModal3 .supplierId').val('');
+                        $('#myOutSourceModal3 .contactPeople').val('');
+                        $('#myOutSourceModal3 .address').val('');
+                        $('#myOutSourceModal3 .contactPhone').val('');
+                    }
+                });
+            })
+    }
+
+    window.setTab3DepartmentsAutoComplete = function () {
+        var departments
+        var source = []
+
+        window.ajax(events['rq2017'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                departments = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".department").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var department = departments[index]
+                        //console.log(department);
+                        $('.department').attr("departmentId", department.id);
+                    }
+                    ,
+                    notInSourceCallback: function () {
+                        $('.department').attr("departmentId", '');
+                    }
+                });
+
+
+            })
+
+
+    }
+
+    window.setTab3ModelAutoComplete = function (data) {
+        var models = data;
+
+        window.ajax(events['rq2012'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                models = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab3Model").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = models[index]
+                        //console.log(model);
+                        $('.tab3Model').attr("productId", model.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab2Model').attr("productId", '');
+                    }
+                });
+            })
+    }
+
+</script>

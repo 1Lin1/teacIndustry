@@ -1,0 +1,246 @@
+<div>
+<!--搜索表单-->
+<div class="searchForm" id="Working_ProceduresearchForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">工序名</span> 
+<input id="namesearchFormId" type="text" name="name" class="form-control name" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#namesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">undefined</span> 
+<input id="colIdsearchFormId" type="text" name="colId" class="form-control colId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#colIdsearchFormId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--功能按钮-->
+<div id="Working_Procedurefunctions" class="functions"><button class="btn  btn-warning "type="button"onclick="window.createWorking_ProcedureForm()">新增</button><button class="btn  btn-danger"type="button"onclick="window.batchDeleteWorking_Procedure()">删除</button><button class="btn  btn-primary"type="button"onclick="window.searchWorking_Procedure()">搜索</button></div>
+<!--表单-->
+<div class="form" id="Working_ProcedureForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">工序名</span> 
+<input id="nameformId" type="text" name="name" class="form-control name" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#nameformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">undefined</span> 
+<input id="colIdformId" type="text" name="colId" class="form-control colId" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#colIdformId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--弹窗-->
+<div class="modal fade modal-moveable"id="Working_ProcedureModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button"class="close"data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button><h4 class="modal-title">Working_Procedure</h4></div><div class="modal-body"></div><div style="clear: both"></div> <div class="modal-footer"><button type="button"class="btn btn-default"data-dismiss="modal">关闭</button><button onclick="window.deleteWorking_ProcedureForm()"type="button"class="btn btn-danger"data-dismiss="modal">删除</button><button onclick="window.saveWorking_ProcedureForm()"type="button"class="btn btn-primary"data-dismiss="modal">保存</button></div></div></div></div>
+
+<!--列表-->
+<div id="table_Working_Procedure"></div>
+</div>
+<script>
+
+ var Working_ProcedureDataSource={
+  "form": {
+    "name": "",
+    "colId": ""
+  },
+  "list": {
+    "cols": [
+      {
+        "name": "name",
+        "label": "工序名",
+        "width": 100
+      },
+      {
+        "name": "colId",
+        "width": 100
+      },
+      {
+        "name": "createdAt",
+        "label": "创建日期",
+        "width": 150
+      }
+    ],
+    "array": []
+  }
+}
+
+ //渲染列表
+ window.renderWorking_ProcedureTable=function (tableId, dataSource) {
+        $(tableId).html('').append('<div class="table"></div>')
+
+        $(tableId + ' .table').datagrid({
+            dataSource: dataSource,
+            checkable: true,
+            checkByClickRow: false,
+            partialRendering: false,
+            // height: '300',
+            onRender: function () {
+                $(tableId + ' .datagrid-cell').off('click');
+                $(tableId + ' .datagrid-cell').on('click', function () {
+                    var row = $(this).attr('data-row')
+                    var col = $(this).attr('data-col')
+                    if (row == 0 || col == 0) return
+                    var index = row - 1
+                    var formId = 'Working_ProcedureForm'
+                    var modalId = 'Working_ProcedureModal'
+                    $('#' + modalId).modal('show', 'fit');
+                    var formData = Working_ProcedureDataSource.list.array[index];
+                    window.renderForm('#' + formId, formData)
+                    $('#' + formId + ' .flag').val('edit')
+                    $('#' + formId + ' .index').val(index)
+                })
+            }
+        })
+    }
+
+ //创建
+ window.createWorking_ProcedureForm=function () { //调起创建弹窗
+        var formId = 'Working_ProcedureForm'
+        var modalId = 'Working_ProcedureModal'
+        $('#' + modalId).modal('show')
+        var data = {"id":"","name":"","colId":""};
+        window.renderForm('#' + formId, data);
+        $('#' + formId + ' .flag').val('new')
+        $('#' + formId + ' .id').val('')
+    }
+
+ //保存
+ window.saveWorking_ProcedureForm=function () { //创建或保存
+        var formId = 'Working_ProcedureForm'
+        var flag = $('#' + formId + ' .flag').val()
+        var formData = window.getFormData('#' + formId)
+        if (flag == 'new') { //创建状态
+            Working_ProcedureDataSource.list.array.push(formData)
+            var event = events['rq2111']
+            event.requiredParams = {model: 'Working_Procedure'}
+            event.optionalParams = {data: formData}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("创建成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Working_Procedure'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                Working_ProcedureDataSource.list.array = result.data;
+                                window.renderWorking_ProcedureTable('#table_Working_Procedure', Working_ProcedureDataSource.list)
+                            })
+                    }, 1000)
+                })
+        } else {
+            var index = $('#' + formId + ' .index').val()
+            var data = Working_ProcedureDataSource.list.array[index]
+            for (var x in formData) {
+                try {
+                    data[x] = formData[x]
+                } catch (e) {
+                }
+            }
+            var event = events['rq2112']
+            event.requiredParams = {model: 'Working_Procedure'}
+            event.optionalParams = {data: data}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("保存成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Working_Procedure'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                Working_ProcedureDataSource.list.array = result.data;
+                                window.renderWorking_ProcedureTable('#table_Working_Procedure', Working_ProcedureDataSource.list)
+                            })
+                    }, 1000)
+                })
+        }
+        var modalId = 'Working_ProcedureModal'
+        $('#' + modalId).modal('hide')
+    }
+
+ //删除
+ window.deleteWorking_ProcedureForm=function () { //删除
+        var formId = 'Working_ProcedureForm'
+        var index = $(formId + ' .index').val()
+        var data = Working_ProcedureDataSource.list.array[index]
+
+        if (index) { //调用接口从服务器删除
+            var modelName = 'Working_Procedure';
+            var id = data.id;
+            if (!id) {
+                return
+            } else {
+                var event = events['rq2115']
+                event.requiredParams = {model: modelName}
+                event.optionalParams = {items: [{id: id}]}
+                window.ajax(event)
+                    .then(function () {
+                        setTimeout(function () {
+                            new $.zui.Messager("删除成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            $('.modal').modal('hide');
+
+                        }, 1000)
+                    })
+            }
+            Working_ProcedureDataSource.list.array.splice(index, 1);
+            window.renderWorking_ProcedureTable('#table_Working_Procedure', Working_ProcedureDataSource.list)
+        }
+
+        var modalId = 'Working_ProcedureModal'
+        $('#' + modalId).modal('hide');
+    }
+
+ //批量删除
+ window.batchDeleteWorking_Procedure=function () { //批量删除
+        var formId = 'Working_ProcedureForm'
+        var index = $(formId + ' .index').val()
+        var data = Working_ProcedureDataSource.list.array[index]
+
+        var tableId = 'table_Working_Procedure'
+        var items = window.getSelectedTableItems('#' + tableId + ' .table')
+        if (items.length == 0) {
+            new $.zui.Messager("请至少选择一个记录", {
+                icon: 'info' // 定义消息图标
+            }).show();
+            return
+        }
+        var batchDeleteEvent = events['rq2115'] //通用删除接口
+        batchDeleteEvent.requiredParams = {model: 'Working_Procedure'}
+        batchDeleteEvent.optionalParams = {items: items}
+        window.ajax(batchDeleteEvent)
+            .then(function () {
+                var getEvent = events['rq2114'] //通用查找接口
+                getEvent.requiredParams = {model: 'Working_Procedure'}
+                getEvent.optionalParams = {items: items}
+                return window.ajax(getEvent)
+            })
+            .then(function (result) {
+                Working_ProcedureDataSource.list.array = result.data;
+                window.renderWorking_ProcedureTable('#table_Working_Procedure', Working_ProcedureDataSource.list)
+            })
+    }
+
+ //搜索
+ window.searchWorking_Procedure=function (limit) { //搜索
+        var formId = 'Working_ProceduresearchForm'
+        var formData = limit ? window.getFormData('#' + formId) : {}
+
+        var searchEvent = events['rq2114'] //通用查询接口
+        searchEvent.requiredParams = {model: 'Working_Procedure'}
+        searchEvent.optionalParams = formData
+        window.ajax(searchEvent)
+            .then(function (result) {
+                Working_ProcedureDataSource.list.array = result.data;
+                window.renderWorking_ProcedureTable('#table_Working_Procedure', Working_ProcedureDataSource.list)
+            })
+    }
+
+</script>

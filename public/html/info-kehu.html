@@ -1,0 +1,77 @@
+
+
+
+    <div style="clear: both"></div>
+
+</div>
+
+
+<div class="container" style="margin:0;padding:0">
+    <div style="margin:10px 10px 0px 10px;font-size: 17px;color:#666;"><span style="font-weight: bolder;color:black">客户信息：</span>
+    </div>
+    <div class="container " style="margin:0;padding:0">
+        <button class="btn btn-warning newCustomerButton" type="button" style="margin-left:10px;margin-top:15px;">新增</button>
+        <button onclick="window.deleteClients()" class="btn btn-danger" type="button" style="margin-left:12px;margin-top:15px;">删除</button>
+        <button onclick="window.doExport('kehu','infosalet1','#sale4')" class="btn btn-success" type="button" style="margin-left:12px;margin-top:15px;">导出</button>
+        <button class="btn btn-success" type="button" style="margin-left:12px;margin-top:15px;">导入 </button>
+        <button onclick="window.doExportTemplate('kehu','infosalet1','#sale4')" class="btn btn-info" type="button" style="margin-left:12px;margin-top:15px;">下载导入模板 </button>
+        <br>
+    </div>
+    <div id='sale4' class="col-md-11 datagrid" style="margin:10px 10px 10px 2px"></div>
+</div>
+<form class="form-inline">
+    <div class="col-md-3 " style="margin-top:10px;">
+        <!--        <button type="submit" class="btn btn-primary tab1Submit">返回主页-->
+        <!--        </button>-->
+    </div>
+</form>
+
+
+<div class="modal fade modal-moveable" id="myLgModal3">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h4 class="modal-title h4">客户修改</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                    <span class="input-group-addon">客户名称</span>
+                    <input name="name" type="text" class="form-control name" placeholder="">
+                </div>
+                <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                    <span class="input-group-addon">联系电话</span>
+                    <input name="mobile" type="text" class="form-control mobile" placeholder="">
+                </div>
+                <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                    <span class="input-group-addon">收货地址</span>
+                    <input name="address" type="text" class="form-control address" placeholder="">
+                </div>
+                <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                    <span class="input-group-addon">&nbsp;联 系 人</span>
+                    <input name="contact" type="text" class="form-control contact" placeholder="">
+                </div>
+                <div class="input-group col-md-5" style="margin:0px 20px 10px 10px; float:left">
+                    <span class="input-group-addon">联系人电话</span>
+                    <input name="contact_phone" type="text" class="form-control contact_phone" placeholder="">
+                </div>
+                <div class="input-group col-md-5" style="margin:10px 20px 10px 10px">
+                    <span class="input-group-addon">&nbsp; 备 注 &nbsp;</span>
+                    <input name="remarks" type="text" class="form-control remarks" placeholder="">
+                </div>
+
+
+                <input name="id" type="hidden" class="id">
+                <input name="flag" type="hidden" class="flag">
+                <input name="index" type="hidden" class="index">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="window.saveClient()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>

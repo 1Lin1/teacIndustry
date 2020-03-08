@@ -1,0 +1,29 @@
+<script>
+
+    window.setRequestAutoComplete = function () {
+
+        var source = []
+
+        for (var x in events) {
+            var exe = function (key) {
+                var item = events[key]
+                var dis = {
+                    label: item.name + " ",
+                    value: item.name,
+                    id: item.id,
+                }
+                if (item.type == 'ajax') {
+                    source.push(dis)
+                }
+            }
+            exe(x)
+        }
+        $("#namesearchFormId").autocomplete({
+            source: source,
+            select: function (event, ui) {
+
+            }
+        });
+
+    }
+</script>

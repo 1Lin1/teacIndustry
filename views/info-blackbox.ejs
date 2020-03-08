@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <%- include head/head %>
+    <%- include autocomplete/info-blackbox %>
+
+    <style>
+    </style>
+
+
+</head>
+
+<body>
+<%- include header/header %>
+<%- include left/nav %>
+
+<div class="col-md-10">
+    <!--搜索表单-->
+    <div class="searchForm" id="OperationRecordsearchForm">
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">操作名</span>
+            <input id="namesearchFormId" type="text" name="name" class="form-control name" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#namesearchFormId').val('')">x</span>
+        </div>
+
+
+        <input name="id" class="id" type="hidden">
+        <input name="flag" class="flag" type="hidden">
+        <input name="index" class="index" type="hidden">
+    </div>
+
+    <div style="clear: both"></div>
+
+    <div id="OperationRecordfunctions" class="functions" style="margin-left: 10px">
+        <button class="btn  btn-primary" type="button" onclick="window.searchOperationRecord(true)">搜索</button>
+        <button class="btn  btn-success" type="button" onclick="window.doExport('blackbox','infoblackbox','#table_OperationRecord')">导出</button>
+    </div>
+
+    <!--弹窗-->
+    <div class="modal fade modal-moveable" id="OperationRecordModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                                class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">OperationRecord</h4></div>
+                <div class="modal-body">
+                    <!--表单-->
+                    <div class="form" id="OperationRecordForm">
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">操作id号</span>
+                            <input id="idNumformId" type="text" name="idNum" class="form-control idNum" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#idNumformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">操作名</span>
+                            <input id="nameformId" type="text" name="name" class="form-control name" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#nameformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">操作路径</span>
+                            <input id="pathformId" type="text" name="path" class="form-control path" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#pathformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">操作类型</span>
+                            <input id="typeformId" type="text" name="type" class="form-control type" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#typeformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-12" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">必选参数</span>
+                            <textarea id="requiredParamsformId" type="text" name="requiredParams" class="form-control requiredParams"
+                                      placeholder=""></textarea>
+                            <span class="input-group-addon cursor" onclick="$('#requiredParamsformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-12" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">可选参数</span>
+                            <textarea id="optionalParamsformId" type="text" name="optionalParams" class="form-control optionalParams"
+                                      placeholder=""></textarea>
+                            <span class="input-group-addon cursor" onclick="$('#optionalParamsformId').val('')">x</span>
+                        </div>
+                        <input name="id" class="id" type="hidden">
+                        <input name="flag" class="flag" type="hidden">
+                        <input name="index" class="index" type="hidden">
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button onclick="window.deleteOperationRecordForm()" type="button" class="btn btn-danger"
+                            data-dismiss="modal">删除
+                    </button>
+                    <button onclick="window.saveOperationRecordForm()" type="button" class="btn btn-primary"
+                            data-dismiss="modal">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--列表-->
+    <div id="table_OperationRecord" style="margin: 30px 0"></div>
+
+</div>
+
+
+</body>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        var OperationRecordDataSource = {
+            "form": {
+                "idNum": "",
+                "name": "",
+                "path": "",
+                "type": "",
+                "requiredParams": "",
+                "optionalParams": "",
+                "events": "",
+                "init_event": ""
+            },
+            "list": {
+                "cols": [
+                    {
+                        "name": "idNum",
+                        "label": "操作id号",
+                        "width": 100
+                    },
+                    {
+                        "name": "name",
+                        "label": "操作名",
+                        "width": 100
+                    },
+                    {
+                        "name": "path",
+                        "label": "操作路径",
+                        "width": 100
+                    },
+                    {
+                        "name": "type",
+                        "label": "操作类型",
+                        "width": 100
+                    },
+                    {
+                        "name": "requiredParams",
+                        "label": "必选参数",
+                        "width": 100
+                    },
+                    {
+                        "name": "optionalParams",
+                        "label": "可选参数",
+                        "width": 100
+                    },
+                    {
+                        "name": "createdAt",
+                        "label": "创建日期",
+                        "width": 150
+                    }
+                ],
+                "array": []
+            }
+        }
+
+        //渲染列表
+        window.renderOperationRecordTable = function (tableId, dataSource) {
+            $(tableId).html('').append('<div class="table"></div>')
+
+            window.exportDataSource.infoblackbox = dataSource
+            $(tableId + ' .table').datagrid({
+                dataSource: dataSource,
+                checkable: true,
+                checkByClickRow: false,
+                partialRendering: true,
+                // height: '300',
+                cellFormator: function ($cell, cell, datagrid) {
+                    var col = cell.colIndex;
+                    var row = cell.rowIndex;
+                    var form = cell.config.data
+                    var value = cell.value;
+
+                    if (row == 0 || col == 0) { //不绑定点击事件
+
+                    } else {
+                        $cell.off('click')
+                        $cell.on('click', function () {
+                            var index = datagrid.getDataIndex(form.id);
+                            var formId = 'OperationRecordForm'
+                            var modalId = 'OperationRecordModal'
+                            $('#' + modalId).modal('show', 'fit');
+                            var formData = OperationRecordDataSource.list.array[index];
+                            window.renderForm('#' + formId, formData)
+                            $('#' + formId + ' .flag').val('edit')
+                            $('#' + formId + ' .index').val(index)
+                        })
+                    }
+
+
+                    var config = cell.config
+                    var isCheckbox = config.checkbox;
+                    var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                    $cell[cell.config.html ? 'html' : 'text'](value);
+                    if (config.className) {
+                        $cell.addClass(config.className);
+                    }
+
+
+                },
+                // onRender: function () {
+                //     $(tableId + ' .datagrid-cell').off('click');
+                //     $(tableId + ' .datagrid-cell').on('click', function () {
+                //         var row = $(this).attr('data-row')
+                //         var col = $(this).attr('data-col')
+                //         if (row == 0 || col == 0) return
+                //         var index = row - 1
+                //         var formId = 'OperationRecordForm'
+                //         var modalId = 'OperationRecordModal'
+                //         $('#' + modalId).modal('show', 'fit');
+                //         var formData = OperationRecordDataSource.list.array[index];
+                //         window.renderForm('#' + formId, formData)
+                //         $('#' + formId + ' .flag').val('edit')
+                //         $('#' + formId + ' .index').val(index)
+                //     })
+                // }
+            })
+        }
+
+        //搜索
+        window.searchOperationRecord = function (limit) { //搜索
+            var formId = 'OperationRecordsearchForm'
+            var formData = limit ? window.getFormData('#' + formId) : {}
+            delete formData['id']
+            delete formData['flag']
+            delete formData['index']
+            if(!formData.name){
+                delete formData['name']
+            }
+
+            var searchEvent = events['rq2114'] //通用查询接口
+            searchEvent.requiredParams = {model: 'OperationRecord'}
+            searchEvent.optionalParams = formData
+            window.ajax(searchEvent)
+                .then(function (result) {
+                    OperationRecordDataSource.list.array = result.data;
+                    window.renderOperationRecordTable('#table_OperationRecord', OperationRecordDataSource.list)
+                })
+        }
+
+        window.searchOperationRecord();
+        window.setRequestAutoComplete()
+
+    });
+
+</script>
+
+</html>

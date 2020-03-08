@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <%- include head/head %>
+    <%- include autocomplete/info-blackbox %>
+
+    <style>
+    </style>
+
+
+</head>
+
+<body>
+<%- include header/header %>
+<%- include left/nav %>
+
+<div class="col-md-10">
+    <!--功能按钮-->
+    <div id="ChargePeriodfunctions" class="functions" style="margin: 10px 0">
+        <button class="btn  btn-warning " type="button" onclick="window.createChargePeriodForm()">新增</button>
+        <button class="btn  btn-danger" type="button" onclick="window.batchDeleteChargePeriod()">删除</button>
+    </div>
+
+    <!--弹窗-->
+    <div class="modal fade modal-moveable" id="ChargePeriodModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                                class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">ChargePeriod</h4></div>
+                <div class="modal-body">
+                    <!--表单-->
+                    <div class="form" id="ChargePeriodForm">
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">产品名</span>
+                            <input id="nameformId" type="text" name="name" class="form-control name" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#nameformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">时长(天)</span>
+                            <input id="timeformId" type="text" name="time" class="form-control time" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#timeformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">价格</span>
+                            <input id="priceformId" type="text" name="price" class="form-control price" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#priceformId').val('')">x</span>
+                        </div>
+                        <input name="id" class="id" type="hidden">
+                        <input name="flag" class="flag" type="hidden">
+                        <input name="index" class="index" type="hidden">
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button onclick="window.deleteChargePeriodForm()" type="button" class="btn btn-danger"
+                            data-dismiss="modal">删除
+                    </button>
+                    <button onclick="window.saveChargePeriodForm()" type="button" class="btn btn-primary"
+                            data-dismiss="modal">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--列表-->
+    <div id="table_ChargePeriod" style="margin: 30px 0"></div>
+
+</div>
+
+
+</body>
+
+
+<script>
+
+    $(document).ready(function () {
+
+
+        var ChargePeriodDataSource = {
+            "form": {
+                "name": "",
+                "time": "",
+                "price": ""
+            },
+            "list": {
+                "cols": [
+                    {
+                        "name": "name",
+                        "label": "产品名",
+                        "width": 100
+                    },
+                    {
+                        "name": "time",
+                        "label": "时长（天）",
+                        "width": 100
+                    },
+                    {
+                        "name": "price",
+                        "label": "价格",
+                        "width": 100
+                    },
+                    {
+                        "name": "createdAt",
+                        "label": "创建日期",
+                        "width": 150
+                    }
+                ],
+                "array": []
+            }
+        }
+
+        //渲染列表
+        window.renderChargePeriodTable = function (tableId, dataSource) {
+            $(tableId).html('').append('<div class="table"></div>')
+
+            $(tableId + ' .table').datagrid({
+                dataSource: dataSource,
+                checkable: true,
+                checkByClickRow: false,
+                partialRendering: false,
+                // height: '300',
+                onRender: function () {
+                    $(tableId + ' .datagrid-cell').off('click');
+                    $(tableId + ' .datagrid-cell').on('click', function () {
+                        var row = $(this).attr('data-row')
+                        var col = $(this).attr('data-col')
+                        if (row == 0 || col == 0) return
+                        var index = row - 1
+                        var formId = 'ChargePeriodForm'
+                        var modalId = 'ChargePeriodModal'
+                        $('#' + modalId).modal('show', 'fit');
+                        var formData = ChargePeriodDataSource.list.array[index];
+                        window.renderForm('#' + formId, formData)
+                        $('#' + formId + ' .flag').val('edit')
+                        $('#' + formId + ' .index').val(index)
+                    })
+                }
+            })
+        }
+
+        //创建
+        window.createChargePeriodForm = function () { //调起创建弹窗
+            var formId = 'ChargePeriodForm'
+            var modalId = 'ChargePeriodModal'
+            $('#' + modalId).modal('show')
+            var data = {"id": "", "name": "", "time": "", "price": ""};
+            window.renderForm('#' + formId, data);
+            $('#' + formId + ' .flag').val('new')
+            $('#' + formId + ' .id').val('')
+        }
+
+        //保存
+        window.saveChargePeriodForm = function () { //创建或保存
+            var formId = 'ChargePeriodForm'
+            var flag = $('#' + formId + ' .flag').val()
+            var formData = window.getFormData('#' + formId)
+            if (flag == 'new') { //创建状态
+                ChargePeriodDataSource.list.array.push(formData)
+                var event = events['rq2111']
+                event.requiredParams = {model: 'ChargePeriod'}
+                event.optionalParams = {data: formData}
+                window.ajax(event)
+                    .then(function () {
+                        setTimeout(function () {
+                            new $.zui.Messager("创建成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            var searchEvent = events['rq2114'] //通用查询接口
+                            searchEvent.requiredParams = {model: 'ChargePeriod'}
+                            searchEvent.optionalParams = {}
+                            window.ajax(searchEvent)
+                                .then(function (result) {
+                                    ChargePeriodDataSource.list.array = result.data;
+                                    window.renderChargePeriodTable('#table_ChargePeriod', ChargePeriodDataSource.list)
+                                })
+                        }, 1000)
+                    })
+            } else {
+                var index = $('#' + formId + ' .index').val()
+                var data = ChargePeriodDataSource.list.array[index]
+                for (var x in formData) {
+                    try {
+                        data[x] = formData[x]
+                    } catch (e) {
+                    }
+                }
+                var event = events['rq2112']
+                event.requiredParams = {model: 'ChargePeriod'}
+                event.optionalParams = {data: data}
+                window.ajax(event)
+                    .then(function () {
+                        setTimeout(function () {
+                            new $.zui.Messager("保存成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            var searchEvent = events['rq2114'] //通用查询接口
+                            searchEvent.requiredParams = {model: 'ChargePeriod'}
+                            searchEvent.optionalParams = {}
+                            window.ajax(searchEvent)
+                                .then(function (result) {
+                                    ChargePeriodDataSource.list.array = result.data;
+                                    window.renderChargePeriodTable('#table_ChargePeriod', ChargePeriodDataSource.list)
+                                })
+                        }, 1000)
+                    })
+            }
+            var modalId = 'ChargePeriodModal'
+            $('#' + modalId).modal('hide')
+        }
+
+        //删除
+        window.deleteChargePeriodForm = function () { //删除
+            var formId = 'ChargePeriodForm'
+            var index = $(formId + ' .index').val()
+            var data = ChargePeriodDataSource.list.array[index]
+
+
+
+            if (index) { //调用接口从服务器删除
+                var modelName = 'ChargePeriod';
+                var id = data.id;
+                if (!id) {
+                    return
+                } else {
+                    var event = events['rq2115']
+                    event.requiredParams = {model: modelName}
+                    event.optionalParams = {items: [{id: id}]}
+                    window.ajax(event)
+                        .then(function () {
+                            setTimeout(function () {
+                                new $.zui.Messager("删除成功", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                $('.modal').modal('hide');
+
+                            }, 1000)
+                        })
+                }
+                ChargePeriodDataSource.list.array.splice(index, 1);
+                window.renderChargePeriodTable('#table_ChargePeriod', ChargePeriodDataSource.list)
+            }
+
+            var modalId = 'ChargePeriodModal'
+            $('#' + modalId).modal('hide');
+        }
+
+        //批量删除
+        window.batchDeleteChargePeriod = function () { //批量删除
+            var formId = 'ChargePeriodForm'
+            var index = $(formId + ' .index').val()
+            var data = ChargePeriodDataSource.list.array[index]
+
+            var tableId = 'table_ChargePeriod'
+            var items = window.getSelectedTableItems('#' + tableId + ' .table')
+            if (items.length == 0) {
+                new $.zui.Messager("请至少选择一个记录", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            var batchDeleteEvent = events['rq2115'] //通用删除接口
+            batchDeleteEvent.requiredParams = {model: 'ChargePeriod'}
+            batchDeleteEvent.optionalParams = {items: items}
+            window.ajax(batchDeleteEvent)
+                .then(function () {
+                    var getEvent = events['rq2114'] //通用查找接口
+                    getEvent.requiredParams = {model: 'ChargePeriod'}
+                    getEvent.optionalParams = {items: items}
+                    return window.ajax(getEvent)
+                })
+                .then(function (result) {
+                    ChargePeriodDataSource.list.array = result.data;
+                    window.renderChargePeriodTable('#table_ChargePeriod', ChargePeriodDataSource.list)
+                })
+        }
+
+        //搜索
+        window.searchChargePeriod = function (limit) { //搜索
+            var formId = 'ChargePeriodsearchForm'
+            var formData = limit ? window.getFormData('#' + formId) : {}
+
+            var searchEvent = events['rq2114'] //通用查询接口
+            searchEvent.requiredParams = {model: 'ChargePeriod'}
+            searchEvent.optionalParams = formData
+            window.ajax(searchEvent)
+                .then(function (result) {
+                    ChargePeriodDataSource.list.array = result.data;
+                    window.renderChargePeriodTable('#table_ChargePeriod', ChargePeriodDataSource.list)
+                })
+        }
+
+        window.searchChargePeriod();
+
+    });
+
+</script>
+
+</html>

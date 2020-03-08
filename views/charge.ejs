@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <%- include head/head %>
+
+    <!--二维码-->
+    <script src="/bower_components/jquery-qrcode/jquery.qrcode.min.js"></script>
+
+    <style>
+        .priceBox button {
+            width: 81px;
+        }
+
+        #qrCode img {
+            box-shadow: 0px 0px 10px gray
+        }
+    </style>
+
+
+</head>
+
+<body>
+<%- include header/header %>
+
+
+<div class="container" style="text-align: center;width: 100%;padding-top: 100px">
+    <div style="margin: auto;">
+        <div class="leftNav btn-group  priceBox" style="margin-bottom: 15px">
+
+        </div>
+
+    </div>
+</div>
+
+<div class="container" style="text-align: center;width: 100%;">
+    <div style="margin: auto;max-width: 320px">
+        <div class="input-group">
+            <span class="input-group-addon">账号</span>
+            <input type="text" class="form-control chargeId" placeholder="请输入账号名">
+            <span data-placement="bottom" id="qrCodeTips" class="input-group-addon cursor"
+                  onclick="window.getFactoryId()">生成充值码</span>
+        </div>
+    </div>
+</div>
+
+<div style="width: 100%;text-align: center;margin: 30px 0">
+    <div style="margin: auto;" id="qrCode"></div>
+    <div style="margin: 30px 0">支付功能由广州市五帆信息科技有限公司提供技术支持</div>
+</div>
+
+
+</body>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        var price = 0;
+        var periodId = ''
+        var genJqueryQrCode = function (url) {
+            //console.log(location);
+            //console.log("二维码地址" + url);
+            var that = this;
+            //这是一个加上的测试注释
+            var options = {
+                //demo 地址 https://larsjung.de/jquery-qrcode/latest/demo/
+                // render method: 'canvas', 'image' or 'div'
+                render: 'image',
+                // version range somewhere in 1 .. 40
+                minVersion: 10,
+                maxVersion: 40,
+                // error correction level: 'L', 'M', 'Q' or 'H'
+                ecLevel: 'H',
+                // offset in pixel if drawn onto existing canvas
+                left: 0,
+                top: 0,
+                // size in pixel
+                size: 300,
+                // code color or image element
+                fill: '#000',
+                // background color or image element, null for transparent background
+                background: null,
+                // content
+                text: url,
+                // corner radius relative to module width: 0.0 .. 0.5
+                radius: 0.5,
+                // quiet zone in modules
+                quiet: 3,
+                // modes
+                // 0: normal
+                // 1: label strip
+                // 2: label box
+                // 3: image strip
+                // 4: image box
+                mode: 2,
+                mSize: 0.07,
+                mPosX: 0.5,
+                mPosY: 0.5,
+                label: "微信扫码支付",
+                fontname: 'sans',
+                fontcolor: '#000',
+                image: null
+            };
+            setTimeout(function () {
+                window.jQuery('#qrCode').empty().qrcode(options);
+            }, 200)
+        }
+
+        window.selectPrice = function (data) {
+            price = data;
+            window.getFactoryId()
+        }
+
+        window.getFactoryId = function () {
+            var userName = $('.chargeId').val()
+            if (!userName) {
+                new $.zui.Messager("请输入充值账号！", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return;
+            }
+
+            var priceToPay = price;
+            if (priceToPay == 0) {
+                new $.zui.Messager("请选择充值金额！", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return;
+            }
+            //根据用户名查找工厂id
+            var event = events['rq2021']
+            event.requiredParams = {name: userName}
+            event.optionalParams = {}
+            window.ajax(event)
+                .then(function (data) {
+                    //console.log(data);
+                    if (!data.data) {
+                        new $.zui.Messager("找不到相应的用户！", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        window.jQuery('#qrCode').empty()
+                        return
+                    } else {
+                        var url = "http://" + location.host + '/rq1013?userName=' + userName + '&chargePeriodId=' + periodId;
+                    }
+                    genJqueryQrCode(url)
+                })
+        }
+
+
+        var init = function () {
+
+            //根据用户名查找工厂id
+            var event = events['rq2022']
+            window.ajax(event)
+                .then(function (data) {
+
+                    var periods = data.data;
+                    for (var i = 0; i < periods.length; i++) {
+                        var exe = function (i) {
+                            var period = periods[i];
+
+                            $('.priceBox').append('<button id=' + period.id + ' type="button" class="btn"><a>' + period.price + '/' + period.name + '</a></button>')
+                            $('.priceBox #' + period.id).click(function () {
+                                periodId = period.id
+                                price = period.price
+                                window.jQuery('#qrCode').empty()
+                                $('.priceBox button').removeClass('active')
+                                $(this).addClass('active')
+                            })
+
+                        }
+                        exe(i)
+                    }
+                })
+
+            var user = window.user
+            if (user) {
+                var userName = user.name
+                $('.chargeId').val(userName)
+                $('.chargeId').attr('readonly', "1")
+                var url = "http://" + location.host + '/rq1013?userName=' + userName;
+                //console.log(url);
+            } else {
+
+            }
+        }
+
+        init();
+
+        window.setTips("#qrCodeTips", "点击生成微信充值二维码")
+
+
+    })
+    ;
+
+</script>
+
+</html>

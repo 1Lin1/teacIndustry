@@ -1,0 +1,97 @@
+<style>
+    @media screen and (max-width: 440px) {
+        .exBtn {
+            width: 31% !important;
+
+        }
+    }
+
+    @media screen and (max-width: 380px) {
+        .exBtn2 {
+            width: 28% !important;
+        }
+    }
+</style>
+
+
+<div class="container-fluid" style="margin:20px 0;padding:0">
+    <button onclick="window.clickAddCustomer()" class="btn btn-primary col-md-1 col-sm-2 exBtn"
+            style="float:left;margin:0 2px;margin-top:10px">添加用户
+    </button>
+
+    <div style="clear: both"></div>
+</div>
+
+
+<div class="container" style="margin:0;padding:0">
+    <div id='customer' class="col-md-12 col-xs-12" style="margin:10px 10px 10px 2px"></div>
+</div>
+<br>
+
+
+<!--添加用户弹窗-->
+<div class="modal fade modal-moveable" id="customerModal" style="height: 125%; ">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+
+                    <input name="id" type="hidden" class="form-control id">
+
+
+                    <div class="input-group">
+                        <span class="input-group-addon">登录名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <input name="name" type="text" class="form-control name" placeholder="登录名">
+
+
+                    </div>
+                    <div class="input-group" style="float: left; width: 50%;">
+                        <span class="input-group-addon">初始密码</span>
+                        <input name="password" type="text" class="form-control password" placeholder="初始密码">
+
+                    </div>
+                    <div class="input-group" style="float: left; width: 50%;">
+                        <span class="input-group-addon">昵称</span>
+                        <input name="nickName" type="text" class="form-control nickName" placeholder="昵称">
+
+                    </div>
+                    <div class="input-group" style="float: left; width: 50%;">
+                        <span class="input-group-addon">电子邮箱</span>
+                        <input name="email" type="text" class="form-control email" placeholder="电子邮箱">
+
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">手机号&nbsp;</span>
+                        <input name="mobile" type="text" class="form-control mobile" placeholder="手机号">
+
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">类型</span>
+                        <select name="type" id="type" class="form-control type">
+                            <option value="supervisor">超级管理员</option>
+                            <option value="customer">普通用户</option>
+                            <option value="financial">财务</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div style="width: 100%;text-align: center">
+                    <div style="margin: auto;" id="qrCode"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button onclick="window.addCustomer()" class="btn btn-success" type="button">
+                确认
+            </button>
+            <button onclick="window.deleteCustomer()" class="btn btn-danger" type="button"
+            >
+                删除
+            </button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
+
+    </div>
+</div>
+</div>

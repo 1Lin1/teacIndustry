@@ -1,0 +1,238 @@
+<div class="finacialTab3">
+
+    <!--工资修正弹窗-->
+    <div class="modal fade modal-moveable" id="Work_Order_FixModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">Work_Order_Fix</h4></div>
+                <div class="modal-body">
+                    <!--表单-->
+                    <div class="form" id="Work_Order_FixForm">
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">姓名</span>
+                            <input id="nameformId" type="text" name="name" class="form-control name" placeholder="" readonly>
+                            <input id="nameformIdcallback" type="hidden" name="nameId" class="form-control nameId"
+                                   placeholder="">
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">工号</span>
+                            <input id="work_numberformId" type="text" name="work_number"
+                                   class="form-control work_number"
+                                   placeholder="" readonly>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">部门</span>
+                            <input id="departmentformId" type="text" name="department" class="form-control department"
+                                   placeholder="" readonly>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">应扣/应加</span>
+                            <input id="totalformId" type="text" name="total" class="form-control total" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#totalformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">日期</span>
+                            <input id="dateformId" type="text" name="date" class="form-control date datetimepicker" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#dateformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">备注</span>
+                            <input id="noteformId" type="text" name="note" class="form-control note" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#noteformId').val('')">x</span>
+                        </div>
+
+                        <input name="id" class="id" type="hidden">
+                        <input name="flag" class="flag" type="hidden">
+                        <input name="index" class="index" type="hidden">
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+<!--                    <button onclick="window.deleteWork_Order_FixForm()" type="button" class="btn btn-danger"-->
+<!--                            data-dismiss="modal">删除-->
+<!--                    </button>-->
+<!--                    <button onclick="window.saveWork_Order_FixForm()" type="button" class="btn btn-primary"-->
+<!--                            data-dismiss="modal">保存-->
+<!--                    </button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row col-md-7 col-xs-12" style="margin:0;padding:0">
+
+
+        <div class="input-group col-md-4" style="float:left;margin:5px 2px">
+            <span class="input-group-addon">日期起</span>
+            <input type="text" class="form-control datetimepicker tab3CreatedAtStartDate1" placeholder="点击选择">
+            <span class="input-group-addon cursor" onclick="$('.tab3CreatedAtStartDate1').val('')">x</span>
+        </div>
+        <div class="input-group col-md-4" style="float:left;margin:5px 2px">
+            <span class="input-group-addon">日期终</span>
+            <input type="text" class="form-control datetimepicker tab3CreatedAtEndDate1" placeholder="点击选择">
+            <span class="input-group-addon cursor" onclick="$('.tab3CreatedAtEndDate1').val('')">x</span>
+        </div>
+
+        <div style="clear: both"></div>
+
+        <div class="input-group col-md-4" style="float:left;margin:5px 2px">
+            <span class="input-group-addon">工号</span>
+            <input type="text" class="form-control tab3WorkNumber1" placeholder="点击获取下拉选项">
+            <span class="input-group-addon cursor"
+                  onclick="$('.tab3WorkNumber1').removeAttr('employeeId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-4" style="float:left;margin:5px 2px">
+            <span class="input-group-addon">姓名</span>
+            <input type="text" class="form-control tab3Employee1" placeholder="点击获取下拉选项">
+            <span class="input-group-addon cursor"
+                  onclick="$('.tab3Employee1').removeAttr('employeeId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-4" style="float:left;margin:5px 2px">
+            <span class="input-group-addon">部门</span>
+            <input type="text" class="form-control tab3Department1" placeholder="点击获取下拉选项">
+            <span class="input-group-addon cursor"
+                  onclick="$('.tab3Department1').removeAttr('departmentId').val('')">x</span>
+        </div>
+        <div style="clear: both"></div>
+        <div class="" style="margin:15px 10px 10px 10px ;float:left">
+            <button onclick="window.searchGongzi()" class="btn   btn-primary" style="">搜索</button>
+            <button onclick="window.doExportAll('gongzitiao','infosalet1','#gongzi1')" class="btn btn-success "
+                    style="">导出工资条
+            </button>
+        </div>
+
+        <div style="clear: both"></div>
+        <div id='gongzi1' class="col-md-10" style="margin:10px 10px 10px 2px"></div>
+
+    </div>
+
+    <!--工资详细记录-->
+
+
+    <div class="row col-md-5 col-xs-12" style="margin:0;padding:0">
+
+        <div class="input-group col-md-5" style="float:left;margin:5px 2px">
+            <span class="input-group-addon ">日期起</span>
+            <input type="text" class="form-control datetimepicker tab3CreatedStartDate2" placeholder="点击选择">
+            <span class="input-group-addon cursor" onclick="$('.tab3CreatedStartDate2').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="float:left;margin:5px 2px">
+            <span class="input-group-addon ">日期终</span>
+            <input type="text" class="form-control datetimepicker tab3CreatedEndDate2" placeholder="点击选择">
+            <span class="input-group-addon cursor" onclick="$('.tab3CreatedEndDate2').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="float:left;margin:5px 2px">
+            <span class="input-group-addon">部门</span>
+            <input type="text" class="form-control tab3Department2" placeholder="点击获取下拉选项">
+            <span class="input-group-addon cursor"
+                  onclick="$('.tab3Department2').removeAttr('departmentId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="float:left;margin:5px 2px">
+            <span class="input-group-addon">工号</span>
+            <input type="text" class="form-control tab3WorkNumber2" placeholder="请录入">
+            <span class="input-group-addon cursor"
+                  onclick="$('.tab3WorkNumber2').removeAttr('employeeId').val('')">x</span>
+        </div>
+        <!--        <div class="input-group col-md-12" style="float:left;margin:5px 2px">-->
+        <!--            <span class="input-group-addon">应扣/应加</span>-->
+        <!--            <input name="tab3Total" type="text" class="form-control tab3Total" placeholder="大于">-->
+        <!--            <span class="input-group-addon cursor"-->
+        <!--                  onclick="$('.tab3Total').removeAttr('tab3Total').val('')">x</span>-->
+        <!--        </div>-->
+        <div style="clear: both"></div>
+        <div class="input-group col-md-5" style="float:left;margin:5px 2px">
+            <span class="input-group-addon">姓名</span>
+            <input type="text" class="form-control tab3Employee2" placeholder="点击获取下拉选项">
+            <span class="input-group-addon cursor"
+                  onclick="$('.tab3Employee2').removeAttr('employeeId').val('')">x</span>
+        </div>
+        <div style="clear: both"></div>
+
+        <!--        <div class="btn-group " style="margin:15px 10px 10px 10px">-->
+        <button onclick="window.searchGongziFix()" class="btn btn-primary" style="">搜索</button>
+        <button class="btn btn-warning" style="" id="yingkou">应扣新增</button>
+        <button onclick="window.doExportAll('gongziFix','infosalet1','#gongzi2')" class="btn btn-success" style="">
+            导出当前条
+        </button>
+        <!--        </div>-->
+
+
+        <div id='gongzi2' class="col-md-12" style="margin:10px 10px 10px 2px"></div>
+    </div>
+
+    <!-- 对话框——2——HTML -->
+    <div class="modal fade modal-moveable" id="myModal4">
+        <div class="modal-dialog  modal-moveable modal-lg">
+            <div class="modal-content">
+                <div class="input-group col-md-4 col-xs-11" style="margin:18px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">工号</span>
+                    <input name="work_number" type="text" class="form-control work_number" id="work_number">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:18px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">姓名</span>
+                    <input name="name" type="text" class="form-control name" id="name">
+                </div>
+                <div style="clear: both"></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">应扣</span>
+                    <input name="total" type="text" class="form-control total" id="yingkou2">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">部门</span>
+                    <input name="department" type="text" class="form-control department" id="bumeng">
+                </div>
+                <div style="clear: both"></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">日期</span>
+                    <input name="date" type="text" class="form-control datetimepicker date" id="riqi">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">经办人</span>
+                    <input name="recorder" type="text" class="form-control recorder" id="jingbanren">
+                </div>
+                <div style="clear: both"></div>
+
+                <input type="hidden" name="employeeId" class="employeeId">
+
+                <textarea class="input-group col-md-5 col-xs-8" rows="5" placeholder="备注："
+                          style="margin:10px 10px 5px 10px;" id="beizhu"></textarea>
+
+
+            </div>
+            <div class="modal-footer">
+                <div style="clear: both"></div>
+                <button class="btn btn-primary col-md-1 col-sm-2 btn2"
+                        style="float:left;width:85px;margin:10px 10px 10px 2px" id="saveYingkou">确认
+                </button>
+                <button class="btn btn-primary col-md-1 col-sm-2 btn2"
+                        style="float:left;width:100px;margin:10px 10px 10px 12px" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade modal-moveable" id="wagesDetailModal">
+        <div class="modal-dialog" style="min-width: 90%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h2 class="modal-title">工资工单详细记录</h2>
+                </div>
+                <div class="modal-body">
+                    <div id="wageDetailsList" class="datagrid">
+                    </div>
+                    <div style="margin-top: 15px;" class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

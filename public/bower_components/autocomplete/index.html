@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./autocomplete.css" type="text/css">
+    <script src="./jquery.js"></script>
+    <script src="./autocomplete.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div id="search-form">
+    </div>
+</div>
+
+<script>
+    var words = ['boat', 'bear', 'dog', 'drink', 'elephant', 'fruit'];
+
+    $('#search-form').autocomplete({
+        hints: words,
+        width: 300,
+        height: 30,
+        onSubmit: function (text) {
+            alert(text)
+        }
+    });
+</script>
+</body>
+</html>

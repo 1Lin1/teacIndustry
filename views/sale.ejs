@@ -1,0 +1,2158 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <%- include head/head %>
+</head>
+
+<body>
+<%- include header/header %>
+
+<!--引用自动完成的代码-->
+<%- include autocomplete/sale %>
+
+
+<div class="container">
+    <div class="tabs" id="tabsExample"></div>
+</div>
+
+</body>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        var orderToExport = [
+            {name: '订单基本信息', dataSource: {cols: [], array: []}}, {name: '订单产品列表', dataSource: {cols: [], array: []}}
+        ]
+
+        var orderToExportChuku = [
+            {name: '出库单基本信息', dataSource: {cols: [], array: []}}, {name: '出库单产品列表', dataSource: {cols: [], array: []}}
+        ]
+
+        var tab2DataSource = { //tab2表格数据
+            cols: [],
+            array: []
+        }
+        var tab1selectedOrder = {
+            dataSource: {
+                cols: [
+                    {name: 'type', label: '型号', width: 100},
+                    {name: 'model', label: '名称', width: 100},
+                    {name: 'specifications', label: '规格', width: 100},
+                    {name: 'packingnumber', label: '装箱数', width: 100},
+                    {name: 'piece', label: '件数', width: 100},
+                    {name: 'number', label: '数量', width: 100},
+                    {name: 'unitprice', label: '单价', width: 100},
+                    {name: 'price', label: '金额', width: 100},
+                    {name: 'deliveried', label: '交付情况', width: 100},
+                    {name: 'remarks', label: '备注', width: 100},
+                ],
+                array: []
+            }
+        };
+        var tab2selectedOrder = {
+            dataSource: {
+                cols: [
+                    {name: 'type', label: '型号', width: 100},
+                    {name: 'model', label: '名称', width: 100},
+                    {name: 'specifications', label: '规格', width: 100},
+                    {name: 'packingnumber', label: '装箱数', width: 100},
+                    {name: 'piece', label: '件数', width: 100},
+                    {name: 'number', label: '数量', width: 100},
+                    {name: 'unitprice', label: '单价', width: 100},
+                    {name: 'price', label: '金额', width: 100},
+                    {name: 'deliveried', label: '交付情况', width: 100},
+                    {name: 'remarks', label: '备注', width: 100},
+                ],
+                array: []
+            }
+        };
+
+        var tab2NewOrder = { //新增的时候赋值进去
+            order: {},
+            orderProducts: [],
+            dataSource: {}
+        }
+
+
+        var tab1DataSource = { //tab1表格数据
+            cols: [{name: 'createdAt', label: '下单日期', width: 200},
+                {name: 'deleveredDate', label: '交付日期', width: 100},
+                {name: 'orderNo', label: '订单编号', width: 100},
+                {name: 'clientName', label: '客户名称', width: 100},
+                {name: 'create_user_id', label: '制单员', width: 100},
+                {name: 'priceSum', label: '订单总金额', width: 100},
+                {name: 'delivered', label: '已交付金额', width: 100},
+                {name: 'accepted', label: '已收账款', width: 100},
+                {name: 'discount', label: ' 优惠 ', width: 100},
+                {name: 'account_receivale', label: '应收账款', width: 100},
+                {name: 'remarks', label: '备注', width: 100},],
+            array: []
+        }
+
+        var tab3ProductOut = { //
+            endProductOrder: {
+                sn: '', //订单编号
+                sum: '', //金额
+                receiver: '', //收货人
+                receiverDep: '', //收货单位
+                receiverAddressPhone: '', //收货单位地址电话
+                mobile: '', //收货单位地址电话
+                note: '', //备注
+                receiverDate: '', //收货日期
+                type: '', //出库或者入库类型
+                recorder: '', //录入人
+                supplierName: '', //发货单位
+                supplierContact: '', //发货联系人
+                supplierAddress: '', //发货单位地址
+                supplierPhone: '', //发货单位电话
+            },
+            endProductInOuts: [{
+                name: '', //客户名称
+                employeeId: '', //员工id
+                document_handler: '', //单据经手人
+                product_model: '', //产品型号
+                product_batch: '', //产品批次
+                packing_quantity: '', //装箱数
+                packing_amount: '', //箱数
+                number: '', //数量
+                price: '', //单价
+                sum: '', //金额
+                type: 'out', //出库或者入库类型
+                note: '' //备注
+            }],
+            dataSource: {
+                cols: [
+                    {name: 'product_model', label: '型号',},
+                    {name: 'product_batch', label: '批次',},
+                    {name: 'packing_quantity', label: '装箱数',},
+                    {name: 'packing_amount', label: '箱数',},
+                    {name: 'number', label: '数量',},
+                    {name: 'price', label: '单价',},
+                    {name: 'sum', label: '金额',},
+                    {name: 'note', label: '备注',},
+                ],
+                array: []
+            }
+        }
+
+        var EndProductInOutDataSource = {
+            "form": {
+                "sn": "",
+                "name": "",
+                "employeeId": "",
+                "document_handler": "",
+                "product_model": "",
+                "product_batch": "",
+                "packing_quantity": "",
+                "packing_amount": "",
+                "number": "",
+                "price": "",
+                "sum": "",
+                "type": "",
+                "note": ""
+            },
+            "list": {
+                "cols": [
+                    {
+                        "name": "sn",
+                        "label": "订单编号",
+                        "width": 100
+                    },
+                    {
+                        "name": "name",
+                        "label": "客户名称",
+                        "width": 100
+                    },
+                    {
+                        "name": "document_handler",
+                        "label": "单据经手人",
+                        "width": 100
+                    },
+                    {
+                        "name": "product_model",
+                        "label": "产品型号",
+                        "width": 100
+                    },
+                    {
+                        "name": "product_batch",
+                        "label": "产品批次",
+                        "width": 100
+                    },
+                    {
+                        "name": "packing_quantity",
+                        "label": "装箱数",
+                        "width": 100
+                    },
+                    {
+                        "name": "packing_amount",
+                        "label": "箱数",
+                        "width": 100
+                    },
+                    {
+                        "name": "number",
+                        "label": "数量",
+                        "width": 100
+                    },
+                    {
+                        "name": "price",
+                        "label": "单价",
+                        "width": 100
+                    },
+                    {
+                        "name": "sum",
+                        "label": "金额",
+                        "width": 100
+                    },
+                    {
+                        "name": "note",
+                        "label": "备注",
+                        "width": 100
+                    },
+                    {
+                        "name": "createdAt",
+                        "label": "创建日期",
+                        "width": 150
+                    }
+                ],
+                "array": []
+            }
+        }
+
+
+        var order1Edit = {     //缓存
+            type: '',
+            model: '',
+            specifications: '', //规格
+            packingnumber: '',  //装箱数 pcs
+            piece: '',     //件数
+            unitprice: '',
+            price: '',      //金额
+            remarks: '',   //备注
+            deliveried: '',  //交付情况
+        }
+
+        var ind;
+
+        var tab1EditSource = { //tab1Edit表格数据
+            cols: [],
+            array: []
+        }
+
+        var tab1EditSourceZ;
+
+        var candidateClients; //用于自动完成的下拉客户列表
+
+        var renderTab2NewProductFormBottom = function (data) {
+        }
+
+        var getTab2DataFromNewProductBottom = function () {
+            var type = $("#addtype").val();
+            var model = $("#addmodel").val();
+            var specifications = $("#addspecifications").val();
+            var packingnumber = $("#addpackingnumber").val();
+            var piece = $("#addpiece").val();
+            var unitprice = $("#addunitprice").val();
+            var price = $("#addprice").val();
+            var deliveried = $("#adddeliveried").val();
+            var remarks = $("#addremarks").val();
+
+            var Order_details =
+                {
+                    type: type,
+                    model: model,
+                    specifications: specifications, //规格
+                    packingnumber: packingnumber,  //装箱数 pcs
+                    piece: piece,     //件数
+                    unitprice: unitprice,
+                    price: price,      //金额
+                    remarks: remarks,   //备注
+                    deliveried: deliveried,  //交付情况
+                }
+            return Order_details;
+        }
+
+        //渲染列表
+        window.renderEndProductInOutTable = function (tableId, dataSource) {
+            $(tableId).html('').append('<div class="table"></div>')
+
+            $(tableId + ' .table').datagrid({
+                dataSource: dataSource,
+                checkable: false,
+                checkByClickRow: false,
+                partialRendering: false,
+                height: '250',
+                onRender: function () {
+                    $(tableId + ' .datagrid-cell').off('click');
+                    $(tableId + ' .datagrid-cell').on('click', function () {
+                        var row = $(this).attr('data-row')
+                        var col = $(this).attr('data-col')
+                        if (row == 0 || col == 0) return
+                        var index = row - 1
+                        var formId = 'EndProductInOutForm'
+                        var modalId = 'EndProductInOutModal'
+                        $('#' + modalId).modal('show', 'fit');
+                        var formData = EndProductInOutDataSource.list.array[index];
+                        window.renderForm('#' + formId, formData)
+                        $('#' + formId + ' .flag').val('edit')
+                        $('#' + formId + ' .index').val(index)
+
+
+                    })
+                }
+            })
+        }
+
+
+        var rendertab3ProductOutOrder = function (data) {
+            for (var x in data) {
+                $('#productOutModal .' + x).val(data[x])
+            }
+        }
+        var getTab3ProductOutOrder = function () {
+            var data = {}
+            $('#productOutModal input, #productOutModal select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val;
+            })
+            return data;
+        }
+
+        var renderTab1NewProductFormTop = function (data) {
+            for (var x in data) {
+                $('#tab1MyLgModal4 .' + x).val(data[x])
+            }
+        }
+        var getTab1DataFromNewProductTop = function () {
+            var data = {}
+            $('#tab1MyLgModal4 input, #tab1MyLgModal4 select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val; // data.date = 1980-01-01
+            })
+            return data;
+        }
+        var renderTab2NewProductFormTop = function (data) {
+            for (var x in data) {
+                $('#myLgModal4 .' + x).val(data[x])
+            }
+        }
+        var getTab2DataFromNewProductTop = function () {
+            var data = {}
+            $('#myLgModal4 input, #myLgModal4 select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val; // data.date = 1980-01-01
+            })
+            return data;
+        }
+        var renderProductOutEditModal = function (data) {
+            $('#productOutEditModal .product_batch').html('').append('<option value="' + data['product_batch'] + '">' + data['product_batch'] + '</option>')
+            for (var x in data) {
+                $('#productOutEditModal .' + x).val(data[x])
+            }
+        }
+
+        var getProductOutEditModalData = function () {
+            var data = {}
+            $('#productOutEditModal input, #productOutEditModal select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val;
+            })
+            return data;
+        }
+
+        var getTab3ProductOutOrder = function () {
+            var data = {}
+            $('#productOutModal input, #productOutModal select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val;
+            })
+            return data;
+        }
+
+
+        var renderaddCustomer = function (data) {
+            $('#tab2ddxq .department').val(data.department);
+            $('#tab2ddxq .adress').val(data.adress);
+            $('#tab2ddxq .createdAT').val(data.createdAT);
+            $('#tab2ddxq .deleveredDate').val(data.deleveredDate);
+            $('#tab2ddxq .orderNo').val(data.orderNo);
+            $('#tab2ddxq .create_user_id').val(data.create_user_id);
+            $('#tab2ddxq .accepted').val(data.accepted);
+            $('#tab2ddxq .payed_amount').val(data.adress);
+            $('#tab2ddxq .discount').val(data.discount);
+        }
+
+
+        var getTab1Edit = function () {
+            var data = {}
+            $('#myLgModal4 input, #myLgModal4 select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val; // data.date = 1980-01-01
+            })
+            return data;
+        }
+
+        var renderTab1Edit = function (data) {
+            for (var x in data) {
+                $('#tab1MyLgModal5 .' + x).val(data[x])
+            }
+        }
+        var getTab1Edit = function () {
+            var data = {}
+            $('#tab1MyLgModal5 input, #tab1MyLgModal5 select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val; // data.date = 1980-01-01
+            })
+            return data;
+        }
+
+        var renderTab2Edit = function (data) {
+            for (var x in data) {
+                $('#myLgModal5 .' + x).val(data[x])
+            }
+        }
+        var getTab2Edit = function () {
+            var data = {}
+            $('#myLgModal5 input, #myLgModal5 select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val; // data.date = 1980-01-01
+            })
+            return data;
+        }
+
+
+        var getTab1Edit11 = function () {
+            type = $("#Edittype").val();
+            var model = $("#Editmodel").val();
+            var specifications = $("#Editspecifications").val();
+            var packingnumber = $("#Editpackingnumber").val();
+            var piece = $("#Editpiece").val();
+            var unitprice = $("#Editunitprice").val();
+            var price = $("#Editprice").val();
+            var deliveried = $("#Editdeliveried").val();
+            var remarks = $("#Editremarks").val();
+
+            var Edit = {
+                type: type,
+                model: model,
+                specifications: specifications,
+                packingnumber: packingnumber,
+                piece: piece,
+                unitprice: unitprice,
+                price: price,
+                deliveried: deliveried,
+                remarks: remarks,
+            }
+            return Edit;
+        }
+
+
+        var renderTab1Edit = function (data) {
+            for (var x in data) {
+                $('#tab1MyLgModal5 .' + x).val(data[x])
+            }
+        }
+
+
+        var getaddCustomer = function (data) {
+            var name = $("#addkhname").val();
+            var phone = $("#addphone").val();
+            var place = $("#addplace").val();
+            var Contacts = $("#addContacts").val();
+            var Contactsphone = $("#addContactsphone").val();
+            var Remarks = $("#addRemarks").val();
+
+            var client = {
+                name: name,
+                mobile: phone,
+                address: place,
+                contact: Contacts,
+                contact_phone: Contactsphone,
+                remarks: Remarks,
+            }
+            return client;
+
+        }
+
+        var calOrderTotal = function (list) {
+            return list
+        }
+
+        //自动计算订单应收
+        var calTab1Receivable = function () {
+            var total = 0;
+            var numberSum = 0;
+            var pieceSum = 0;
+            var products = tab1selectedOrder.dataSource.array;
+            for (var i = 0; i < products.length; i++) {
+                var product = products[i];
+                try {
+                    total += parseFloat(product.price);
+                    numberSum += parseInt(product.number)
+                    pieceSum += parseInt(product.piece)
+                } catch (e) {
+                    //console.log(e);
+                }
+            }
+            var accepted = $('#tab1MyLgModal4 .accepted').val()
+            var discount = $('#tab1MyLgModal4 .discount').val()
+            var delivered = $('#tab1MyLgModal4 .delivered').val()
+            // var cal = 0;
+            // if (delivered) {
+            //     cal = total - accepted - discount;
+            // }
+            // $('#tab1MyLgModal4 .account_receivale').val(parseInt(cal))
+            $('#tab1MyLgModal4 .priceSum').val(parseFloat(total))
+            $('#tab1MyLgModal4 .pieceSum').val(parseInt(pieceSum))
+            $('#tab1MyLgModal4 .numberSum').val(parseInt(numberSum))
+        }
+        var calTab2Receivable = function () {
+            var total = 0;
+            var numberSum = 0;
+            var pieceSum = 0;
+            var products = tab2selectedOrder.dataSource.array;
+            for (var i = 0; i < products.length; i++) {
+                var product = products[i];
+                try {
+                    total += parseFloat(product.price);
+                    numberSum += parseInt(product.number)
+                    pieceSum += parseInt(product.piece)
+                } catch (e) {
+                    //console.log(e);
+                }
+            }
+            var accepted = $('#myLgModal4 #addaccepted').val()
+            var discount = $('#myLgModal4 #adddiscount').val()
+
+            // var cal = total - accepted - discount;
+            // $('#myLgModal4 #addpayed_amount').val(parseFloat(cal))
+            $('#myLgModal4 .priceSum').val(parseFloat(total))
+            $('#myLgModal4 .pieceSum').val(parseInt(pieceSum))
+            $('#myLgModal4 .numberSum').val(parseInt(numberSum))
+        }
+        var renderTable1 = function (data) {
+            $('#sale1').html('').append('<div class="table"><div class="input-control search-box search-box-circle has-icon-left has-icon-right"id="depInfoList-example"style="margin-bottom: 10px; max-width: 300px"><input id="depInfoList-exampleInput"type="search"class="form-control search-input"placeholder="关键字过滤(区分大小写)"><label for="depInfoList-exampleInput"class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a href="#"class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a></div><div class="datagrid-container"></div><div class="pager"></div></div>')
+            $('#sale1 .table').datagrid({
+                dataSource: data,
+                partialRendering: false,
+                sortable: true,
+                states: {
+                    pager: {page: 1, recPerPage: 20},
+                    sortBy: 'createdAt',
+                    order: 'desc',
+                },
+                cellFormator: function ($cell, cell, datagrid) {
+                    var col = cell.colIndex;
+                    var row = cell.rowIndex;
+                    var form = cell.config.data
+                    var value = cell.value;
+                    value = value ? value : ''
+
+                    if (row == 0 || col == 0) { //不绑定点击事件
+
+                    } else {
+                        $cell.off('click')
+                        $cell.on('click', function () {
+                            var index = datagrid.getDataIndex(form.id)
+                            tab1selectedOrder.order = data.array[index];
+                            //console.log(tab1selectedOrder.order);
+                            tab1selectedOrder.dataSource.array = tab1selectedOrder.order.order_products
+
+                            $('#tab1MyLgModal4 .flag').val('edit')
+                            $('#tab1MyLgModal4 .index').val(index);
+                            renderTab1NewProductFormTop(tab1selectedOrder.order);
+                            $('#tab1MyLgModal4').modal('show')
+                            renderTab1Table10(tab1selectedOrder.dataSource);
+
+                            calTab1Receivable()
+                        })
+                    }
+
+                    var config = cell.config
+                    var isCheckbox = config.checkbox;
+                    var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                    $cell[cell.config.html ? 'html' : 'text'](value);
+                    if (config.className) {
+                        $cell.addClass(config.className);
+                    }
+                },
+
+                onRender: function (params) {
+                }
+            });
+
+
+            // setTimeout(function () {
+            //     $('.datagrid-cell-cell').each(function () {
+            //         var value = $(this).text()
+            //         $(this).html('')
+            //         $(this).append('<input value="' + value + '">');
+            //     })
+            // }, 2000)
+
+            //console.log("ssss");
+        };
+
+        var renderTable2 = function (data) {
+            $('#sale2').html('').append('<div class="table"><div class="input-control search-box search-box-circle has-icon-left has-icon-right"id="depInfoList-example"style="margin-bottom: 10px; max-width: 300px"><input id="depInfoList-exampleInput"type="search"class="form-control search-input"placeholder="关键字过滤(区分大小写)"><label for="depInfoList-exampleInput"class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a href="#"class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a></div><div class="datagrid-container"></div><div class="pager"></div></div>')
+            $('#sale2 .table').datagrid({
+                partialRendering: false,
+                sortable: true,
+                states: {
+                    pager: {page: 1, recPerPage: 20},
+                    sortBy: 'createdAt',
+                    order: 'desc',
+                },
+                dataSource: {
+                    cols: [
+                        {name: 'createdAt', label: '下单日期', width: 200},
+                        {name: 'deleveredDate', label: '交付日期', width: 100},
+                        {name: 'orderNo', label: '订单编号', width: 100},
+                        {name: 'clientName', label: '客户名称', width: 100},
+                        {name: 'create_user_id', label: '制单员', width: 100},
+                        {name: 'priceSum', label: '订单总金额', width: 100},
+                        {name: 'delivered', label: '已交付金额', width: 100},
+                        {name: 'accepted', label: '已收账款', width: 100},
+                        {name: 'discount', label: ' 优惠 ', width: 100},
+                        {name: 'account_receivale', label: '应收账款', width: 100},
+                        {name: 'remarks', label: '备注', width: 100},
+                    ],
+                    array: data
+                },
+
+                partialRendering: false,
+                // checkable: true,
+                // checkByClickRow: false,
+
+                cellFormator: function ($cell, cell, datagrid) {
+                    var col = cell.colIndex;
+                    var row = cell.rowIndex;
+                    var form = cell.config.data
+                    var value = cell.value;
+                    value = value ? value : ''
+
+                    if (row == 0 || col == 0) { //不绑定点击事件
+
+                    } else {
+                        $cell.off('click')
+                        $cell.on('click', function () {
+                            var index = datagrid.getDataIndex(form.id)
+                            tab2selectedOrder.order = data[index];
+                            tab2selectedOrder.dataSource.array = tab2selectedOrder.order.order_products
+
+
+                            $('#myLgModal4 .flag').val('edit')
+                            $('#myLgModal4 .index').val(index);
+                            $('#myLgModal4 .clientId').val(form.clientId);
+
+                            renderTab2NewProductFormTop(tab2selectedOrder.order);
+                            $('#myLgModal4').modal('show')
+                            renderTable10(tab2selectedOrder.dataSource);
+                            //console.log(tab2selectedOrder);
+                            calTab2Receivable()
+                        })
+                    }
+
+                    var config = cell.config
+                    var isCheckbox = config.checkbox;
+                    var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                    $cell[cell.config.html ? 'html' : 'text'](value);
+                    if (config.className) {
+                        $cell.addClass(config.className);
+                    }
+                },
+
+                onRender: function (params) {
+
+                }
+
+            });
+            //console.log("ssss");
+        };
+
+        var renderTable3 = function (data) {
+            $('#sale3').html('').append('<div class="table"></div>')
+            $('#sale3 .table').datagrid({
+                dataSource: {
+                    cols: [
+                        {name: 'createdAt', label: '开单日期', width: 100},
+                        {name: 'sn', label: '订单编号', width: 100},
+                        {name: 'Receiving_unit', label: '收货单位 ', width: 100},
+                        {name: 'product_list', label: '产品列表 ', width: 100},          //产品列表
+                        {name: 'number', label: ' 数量', width: 100},
+                    ],
+                    array: data
+                },
+                partialRendering: false,
+                // checkable: true,
+                // checkByClickRow: false,
+                onRender: function (params) {
+                    $("#sale3 .datagrid-row").off('click');
+                    $("#sale3 .datagrid-row").click(function () {
+                        $('#tab3ck').modal({
+                            backdrop: "static",
+                            keyboard: false,
+                        })
+                        setTimeout(function () {
+
+                            renderTable8(data);
+                        }, 800);
+                    });
+
+                }
+            });
+        };
+        var renderTable6 = function (data) {
+            $('#sale6').html('').append('<div class="table"></div>')
+            $('#sale6 .table').datagrid({
+                dataSource: {
+                    cols: [
+                        {name: 'type', label: '型  号', width: 100},
+                        {name: 'model', label: ' 名  称 ', width: 100},
+                        {name: 'specifications', label: ' 规  格 ', width: 100},
+                        {name: 'packingnumber', label: ' 装箱数 ', width: 100},
+                        {name: 'piece', label: ' 件  数 ', width: 100},
+                        {name: 'number', label: '数量', width: 100},
+                        {name: 'unitprice', label: ' 单  价 ', width: 100},
+                        {name: 'price', label: ' 金 额 ', width: 100},
+                        {name: 'deliveried', label: ' 交付情况 ', width: 100},
+                        {name: 'remarks', label: ' 备  注 ', width: 100},
+                    ],
+                    array: data  //待插入
+
+                },
+                partialRendering: false,
+                onRender: function (params) {
+                    $("#sale6 .datagrid-row").off('click');
+                    $("#sale6 .datagrid-row").click(function () {
+                        var index = parseInt($(this).attr("data-row")) - 1
+                        ind = index;
+                        tab1EditSourceZ = data[index];
+                        renderTab1Edit(tab1EditSourceZ);
+                        $('#tab1Edit').modal({
+                            backdrop: "static",
+                            keyboard: false,
+                        })
+                        setTimeout(function () {
+                            // alert("11");
+                        }, 800);
+                    });
+                }
+                // checkable: true,
+                // checkByClickRow: false,
+            });
+        };
+        var renderTable7 = function (data) {
+
+
+            $('#sale7').html('').append('<div class="table"></div>')
+            $('#sale7 .table').datagrid({
+                dataSource: {
+                    cols: [
+                        {name: 'type', label: '型  号', width: 100},
+                        {name: 'model', label: ' 名  称 ', width: 100},
+                        {name: 'specifications', label: ' 规  格 ', width: 100},
+                        {name: 'packingnumber', label: ' 装箱数 ', width: 100},
+                        {name: 'piece', label: ' 件  数 ', width: 100},
+                        {name: 'number', label: '数量', width: 100},
+                        {name: 'unitprice', label: ' 单  价 ', width: 100},
+                        {name: 'price', label: ' 金 额 ', width: 100},
+                        {name: 'deliveried', label: ' 交付情况 ', width: 100},
+                        {name: 'remarks', label: ' 备  注 ', width: 100},
+                    ],
+                    array: data
+                },
+                partialRendering: false,
+                // checkable: true,
+                // checkByClickRow: false,
+                onRender: function (params) {
+                    $("#sale7 .datagrid-row").off('click');
+                    $("#sale7 .datagrid-row").click(function () {
+                        $('#tab2Edit').modal({
+                            backdrop: "static",
+                            keyboard: false,
+                        })
+                        setTimeout(function () {
+                            // alert("12");
+                        }, 800);
+                    });
+                }
+            });
+        };
+        var renderTable8 = function (data) {
+            $('#sale8').html('').append('<div class="table"></div>')
+            $('#sale8 .table').datagrid({
+                partialRendering: false,
+                dataSource: {
+                    cols: [
+                        {name: 'type', label: '型  号', width: 100},
+                        {name: 'packing_quantity', label: ' 装箱数 ', width: 100},
+                        {name: 'packing_amount', label: ' 箱  数 ', width: 100},
+                        {name: 'number', label: ' 数量 ', width: 100},
+                        {name: 'price', label: ' 单  价 ', width: 100},
+                        {name: 'sum', label: ' 金 额 ', width: 100},
+                        {name: 'remarks', label: ' 备  注 ', width: 100},
+
+                    ],
+                    array: data  //待插入
+                },
+                // checkable: true,
+                // checkByClickRow: false,
+            });
+        };
+
+        var renderTab1Table10 = function (data) {
+
+            $('#tab1Sale10').html('').append('<div class="table"></div>')
+            $('#tab1Sale10 .table').datagrid({
+                dataSource: data,
+                height: 200,
+                partialRendering: false,
+                onRender: function (params) {
+                    $("#tab1Sale10 .datagrid-row").off('click');
+                    $("#tab1Sale10 .datagrid-row").click(function () {
+                        var row = $(this).attr("data-row");
+                        if (row == 0) return;
+                        var index = parseInt(row) - 1
+                        ind = index;
+                        var rowData = data.array[index];
+
+
+                        $('#tab1MyLgModal5').modal('show')
+                        renderTab1Edit(rowData)
+                        $('#tab1MyLgModal5 .index').val(index)
+                        $('#tab1MyLgModal5 .flag').val('edit')
+
+                        EndProductInOutDataSource.list.array = rowData.deliveredInfo.deliveredArray;
+                        window.renderEndProductInOutTable('#table_EndProductInOut', EndProductInOutDataSource.list)
+                    });
+                }
+            });
+        };
+
+        var renderTable10 = function (data) {
+
+            $('#sale10').html('').append('<div class="table"></div>')
+            $('#sale10 .table').datagrid({
+                dataSource: data,
+                height: 200,
+                partialRendering: false,
+                onRender: function (params) {
+                    $("#sale10 .datagrid-row").off('click');
+                    $("#sale10 .datagrid-row").click(function () {
+                        var row = $(this).attr("data-row");
+                        if (row == 0) return;
+                        var index = parseInt(row) - 1
+                        ind = index;
+                        var rowData = data.array[index];
+
+
+                        $('#myLgModal5').modal('show')
+                        renderTab2Edit(rowData)
+                        $('#myLgModal5 .index').val(index)
+                        $('#myLgModal5 .flag').val('edit')
+
+                        EndProductInOutDataSource.list.array = rowData.deliveredInfo.deliveredArray;
+                        window.renderEndProductInOutTable('#table_EndProductInOut_dingdan', EndProductInOutDataSource.list)
+                        $('#jf').text('交付情况')
+
+                    });
+                }
+            });
+        };
+
+        var renderTable4 = function (dataSource) {
+
+            $('#table4').html('').append('<div class="table"><div class="input-control search-box search-box-circle has-icon-left has-icon-right"id="depInfoList-example"style="margin-bottom: 10px; max-width: 300px"><input id="depInfoList-exampleInput"type="search"class="form-control search-input"placeholder="关键字过滤(区分大小写)"><label for="depInfoList-exampleInput"class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a href="#"class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a></div><div class="datagrid-container"></div><div class="pager"></div></div>')
+            $('#table4 .table').datagrid({
+                dataSource: dataSource,
+                width: 'auto',
+                partialRendering: false,
+                sortable: true,
+                states: {
+                    pager: {page: 1, recPerPage: 20},
+                    sortBy: 'createdAt',
+                    order: 'desc',
+                },
+                cellFormator: function ($cell, cell, datagrid) {
+                    var col = cell.colIndex;
+                    var row = cell.rowIndex;
+                    var form = cell.config.data
+                    var value = cell.value;
+                    value = value ? value : ''
+
+                    if (row == 0 || col == 0) { //不绑定点击事件
+
+                    } else {
+                        $cell.off('click')
+                        $cell.on('click', function () {
+                            var index = datagrid.getDataIndex(form.id)
+                            var item = dataSource.array[index];
+                            var type = item.type
+
+                            if (type == 'in') {
+
+
+                            } else {
+                                $('#productOutModal').modal('show')
+                                $('#productOutModal .flag').val('edit');
+                                $('#productOutModal .index').val('index');
+                                tab3ProductOut.endProductOrder = form.end_product_order
+                                rendertab3ProductOutOrder(tab3ProductOut.endProductOrder)
+                                tab3ProductOut.dataSource.array = tab3ProductOut.endProductOrder.end_product_in_outs
+                                renderProductOutPopUp(tab3ProductOut.dataSource)
+                            }
+                        })
+                    }
+
+                    var config = cell.config
+                    var isCheckbox = config.checkbox;
+                    var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                    $cell[cell.config.html ? 'html' : 'text'](value);
+                    if (config.className) {
+                        $cell.addClass(config.className);
+                    }
+                },
+
+                onRender: function () {
+
+                }
+
+
+            });
+        }
+
+        var renderProductOutPopUp = function (dataSource) {
+            $('#table-productsOut').html('').append('<div class="table"></div>')
+            $('#table-productsOut .table').datagrid({
+                dataSource: dataSource,
+                height: '200',
+                partialRendering: false,
+                onRender: function () {
+                    $('#table-productsOut .datagrid-cell').off('click')
+                    $('#table-productsOut .datagrid-cell').on('click', function () {
+                        var row = $(this).attr('data-row');
+                        if (row == 0) return;
+                        var index = row - 1
+                        var data = dataSource.array[index];
+                        $('#productOutEditModal').modal('show')
+                        data.index = index
+                        data.flag = 'edit'
+                        renderProductOutEditModal(data);
+                    })
+                }
+            });
+        }
+
+        var getEndProductOut = function (limit) {
+            var event = events['rq624']
+            //console.log(event);
+            event.requiredParams.type = 'out'
+            window.ajax(event)
+                .then(function (data) {
+                    var dataSource = {
+                        cols: [],
+                        array: []
+                    };
+                    dataSource.cols = [
+                        {name: 'createdAt', label: '时间', width: 100},
+                        {name: 'client', label: '客户',},
+                        {name: 'product_model', label: '型号',},
+                        {name: 'packing_quantity', label: '装箱数', width: 80},
+                        {name: 'packing_amount', label: '件数', width: 60},
+                        {name: 'number', label: '数量', width: 80},
+                        {name: 'receiverAddressPhone', label: '地址',},
+                        {name: 'product_batch', label: '批次',},
+                        {name: 'id', label: '出库单编号',width: 200},
+                    ];
+                    var list = data.data;
+                    //console.log(data);
+                    for (var i = 0; i < list.length; i++) {
+                        var item = list[i];
+                        try {
+                            item.id = item.end_product_order.sn
+                        } catch (e) {
+                        }
+                        try {
+                            item.receiverAddressPhone = item.end_product_order.receiverAddressPhone
+                        } catch (e) {
+                        }
+                        try {
+                            item.client = item.end_product_order.receiverDep
+                        } catch (e) {
+                        }
+                        try {
+                            item.supplierName = window.user.factory.name
+                        } catch (e) {
+                        }
+                        try {
+                            //console.log(item.end_product_order.receiverDep);
+                        } catch (e) {
+                            //console.log(e);
+                        }
+                        dataSource.array.push(item);
+                    }
+
+                    setTimeout(function () {
+                        renderTable4(dataSource);
+                    }, 500)
+                })
+        }
+
+        //定义标签页
+        var tabs1 = [
+            {
+                title: '客户信息',
+                url: '/html/kehu.html',
+                type: 'ajax',
+                forbidClose: true,
+                onOpen: function () {
+
+                    var getClientOrder = function () {
+                        var event = events['rq322'];
+                        event.requiredParams = {}
+                        event.optionalParams = {}
+                        window.ajax(event)
+                            .then(function (data) {
+                                //渲染表单
+                                tab1DataSource.array = data.data.rows;
+                                renderTable1(tab1DataSource);
+                                window.setTab1ClientAutoComplete(); //让自动填充组件生效
+                            })
+                    }
+                    getClientOrder()
+
+
+                    //绑定客户姓名录入
+                    $('.nameLetter').off('change');
+                    $('.nameLetter').on("change", function () {
+                        var nameLetter = $(this).val();
+                        events['rq320'].optionalParams.name = nameLetter;
+                        window.ajax(events['rq320'])
+                            .then(function (data) {
+                                // 把用户信息填上页面
+                            })
+                    });
+
+
+                    $('.newCustomerButton').off('click');
+                    $('.newCustomerButton').on('click', function (params) {
+
+                        $('#myLgModal').modal('show', 'fit')
+                        $('#myLgModal input').val('')
+
+                    });
+
+                    $('#tab1MyLgModal4 .accepted,#tab1MyLgModal4 .discount').off('blur')
+                    $('#tab1MyLgModal4 .accepted,#tab1MyLgModal4 .discount').on('blur', function () {
+                        calTab1Receivable()
+                    })
+
+                    //绑定添加按钮
+                    //  $('.tab1add1').off('change');
+                    //  $('.tab1add1').on('click',function () {
+                    //    $('#myModal').modal(options)
+                    //  },
+
+
+                    //绑定搜索按钮
+                    $('.tab1Submit').off('click');
+                    $('.tab1Submit').on('click', function () {
+                        var event = events['rq322']
+                        event.requiredParams = {}
+                        event.optionalParams = {}
+
+                        var close = $('#isCloseSelect').val();
+                        if (close != '-1') {
+                            event.requiredParams.close = close;
+                        }
+                        var clientId = $('.clientName').attr('clientId')
+
+                        if (clientId) {
+                            event.optionalParams.clientId = clientId
+                        }
+                        window.ajax(event)
+                            .then(function (data) {
+                                //渲染表单
+                                tab1DataSource.array = data.data.rows;
+                                renderTable1(tab1DataSource);
+
+                            })
+                    });
+
+
+                    window.addCustomer = function () {
+                        var client = getaddCustomer()
+                        //添加客户检测
+                        if (client.name == "") {
+                            new $.zui.Messager("客户名称不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (client.mobile == "") {
+                            new $.zui.Messager("联系电话不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (client.address == "") {
+                            new $.zui.Messager("收货地址不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (client.contact == "") {
+                            new $.zui.Messager("联系人不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (client.contact_phone == "") {
+                            new $.zui.Messager("联系人电话不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        var event = events['rq313'];
+                        event.requiredParams = {factoryId: 1}
+                        event.optionalParams = {client: client}
+                        window.ajax(event)
+                            .then(function () {
+                                events['rq322'].requiredParams = {}
+                                events['rq322'].optionalParams = {}
+                                return window.ajax(events['rq322'])
+                            })
+                            .then(function (data) {
+                                new $.zui.Messager("新增客户成功！", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                $('#myLgModal').modal('hide')
+                                tab1DataSource.array = data.data.rows;
+                                renderTable1(tab1DataSource);
+                            })
+                    }
+                }
+            },
+            {
+                title: '订单信息',
+                url: '/html/dingdan.html',
+                type: 'ajax',
+                forbidClose: true,
+                onOpen: function () {
+
+                    var getOrderData = function () {
+                        //查询订单
+                        events['rq322'].requiredParams = {close: 0}
+                        events['rq322'].optionalParams = {}
+                        window.ajax(events['rq322'])
+                            .then(function (data) {
+                                tab2DataSource.array = data.data.rows;
+                                //渲染表单
+
+                                var list = tab2DataSource.array;
+                                for (var i = 0; i < list.length; i++) {
+                                    var item = list[i];
+                                    // 赋值KEY 把值赋给一个新的key
+                                    item.saleTab2createdAt = item.createdAt;
+                                    item.saleTab2deleveredDate = item.deleveredDate
+                                    item.saleTab2orderNo = item.orderNo;
+                                    item.saleTab2clientId = item.clientId;
+                                    item.saleTab2create_user_id = item.create_user_id;
+                                    item.saleTab2payed_amount = item.payed_amount;
+                                    item.saleTab2delivered = item.delivered;
+                                    item.saleTab2accepted = item.accepted;
+                                    item.saleTab2discount = item.discount;
+                                    item.saleTab2account_receivale = item.account_receivale;
+                                    item.saleTab2Remarks = item.Remarks;
+                                }
+                                renderTable2(tab2DataSource.array);
+
+                            })
+
+                    }
+                    getOrderData()
+
+
+                    window.autoParseFloat('.price,.unitprice,#addaccepted,#adddiscount')
+                    $('#myLgModal4 #addorderNo').off('blur')
+                    $('#myLgModal4 #addorderNo').on('blur', function () {
+                        new $.zui.Messager("注意，订单号需要唯一", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                    });
+
+                    $('#myLgModal4 #addaccepted,#myLgModal4 #adddiscount').off('blur')
+                    $('#myLgModal4 #addaccepted,#myLgModal4 #adddiscount').on('blur', function () {
+                        calTab2Receivable()
+                    })
+
+                    //绑定日期组件
+                    $('#myLgModal4 .datetimepicker').each(function () {
+                        $(this).datetimepicker({ //这里是bootstrap里面的模式，
+                            language: "zh-CN",
+                            weekStart: 1,
+                            todayBtn: 1,
+                            autoclose: 1,
+                            todayHighlight: 1,
+                            startView: 2,
+                            minView: 2,
+                            forceParse: 0,
+                            format: "yyyy-mm-dd"
+                        })
+                            .on('hide', function (ev) {
+                                $('.datetimepicker').blur();
+                            });
+
+                    });
+
+                    //绑定日期组件
+                    $('#myLgModal4 .datetimepickerWithTime').each(function () {
+                        $(this).datetimepicker({ //这里是bootstrap里面的模式，
+                            language: "zh-CN",
+                            weekStart: 1,
+                            todayBtn: 1,
+                            autoclose: 1,
+                            todayHighlight: 1,
+                            startView: 2,
+                            minView: 1,
+                            forceParse: 0,
+                            format: "yyyy-mm-dd hh:mm"
+                        })
+                            .on('hide', function (ev) {
+                                $('.datetimepickerWithTime').blur();
+                            });
+
+                    });
+
+                    $("#myLgModal4 #adddepartment").autocomplete({
+                        source: window.tab2ClicntsSource,
+                        select: function (event, ui) {
+                            //console.log("Selected: ", ui);
+                            var index = ui.item.index
+                            var client = window.tab2ClicntsSource[index]
+                            $('#myLgModal4 #addadress').val(client.address)
+                        },
+                        notInSourceCallback: function () {
+                            $('#myLgModal4 #addadress').val('')
+                        }
+                    });
+
+                    window.setTab2ModelAutoComplete();
+                    window.setTab2ClientAutoComplete();
+                    window.setTab2CreatorAutoComplete();
+
+                    $('.newOrderButton').off('click');
+                    $('.newOrderButton').on('click', function (params) {
+                        //window.ajax(events['rq324'])
+                        var data = {
+                            id: '',
+                            createdAt: new Date().format("yyyy-MM-dd hh:mm"),
+                            department: "", //收货单位
+                            // 下单日期 用createdAT
+                            deleveredDate: "", //交付日期
+                            orderNo: window.generateUUID(), //订单编号
+                            adress: "", //收货地址
+                            create_user_id: window.user.nickName, //制单员
+                            accepted: 0, //已收
+                            discount: 0, //优惠
+                            account_receivale: 0, //应收账款
+                            payed_amount: 0, //已收 =（成品出库的时候的金额）
+                            pieceSum: '', //件数合计
+                            numberSum: '', //数量合计
+                            priceSum: '', //金额合计
+                            clientId: '', //
+                        }
+                        $('#myLgModal4').modal("show")
+
+                        $('#myLgModal4 .flag').val('new')
+                        tab2selectedOrder.order = data;
+                        renderTab2NewProductFormTop(tab2selectedOrder.order);
+                        tab2selectedOrder.dataSource.array = []
+                        renderTable10(tab2selectedOrder.dataSource);
+                        $('#table_EndProductInOut_dingdan').html('')
+
+                    });
+
+
+                    //绑定日期组件
+                    $('.tab2 .datetimepicker').each(function () {
+                        $(this).datetimepicker({ //这里是bootstrap里面的模式，
+                            language: "zh-CN",
+                            weekStart: 1,
+                            todayBtn: 1,
+                            autoclose: 1,
+                            todayHighlight: 1,
+                            startView: 2,
+                            minView: 2,
+                            forceParse: 0,
+                            format: "yyyy-mm-dd"
+                        }).on('hide', function (ev) {
+                            $('.datetimepicker').blur();
+                        });
+
+                    });
+
+                    $('#addorder').off('click');
+                    $('#addorder').on('click', function (params) {
+                        // 追踪productId
+                        $('#myLgModal5').modal('show')
+
+                        var newOrder =
+                            {
+                                id: '',
+                                type: '',
+                                model: '',
+                                specifications: '', //规格
+                                packingnumber: '',  //装箱数 pcs
+                                piece: '',     //件数
+                                number: '',
+                                unitprice: '',
+                                price: '',      //金额
+                                remarks: '',   //备注
+                                deliveried: '',  //交付情况
+                                productId: '',  //交付情况
+                            }
+                        $('#myLgModal5').modal("show")
+                        $('#myLgModal5 .flag').val('new')
+                        renderTab2Edit(newOrder);
+                        $('#jf').text('')
+                    });
+
+                    // window.addOrder_details = function () {
+                    //     var flag = $('#myLgModal5 .flag').val()
+                    //     if (flag == 'new') { //创建状态
+                    //         tab2selectedOrder.dataSource.array.push(getTab2Edit())
+
+                    //     } else { //编辑状态
+                    //         var index = $('#myLgModal5 .index').val()
+                    //         var dataForm = getTab2Edit();
+                    //         var data = tab2selectedOrder.dataSource.array[index]
+                    //         for (var x in dataForm) {
+                    //             try {
+                    //                 data[x] = dataForm[x]
+                    //             } catch (e) {
+                    //             }
+                    //         }
+                    //     }
+                    //     renderTable10(tab2selectedOrder.dataSource);
+                    //     $('#myLgModal5').modal('hide')
+
+                    // }
+
+                    window.exportOrder = function () {
+                        var form = window.getFormData('#myLgModal4');
+                        var cols = []
+                        $('#myLgModal4 .input-group').each(function () {
+                            var $this = $(this)
+                            var name = $this.find('input').attr('name')
+                            var label = $this.find('span').text()
+                            var col = {name: name, label: label}
+                            cols.push(col)
+                        })
+                        orderToExport[0].dataSource.cols = cols;
+                        orderToExport[0].dataSource.array = [form];
+                        orderToExport[1].dataSource = tab2selectedOrder.dataSource;
+
+                        var event = events['rq2117']
+                        event.requiredParams = {data: orderToExport}
+                        event.optionalParams = {}
+                        window.ajax(event)
+                            .then(function (data) {
+                                var truthBeTold = window.confirm("单击“确定”继续。 \n请允许弹出窗口以便下载文件！\n下载链接于3分钟后会自动删除！")
+                                if (truthBeTold) {
+                                    window.location.href = data.data;
+                                } else {
+
+                                }
+                            })
+                    }
+
+                    //封存订单
+
+                    $("#fon_cun").off('click')
+                    $("#fon_cun").click(function () {
+                        var id = $('#myLgModal4 .id').val()
+                        events['rq329'].requiredParams = {}
+                        events['rq329'].optionalParams = {id: id}
+                        window.ajax(events['rq329'])
+                        $('#myLgModal4').modal('hide')
+                        window.ajax(events['rq317'])
+                            .then(function (data) {
+                                new $.zui.Messager('封存成功', {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                getOrderData()
+                            })
+                    });
+
+                    //绑定搜索按钮
+                    $('.tab2Submit').off('click');
+                    $('.tab2Submit').on('click', function () {
+
+
+                        var event = events['rq322']
+                        event.requiredParams = {}
+                        event.optionalParams = {}
+                        event.dateParams = {createdAt: {}, deleveredDate: {}}
+
+
+                        var tab2CreatedAt = $('.tab2CreatedAt').val()
+                        if (tab2CreatedAt) {
+                            event.dateParams.createdAt.start = tab2CreatedAt
+                            // event.dateParams.createdAt.end = new Date(new Date(tab2CreatedAt).getTime() + 86400000).format("yyyy-MM-dd")
+                        }
+                        var tab2CreatedAtEnd = $('.tab2CreatedAtEnd').val()
+                        if (tab2CreatedAtEnd) {
+                            event.dateParams.createdAt.end = new Date(new Date(tab2CreatedAtEnd).getTime() + 86400000).format("yyyy-MM-dd")
+                            // event.dateParams.createdAt.end = new Date(new Date(tab2DeliveryDate).getTime() + 86400000).format("yyyy-MM-dd")
+                        }
+                        var tab2DeliveryDateStart = $('.tab2DeliveryDateStart').val()
+                        var tab2DeliveryDateEnd = $('.tab2DeliveryDateEnd').val()
+                        if (tab2DeliveryDateStart) {
+                            event.dateParams.deleveredDate.start = tab2DeliveryDateStart
+                        }
+                        if (tab2DeliveryDateEnd) {
+                            event.dateParams.deleveredDate.end = new Date(new Date(tab2DeliveryDateEnd).getTime() + 86400000).format("yyyy-MM-dd")
+                        }
+                        var orderNo = $('.tab2OrderNo').val()
+                        var productId = $('.tab2Model').attr("productId");
+                        var clientId = $('.tab2ClientName').attr('clientId')
+                        var tab2Creator = $('.tab2Creator').attr('nickName')
+
+                        if (clientId) {
+                            event.optionalParams.clientId = clientId
+                        }
+                        if (productId) {
+                            event.optionalParams.productId = productId
+                        }
+                        if (orderNo) {
+                            event.optionalParams.orderNo = orderNo
+                        }
+                        if (tab2Creator) {
+                            event.optionalParams.create_user_id = tab2Creator
+                        }
+                        window.ajax(event)
+                            .then(function (data) {
+                                //渲染表单
+                                tab2DataSource.array = data.data.rows;
+                                renderTable2(tab2DataSource.array);
+                            })
+                    });
+
+                    window.setTab2NewProductModelAutoComplete()
+
+                    //订单数据自动计算
+                    var autoCalOrderForm = function () {
+                        var id = '#myLgModal5'
+                        var packingnumber = $(id + ' .packingnumber').val()
+                        var unitprice = $(id + ' .unitprice').val()
+                        var piece = $(id + ' .piece').val()
+                        var number = $(id + ' .number').val()
+                        var price = $(id + ' .price').val()
+
+                        if (packingnumber && piece) {
+                            // number = packingnumber * piece
+                            number = window.accMul(packingnumber, piece)
+                            // console.log('autoCalOrderForm',number)
+                        }
+                        $(id + ' .number').val(number)
+
+                        $(id + ' .price').val((number * unitprice).toFixed(2))
+                        // console.log('autoCalOrderForm')
+
+                    }
+                    var autoValidateForm = function () {
+                        var id = '#myLgModal5'
+                        var packingnumber = $(id + ' .packingnumber').val()
+                        var piece = $(id + ' .piece').val()
+                        var number = $(id + ' .number').val()
+
+                        if (number == piece * packingnumber) {
+                            return true;
+                        } else {
+                            new $.zui.Messager("数量 = 装箱数 * 件数，您填写的数字不正确，请检查！", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return false;
+                        }
+                    }
+                    window.autoValidateForm = autoValidateForm;
+
+                    $('#myLgModal5 .piece,#myLgModal5 .number,#myLgModal5 .price').off('blur')
+                    $('#myLgModal5 .piece,#myLgModal5 .number,#myLgModal5 .price').blur(function () {
+                        autoCalOrderForm();
+                    })
+                    $('#myLgModal5 .number').off('blur')
+                    $('#myLgModal5 .number').blur(function () {
+                        // autoValidateForm();
+                    })
+
+                }
+            },
+            {
+                title: '出库记录',
+                url: '/html/chuku.html',
+                type: 'ajax',
+                forbidClose: true,
+                onOpen: function () {
+
+                    getEndProductOut()
+
+                    $('#addorder').off('click');
+                    $('#addorder').on('click', function (params) {
+                        //window.ajax(events['rq324'])
+                        $('#myLgModal5').modal('show')
+
+                        var newOrder =
+                            {
+                                type: '',
+                                model: '',
+                                specifications: '', //规格
+                                packingnumber: '',  //装箱数 pcs
+                                piece: '',     //件数
+                                unitprice: '',
+                                price: '',      //金额
+                                remarks: '',   //备注
+                                deliveried: '',  //交付情况
+                            }
+                        $('#myLgModal5').modal("show")
+                        $('#myLgModal5 .flag').val('new')
+                        renderTab2Edit(newOrder);
+                    });
+
+                    window.deleteChukudan = function () {
+
+                        var id = tab3ProductOut.endProductOrder.id
+                        var item = {id: id}
+                        if (!id) {
+
+                            return
+                        } else {
+                            var event = events['rq2115']
+                            event.requiredParams = {model: 'EndProductOrder'}
+                            event.optionalParams = {items: [item]}
+                            window.ajax(event)
+                                .then(function () {
+
+                                    setTimeout(function () {
+                                        $('#productOutModal').modal('hide')
+                                        new $.zui.Messager("删除成功", {
+                                            icon: 'info' // 定义消息图标
+                                        }).show();
+                                        getEndProductOut()
+                                    }, 1000)
+                                })
+                        }
+                    }
+
+                    window.saveChukudan = function () {
+
+                        var order = getTab3ProductOutOrder();
+
+
+                        if (order.createdAt == "") {
+                            new $.zui.Messager("录入日期不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (order.sn == "") {
+                            new $.zui.Messager("单据编号不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (order.recorder == "") {
+                            new $.zui.Messager("经手人不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (order.receiverDep == "") {
+                            new $.zui.Messager("收货单位名称不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (order.receiver == "") {
+                            new $.zui.Messager("联系人不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (order.receiverAddressPhone == "") {
+                            new $.zui.Messager("地址不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (order.mobile == "") {
+                            new $.zui.Messager("电话不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (order.sum == "") {
+                            new $.zui.Messager("合计不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (order.supplierName == "") {
+                            new $.zui.Messager("发货单位名称不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (order.supplierAddress == "") {
+                            new $.zui.Messager("发货单位地址,电话不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+
+                        $('#productOutModal').modal('hide');
+
+
+                        //console.log(order);
+                        var event;
+                        if (order.id) {
+                            event = events['rq626'];
+                        } else {
+                            event = events['rq626'];
+                        }
+                        var records = tab3ProductOut.dataSource.array;
+                        var data = {
+                            type: 'out',
+                            clientId: order.clientId,
+                            endProductOrder: order,
+                            data: records
+                        };
+
+                        event.requiredParams = {}
+                        event.optionalParams = data;
+                        window.ajax(event) // 物料进仓
+                            .then(function (data) {
+                                getEndProductOut()
+                            })
+                    }
+
+                    window.saveProductOut = function () {
+                        var flag = $('#productOutEditModal .flag').val()
+                        var savePro = getProductOutEditModalData();
+
+                        if (savePro.product_model == "") {
+                            new $.zui.Messager("型号不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (savePro.product_batch == "") {
+                            new $.zui.Messager("批次不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (savePro.packing_quantity == "") {
+                            new $.zui.Messager("装箱数不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (savePro.packing_amount == "") {
+                            new $.zui.Messager("箱数不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (savePro.number == "") {
+                            new $.zui.Messager("数量不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (savePro.price == "") {
+                            new $.zui.Messager("单价不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        if (savePro.sum == "") {
+                            new $.zui.Messager("金额不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+
+
+                        if (flag == 'new') {
+                            var data = getProductOutEditModalData();
+                            tab3ProductOut.dataSource.array.push(data);
+
+                        } else {
+                            var index = $('#productOutEditModal .index').val()
+                            var dataForm = getProductOutEditModalData();
+                            var data = tab3ProductOut.dataSource.array[index]
+                            //console.log('data', data);
+                            //console.log('dataForm', dataForm);
+                            for (var x in dataForm) {
+                                data[x] = dataForm[x]
+                            }
+                        }
+                        renderProductOutPopUp(tab3ProductOut.dataSource)
+                        $('#productOutEditModal').modal('hide')
+                    }
+
+                    window.exportOrderChuku = function () {
+                        var form = window.getFormData('#productOutModal');
+                        var cols = []
+                        $('#productOutModal .input-group').each(function () {
+                            var $this = $(this)
+                            var name = $this.find('input').attr('name')
+                            var label = $this.find('span').text()
+                            var col = {name: name, label: label}
+                            cols.push(col)
+                        })
+                        orderToExportChuku[0].dataSource.cols = cols;
+                        orderToExportChuku[0].dataSource.array = [form];
+                        orderToExportChuku[1].dataSource = tab3ProductOut.dataSource;
+
+                        var event = events['rq2117']
+                        event.requiredParams = {data: orderToExportChuku}
+                        event.optionalParams = {}
+                        window.ajax(event)
+                            .then(function (data) {
+                                var truthBeTold = window.confirm("单击“确定”继续。 \n请允许弹出窗口以便下载文件！\n下载链接于3分钟后会自动删除！")
+                                if (truthBeTold) {
+                                    window.location.href = data.data;
+                                } else {
+
+                                }
+                            })
+                    }
+
+                    //绑定搜索按钮
+
+                    window.setTab3ClientAutoComplete() //客户自动完成组件
+                    window.setTab3ProcessAutoComplete()
+                    window.setTab3ModelAutoComplete()
+
+                    $('.tab3Submit').off('click');
+                    $('.tab3Submit').on('click', function () {
+
+                        var event = events['rq624']
+                        event.requiredParams = {}
+                        event.optionalParams = {}
+                        event.dateParams = {createdAt: {}}
+
+                        var tab3CreatedAtDateStart = $('.tab3CreatedAtDateStart').val();
+                        var tab3CreatedAtDateEnd = $('.tab3CreatedAtDateEnd').val();
+
+                        if (tab3CreatedAtDateStart) {
+                            event.dateParams.createdAt.start = tab3CreatedAtDateStart
+                        }
+                        if (tab3CreatedAtDateEnd) {
+                            event.dateParams.createdAt.end = tab3CreatedAtDateEnd
+                        }
+
+                        var clientId = $('.tab3Client').attr('clientId')
+                        if (clientId) {
+                            event.optionalParams.clientId = clientId;
+                        }
+                        var orderNo = $('.tab3OrderNo').val();
+                        if (orderNo) {
+                            event.optionalParams.orderNo = orderNo
+                        }
+                        var product_model = $('.tab3Model').val();
+                        if (product_model) {
+                            event.optionalParams.product_model = product_model
+                        }
+                        var product_batch = $('.tab3Batch').val();
+                        if (product_batch) {
+                            event.optionalParams.product_batch = product_batch
+                        }
+
+                        var tab3DateStart = $('.tab2DateStart').val();
+                        if (tab3DateStart) {
+                            event.optionalParams.dateStart = tab3DateStart
+                        }
+
+                        var tab3DateEnd = $('.tab3DateEnd').val();
+
+                        getEndProductOut()
+                    });
+
+                    //绑定日期组件
+                    $('.tab3 .datetimepicker').each(function () {
+                        $(this).datetimepicker({ //这里是bootstrap里面的模式，
+                            language: "zh-CN",
+                            weekStart: 1,
+                            todayBtn: 1,
+                            autoclose: 1,
+                            todayHighlight: 1,
+                            startView: 2,
+                            minView: 2,
+                            forceParse: 0,
+                            format: "yyyy-mm-dd"
+                        })
+                            .on('hide', function (ev) {
+                                $('.datetimepicker').blur();
+                            });
+
+                    });
+
+                }
+            },
+        ]
+        // 初始化标签页管理器
+        $('#tabsExample').tabs({tabs: tabs1});
+
+
+        // 新增客户
+        window.rq313 = function () {
+            //rq313 新增客户
+            events['rq313'].requiredParams = {factoryId: 1}
+            var client = {
+                name: '客户',
+                mobile: '13333333333',
+                address: '某某地区',
+                contact: '李小明',
+                contact_phone: '020-88888888',
+            }
+            events['rq313'].optionalParams = {client: client}
+            window.ajax(events['rq313'])
+                .then(function (data) {
+                    // 将数据处理成表格的格式 并 实例化表格
+                })
+        }
+
+
+        //订单新增-订单详情
+        window.tab1Edit = function () {
+            var orderEdit = getTab1Edit();
+            tab1EditSourceZ = orderEdit;
+            getTab1Edit11(orderEdit);
+
+
+        }///保存发请求(订单Tab1)
+
+        window.tab2Edit = function () {
+
+        }///保存发请求(客户Tab2)
+
+
+        // 订单新增
+        window.rq324 = function () {
+
+
+            var order = getTab2DataFromNewProductTop();
+
+            if (order.department == "") {
+                new $.zui.Messager("收货单位不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (order.adress == "") {
+                new $.zui.Messager("收货地址不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            // if (order.deleveredDate == "") {
+            //     new $.zui.Messager("交付日期不能为空", {
+            //         icon: 'info' // 定义消息图标
+            //     }).show();
+            //     return
+            // }
+            if (order.deleveredDate == '') {
+                delete order['deleveredDate']
+            }
+            if (order.orderNo == "") {
+                new $.zui.Messager("订单编号不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+
+            var event
+            if (order.id) {
+                event = events['rq328']
+            } else {
+                event = events['rq324'];
+            }
+            var orderProducts = tab2selectedOrder.dataSource.array;
+            event.requiredParams = {clientId: order.clientId}
+            event.optionalParams = {order: order, orderProducts: orderProducts}
+            window.ajax(event)
+                .then(function (result) {
+                    $('#myLgModal4').modal('hide')
+                    new $.zui.Messager("订单保存成功！", {
+                        icon: 'info' // 定义消息图标
+                    }).show();
+                    //查询订单
+                    events['rq322'].requiredParams = {factoryId: 1}
+                    events['rq322'].optionalParams = {}
+                    return window.ajax(events['rq322'])
+                })
+                .then(function (data) {
+                    // 将数据处理成表格的格式 并 实例化表格
+                    tab2DataSource.array = data.data.rows;
+                    renderTable2(tab2DataSource.array);
+                })
+
+
+        }
+        // 订单新增
+        window.tab1Rq324 = function () {
+
+
+            var order = getTab1DataFromNewProductTop();
+
+            if (order.department == "") {
+                new $.zui.Messager("收货单位不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (order.adress == "") {
+                new $.zui.Messager("收货地址不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            // if (order.deleveredDate == "") {
+            //     new $.zui.Messager("交付日期不能为空", {
+            //         icon: 'info' // 定义消息图标
+            //     }).show();
+            //     return
+            // }
+            if (order.orderNo == "") {
+                new $.zui.Messager("订单编号不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            var event
+            if (order.id) {
+                event = events['rq328']
+            } else {
+                event = events['rq324'];
+            }
+            var orderProducts = tab1selectedOrder.dataSource.array;
+            event.requiredParams = {clientId: order.clientId}
+            event.optionalParams = {order: order, orderProducts: orderProducts}
+            window.ajax(event)
+                .then(function (result) {
+                    $('#tab1MyLgModal4').modal('hide')
+                    new $.zui.Messager("订单保存成功！", {
+                        icon: 'info' // 定义消息图标
+                    }).show();
+                    //查询订单
+                    events['rq322'].requiredParams = {}
+                    events['rq322'].optionalParams = {}
+                    return window.ajax(events['rq322'])
+                })
+                .then(function (data) {
+                    tab1DataSource.array = data.data.rows;
+                    // 将数据处理成表格的格式 并 实例化表格
+                    renderTable1(tab1DataSource);
+                })
+
+
+        }
+
+        window.addOrder_details = function () {
+            // 追踪productId
+
+            var flag = $('#myLgModal5 .flag').val()
+            var AddorderProduct = getTab2Edit();
+
+            //订单详细检测
+            if (AddorderProduct.type == "") {
+                new $.zui.Messager("型号不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (AddorderProduct.model == "") {
+                new $.zui.Messager("名称不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (AddorderProduct.specifications == "") {
+                new $.zui.Messager("规格不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (AddorderProduct.packingnumber == "") {
+                new $.zui.Messager("装箱数不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (AddorderProduct.piece == "") {
+                new $.zui.Messager("件数不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (AddorderProduct.number == "") {
+                new $.zui.Messager("数量不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (AddorderProduct.unitprice == "") {
+                new $.zui.Messager("单价不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (AddorderProduct.price == "") {
+                new $.zui.Messager("金额不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (!window.autoValidateForm()) { //验证填写的表单数据正确性
+                return
+            }
+
+
+            if (flag == 'new') { //创建状态
+                tab2selectedOrder.dataSource.array.push(getTab2Edit())
+            } else { //编辑状态
+                var index = $('#myLgModal5 .index').val()
+                var dataForm = getTab2Edit();
+                var data = tab2selectedOrder.dataSource.array[index]
+                for (var x in dataForm) {
+                    try {
+                        data[x] = dataForm[x]
+                    } catch (e) {
+                    }
+                }
+            }
+            renderTable10(tab2selectedOrder.dataSource);
+
+            calTab2Receivable()
+
+            $('#myLgModal5').modal('hide')
+
+        }
+        window.addOrder_detailsTab1 = function () {
+            // 追踪productId
+            var flag = $('#tab1MyLgModal5 .flag').val()
+            var EditorderProduct = getTab1Edit();
+
+            //订单详细检测
+            if (EditorderProduct.type == "") {
+                new $.zui.Messager("型号不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (EditorderProduct.model == "") {
+                new $.zui.Messager("名称不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (EditorderProduct.specifications == "") {
+                new $.zui.Messager("规格不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (EditorderProduct.packingnumber == "") {
+                new $.zui.Messager("装箱数不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (EditorderProduct.piece == "") {
+                new $.zui.Messager("件数不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (EditorderProduct.number == "") {
+                new $.zui.Messager("数量不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (EditorderProduct.unitprice == "") {
+                new $.zui.Messager("单价不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+            if (EditorderProduct.price == "") {
+                new $.zui.Messager("金额不能为空", {
+                    icon: 'info' // 定义消息图标
+                }).show();
+                return
+            }
+
+            if (flag == 'new') { //创建状态
+                tab1selectedOrder.dataSource.array.push(getTab1Edit())
+
+            } else { //编辑状态
+                var index = $('#tab1MyLgModal5 .index').val()
+                var dataForm = getTab1Edit();
+                var data = tab1selectedOrder.dataSource.array[index]
+                for (var x in dataForm) {
+                    try {
+                        data[x] = dataForm[x]
+                    } catch (e) {
+                    }
+                }
+            }
+            renderTab1Table10(tab1selectedOrder.dataSource);
+            $('#tab1MyLgModal5').modal('hide')
+            calTab1Receivable()
+
+        }
+
+
+        window.deleteOrder_details = function () {
+            var flag = $('#myLgModal5 .flag').val()
+            if (flag == 'new') { //创建状态
+
+            } else { //编辑状态
+                var index = $('#myLgModal5 .index').val()
+                var dataForm = getTab2Edit();
+                if (dataForm.id) { //从远程服务器删除
+                    window.deleteModel(dataForm.id, "Order_Product", function () {
+                        new $.zui.Messager("远程删除成功！", {
+                            icon: 'info'
+                        }).show();
+                    })
+                }
+                tab2selectedOrder.dataSource.array.splice(index, 1)
+            }
+            renderTable10(tab2selectedOrder.dataSource);
+            $('#myLgModal5').modal('hide')
+
+        }
+    })
+
+
+</script>
+
+</html>
+

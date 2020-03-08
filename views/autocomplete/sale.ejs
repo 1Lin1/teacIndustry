@@ -1,0 +1,389 @@
+<script>
+    window.setTab1ClientAutoComplete = function () {
+        events['rq311'].requiredParams = {}
+        events['rq311'].optionalParams = {}
+        var clients;
+        window.ajax(events['rq311'])
+            .then(function (data) {
+                var source = []
+                var items = data.data.rows;
+                clients = data.data.rows;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $("#clientAutoComplete").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var client = clients[index]
+                        //console.log(client);
+                        $('.clientName').attr("clientId", client.id);
+                        $('.clientMobile').val(client.mobile)
+                        $('.clientContact').val(client.contact)
+                        $('.clientAddress').val(client.address)
+                    },
+                    notInSourceCallback: function () {
+                        $('.clientMobile').val('')
+                        $('.clientContact').val('')
+                        $('.clientAddress').val('')
+                    }
+                });
+
+                $('.removeInfo').click(function () {
+                    $('.clientName').val("")
+                    $('.clientName').removeAttr("clientId")
+                    $('.clientMobile').val("")
+                    $('.clientContact').val("")
+                    $('.clientAddress').val("")
+                })
+
+                $("#tab1MyLgModal4 .department").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var client = clients[index]
+                        $('#tab1MyLgModal4 .adress').val(client.address)
+                        $('#tab1MyLgModal4 .clientId').val(client.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('#tab1MyLgModal4 .adress').val('')
+                        $('#tab1MyLgModal4 .clientId').val('');
+                    }
+                });
+                // 将数据处理成表格的格式 并 实例化表格
+            })
+    }
+
+    window.setTab2ModelAutoComplete = function (data) {
+        var models = data;
+
+        window.ajax(events['rq2012'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                models = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab2Model").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = models[index]
+                        //console.log(model);
+                        $('.tab2Model').attr("productId", model.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab2Model').attr("productId", '');
+                    }
+                });
+            })
+    }
+
+    window.setTab2ClientAutoComplete = function () {
+        events['rq311'].requiredParams = {}
+        events['rq311'].optionalParams = {}
+        var clients;
+        window.ajax(events['rq311'])
+            .then(function (data) {
+                var source = []
+                var items = data.data.rows;
+                clients = data.data.rows;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                        address: item.address,
+                    }
+                    source.push(dis);
+                }
+                //console.log(source);
+                window.tab2ClicntsSource = source
+
+                $(".tab2ClientName").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var client = clients[index]
+                        //console.log(client);
+
+                        $('.tab2ClientName').val(client.name)
+                        $('.tab2ClientName').attr('clientId', client.id);
+                        $('.tab2ClientName').attr('clientName', client.name);
+
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab2ClientName').attr('clientId', '');
+                        $('.tab2ClientName').attr('clientName', '');
+                    }
+                });
+
+                $("#myLgModal4 #adddepartment").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var client = clients[index]
+                        $('#myLgModal4 #addadress').val(client.address)
+                        $('#myLgModal4 .clientId').val(client.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('#myLgModal4 #addadress').val('')
+                        $('#myLgModal4 .clientId').val('');
+                    }
+                });
+
+            })
+    }
+
+    window.setTab2CreatorAutoComplete = function () {
+        var customers
+        var source = []
+
+        window.ajax(events['rq2015'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                customers = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + '(' + item.nickName + ')' + " ",
+                        value: item.name,
+                        id: item.id,
+                        nickName:item.nickName,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab2Creator").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var customer = customers[index]
+                        //console.log(customer);
+                        $('.tab2Creator').attr("customerId", customer.id);
+                        $('.tab2Creator').attr("nickName", customer.nickName);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab2Creator').attr("customerId", '');
+                        $('.tab2Creator').attr("nickName", '');
+                    }
+                });
+            })
+
+
+    }
+
+    window.setTab2NewProductModelAutoComplete = function (data) {
+        // 追踪productId
+        var models = data;
+
+        var event = events['rq2114']
+        event.optionalParams = {}
+        event.requiredParams = {model: 'Product'}
+        window.ajax(event)
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                models = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".addtype").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = models[index]
+                        $('#myLgModal5 .productId').val(model.id)
+                        $('#myLgModal5 .model').val(model.model)
+                        $('#myLgModal5 .specifications').val(model.specifications)
+                        $('#myLgModal5 .packingnumber').val(model.packingnumber)
+                        $('#myLgModal5 .unitprice').val(model.unitprice)
+
+                        var productId = model.id;
+                        var clientId = $('#myLgModal4 .clientId').val()
+                        clientId = parseInt(clientId)
+                        if (clientId) {
+                            var event = events['rq255']
+                            event.optionalParams = {}
+                            event.requiredParams = {productId: productId, clientId: clientId}
+                            window.ajax(event)
+                                .then(function (data) {
+                                    if (data.data && data.data.price) {
+                                        $('#myLgModal5 .unitprice').val(data.data.price)
+                                    }
+                                })
+                        }
+
+                    },
+                    notInSourceCallback: function () {
+                        $('#myLgModal5 .productId').val('')
+                        $('#myLgModal5 .model').val('')
+                        $('#myLgModal5 .specifications').val('')
+                        $('#myLgModal5 .packingnumber').val('')
+                        $('#myLgModal5 .unitprice').val('')
+                    }
+                });
+            })
+    }
+
+    window.setTab3ClientAutoComplete = function () {
+        events['rq311'].requiredParams = {}
+        events['rq311'].optionalParams = {}
+        var clients;
+        window.ajax(events['rq311'])
+            .then(function (data) {
+                var source = []
+                var items = data.data.rows;
+                clients = data.data.rows;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+                //console.log(source);
+
+                $(".tab3Client").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var client = clients[index]
+                        //console.log(client);
+
+
+                        $('.tab3Client').attr('clientId', client.id);
+
+                    }
+                    ,
+                    notInSourceCallback: function () {
+                        $('.tab3Client').attr('clientId', '');
+                    }
+                });
+            })
+    }
+
+    window.setTab3ModelAutoComplete = function (data) {
+        var models = data;
+
+        window.ajax(events['rq2012'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                models = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab3Model").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = models[index]
+                        //console.log(model);
+                        $('.tab3Model').attr("productId", model.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab3Model').attr("productId", '');
+                    }
+                });
+            })
+    }
+
+    window.setTab3ProcessAutoComplete = function (data) {
+        var processes = data;
+
+        window.ajax(events['rq2013'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                processes = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.product_batch + " ",
+                        value: item.product_batch,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $(".tab3Batch").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var process = processes[index]
+                        //console.log(process);
+                        $('.tab3Batch').attr("processId", process.id);
+                    },
+                    notInSourceCallback: function () {
+                        $('.tab3Batch').attr("processId", '');
+                    }
+                });
+            })
+    }
+
+</script>   

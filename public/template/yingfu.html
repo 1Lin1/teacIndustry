@@ -1,0 +1,480 @@
+<style>
+    @media screen and (max-width: 440px) {
+
+
+        .exBtn {
+            width: 31% !important;
+
+        }
+
+
+    }
+
+    @media screen and (max-width: 380px) {
+
+        .exBtn2 {
+            width: 28% !important;
+
+        }
+
+
+    }
+
+
+</style>
+
+<div class="tab2">
+
+    <div class="container-fluid" style="margin:0;padding:0">
+
+
+        <div style="clear: both"></div>
+
+        <div style="margin:15px 10px 0px 10px ;font-size: 17px;color:#666;"><span
+                style="font-weight: bolder;color: red">筛选:</span></div>
+
+        <div class="input-group col-md-5" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">开始日期</span>
+            <input name="tab2CreateAtDateStart" type="text" class="form-control datetimepicker tab2CreateAtDateStart"
+                   placeholder="点击选择">
+            <span class="input-group-addon cursor" onclick="$('.tab2CreateAtDateStart').val('')">x</span>
+        </div>
+
+        <div class="input-group col-md-5" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">结束日期</span>
+            <input name="tab2CreateAtDateEnd" type="text" class="form-control datetimepicker tab2CreateAtDateEnd"
+                   placeholder="点击选择">
+            <span class="input-group-addon cursor" onclick="$('.tab2CreateAtDateEnd').val('')">x</span>
+        </div>
+        <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">供应商名称</span>
+            <input type="text" class="form-control nameLetter autocomplete supplierName" id="supplierAutoCompletef"
+                   placeholder="点击获取下拉选项">
+            <span class="input-group-addon removeInfo cursor" onclick="$('#supplierAutoCompletef').removeAttr('supplierId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">类型</span>
+            <div>
+                <select class="form-control" id="orderTypeId" >
+                    <option value="0">全部</option>
+                    <option value="1">成品入库</option>
+                    <option value="2">物料入库</option>
+                    <option value="3">工单外包</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="clear: both"></div>
+
+
+        <div style="clear: both"></div>
+
+        <button onclick="window.searchYingFu()" class="btn btn-primary col-md-1 col-sm-2 exBtn"
+                style="float:left;margin:0 2px;margin-top:10px">搜索
+        </button>
+        <button onclick="window.doExport('yingfu','ftab2','#yingfu1')" class="btn btn-success col-md-1 col-sm-2 exBtn"
+                style="float:left;margin:0 2px;margin-top:10px">导出
+        </button>
+
+        <button class="btn  btn-warning col-md-1 col-sm-2 exBtn chuZhang"
+                style="float:left;margin:0 2px;margin-top:10px"
+                id="chuZhang1">出账
+        </button>
+
+    </div>
+
+
+    <div class="container" style="margin:0;padding:0">
+        <div style="margin:10px 10px 0px 10px ;font-size: 17px;color:#666;"><span
+                style="font-weight: bolder;color: red">全部单据:</span>
+        </div>
+        <div id='yingfu1' class="col-md-12 col-xs-12" style="margin:10px 10px 10px 2px"></div>
+    </div>
+    <br>
+
+
+    <!-- 对话框——3——HTML -->
+    <div class="modal fade modal-moveable" id="myModal3">
+        <div class="modal-dialog  modal-moveable modal-lg">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h4 class="modal-title">应付明细</h4>
+            </div>
+            <div class="modal-content">
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">录入日期</span>
+                    <input name="createdAt" type="text" class="form-control createdAt" id="luru_data">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">单据编号</span>
+                    <input name="sn" type="text" class="form-control sn" id="order_id">
+                </div>
+                <div style="clear: both"></div>
+                <div style="margin:15px 10px 0px 10px ;font-size: 17px;color:#666;"><span
+                        style="font-weight: bolder;color: red">供应商:</span></div>
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">&nbsp;&nbsp;名称&nbsp;&nbsp;</span>
+                    <input name="supplierName" type="text" class="form-control supplierName" id="supplierName">
+                </div>
+
+                <div style="clear: both"></div>
+                <!--            <button class="btn btn-danger col-md-1 col-sm-2 btn2"-->
+                <!--                    style="width:100px;margin:10px 10px 2px 10px;float: left;" id="add_btn">添加+-->
+                <!--            </button>-->
+
+                <div style="clear: both"></div>
+
+
+                <div id='table-tianjia' class="col-md-10" style="margin:10px 10px 10px 2px"></div>
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;">
+                    <span class="input-group-addon">金额合计</span>
+                    <input name="sum" type="text" class="form-control sum" placeholder="人民币">
+                </div>
+
+
+                <div style="clear: both"></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;">
+                    <span class="input-group-addon">签收日期</span>
+                    <input name="receiverDate" type="text" class="form-control receiverDate datetimepicker" placeholder="  年  月  日"
+                           id="receive_date">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;">
+                    <span class="input-group-addon">录入人</span>
+                    <input name="recorder" type="text" class="form-control recorder" id="receive_record">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;">
+                    <span class="input-group-addon">&nbsp;&nbsp;备注&nbsp;&nbsp;</span>
+                    <input name="note" type="text" class="form-control note" id="receive_note">
+                </div>
+                <div style="clear: both"></div>
+            </div>
+            <div class="modal-footer" style="border-top:none">
+                <div style="clear: both"></div>
+                <!--            <button class="btn btn-primary col-md-1 col-sm-2 btn2 exBtn2"-->
+                <!--                    style="float:right;width:85px;margin:10px 10px 10px 2px">保存单据-->
+                <!--            </button>-->
+                <!--            <button class="btn btn-primary col-md-1 col-sm-2 btn2 exBtn2"-->
+                <!--                    style="float:right;width:85px;margin:10px 10px 10px 2px">删除单据-->
+                <!--            </button>-->
+                <button class="btn  col-md-1 col-sm-2 btn2 exBtn2"
+                        style="float:right;width:100px;margin:10px 10px 10px 12px" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 对话框——2——HTML -->
+    <div class="modal fade modal-moveable" id="myChuzhangModal3">
+        <div class="modal-dialog  modal-moveable modal-lg" style="min-width: 320px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h4 class="modal-title">出账</h4>
+            </div>
+            <div class="modal-content">
+                <!--                <div class="input-group col-md-2 col-xs-11" style="margin:10px 10px 5px 10px">-->
+                <!--                    <span class="input-group-addon">客户名称</span>-->
+                <!--                    <input type="text" class="form-control">-->
+                <!--                </div>-->
+                <div class="container" style="margin:0;padding:0">
+                    <div class="row">
+                        <!--                        <div class="col-md-2 col-xs-11 blue"-->
+                        <!--                             style="margin:10px 3px 10px 20px;background-color: lightblue;height: 400px;overflow-y:scroll;float: left;">-->
+                        <!--                            <ul class="tree tree-lines" data-ride="tree" style="color:black" id="tree2">-->
+                        <!--                                <li>-->
+                        <!--                                    <span><input type="checkbox">2019年（<span></span>）</span>-->
+                        <!--                                    <ul>-->
+                        <!--                                        <li><span><input type="checkbox">1月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+
+                        <!--                                        <li><span><input type="checkbox">2月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+                        <!--                                        <li><span><input type="checkbox">3月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+
+                        <!--                                        <li><span><input type="checkbox">4月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+
+                        <!--                                    </ul>-->
+                        <!--                                </li>-->
+
+                        <!--                                <li>-->
+                        <!--                                    <span><input type="checkbox">2018年（<span></span>）</span>-->
+                        <!--                                    <ul>-->
+                        <!--                                        <li><span><input type="checkbox">1月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+
+                        <!--                                        <li><span><input type="checkbox">2月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+                        <!--                                        <li><span><input type="checkbox">3月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+
+                        <!--                                        <li><span><input type="checkbox">4月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+
+                        <!--                                    </ul>-->
+                        <!--                                </li>-->
+
+                        <!--                                <li>-->
+                        <!--                                    <span><input type="checkbox">2017年（<span></span>）</span>-->
+                        <!--                                    <ul>-->
+                        <!--                                        <li><span><input type="checkbox">1月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+
+                        <!--                                        <li><span><input type="checkbox">2月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+                        <!--                                        <li><span><input type="checkbox">3月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+
+                        <!--                                        <li><span><input type="checkbox">4月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+
+                        <!--                                    </ul>-->
+                        <!--                                </li>-->
+
+                        <!--                                <li>-->
+                        <!--                                    <span><input type="checkbox">2016年（<span></span>）</span>-->
+                        <!--                                    <ul>-->
+                        <!--                                        <li><span><input type="checkbox">1月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+
+                        <!--                                        <li><span><input type="checkbox">2月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+                        <!--                                        <li><span><input type="checkbox">3月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+
+                        <!--                                        <li><span><input type="checkbox">4月（<span></span>）</span>-->
+                        <!--                                            <ul>-->
+                        <!--                                                <li><input type="checkbox">1日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">2日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">3日（<span></span>）</li>-->
+                        <!--                                                <li><input type="checkbox">4日（<span></span>）</li>-->
+                        <!--                                            </ul>-->
+                        <!--                                        </li>-->
+
+                        <!--                                    </ul>-->
+                        <!--                                </li>-->
+                        <!--                            </ul>-->
+                        <!--                        </div>-->
+                        <div style="float: left;" class="col-md-12 col-xs-12">
+                            <div id='table-tan2' style="margin:10px 10px 10px 10px"></div>
+                        </div>
+                        <div style="clear: both"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top:none">
+                <div style="clear: both"></div>
+                <!--                <button class="btn btn-primary col-md-1 col-sm-2 btn2"-->
+                <!--                        style="float:right;width:85px;margin:10px 10px 10px 2px">确认-->
+                <!--                </button>-->
+                <button class="btn  col-md-1 col-sm-2 btn2"
+                        style="float:right;width:100px;margin:10px 10px 10px 12px" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!--对话框3——添加东西-->
+    <div class="modal modal-moveable fade" id="add_Modal" style="height: 95%;overflow: scroll">
+        <div class="modal-dialog  modal-moveable modal-lg">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h4 class="modal-title">详情</h4>
+            </div>
+            <div class="modal-content">
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">名称</span>
+                    <input type="text" class="form-control model" id="add1_name">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">供应商/品牌</span>
+                    <input type="text" class="form-control" id="add1_gonyingshang">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">单位</span>
+                    <input type="text" class="form-control unit" id="add1_danwei">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">数量</span>
+                    <input type="text" class="form-control number" id="add1_number">
+                </div>
+                <div style="clear: both"></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">单价</span>
+                    <input type="text" class="form-control price" id="add1_price">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">金额</span>
+                    <input type="text" class="form-control total" id="add1_amount">
+                </div>
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">备注</span>
+                    <input type="text" class="form-control desc" id="add1_note">
+                </div>
+
+            </div>
+            <div class="modal-footer" style="border-top:none">
+                <div style="clear: both"></div>
+                <button id="add_baocun" class="btn btn-primary col-md-1 col-sm-2 btn2 exBtn2"
+                        style="float:right;width:85px;margin:10px 10px 10px 2px">保存
+                </button>
+                <button class="btn  col-md-1 col-sm-2 btn2 exBtn2"
+                        style="float:right;width:100px;margin:10px 10px 10px 12px" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!--对话框4——修改表格里的数据-->
+    <div class="modal modal-moveable fade" id="xiugai_Modal" style="height: 95%;overflow: scroll">
+        <div class="modal-dialog  modal-moveable modal-lg">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h4 class="modal-title">详情</h4>
+            </div>
+            <div class="modal-content">
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">名称</span>
+                    <input type="text" class="form-control model" id="add2_name">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">供应商/品牌</span>
+                    <input type="text" class="form-control" id="add2_gonyingshang">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">单位</span>
+                    <input type="text" class="form-control unit" id="add2_danwei">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">数量</span>
+                    <input type="text" class="form-control number" id="add2_number">
+                </div>
+                <div style="clear: both"></div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">单价</span>
+                    <input type="text" class="form-control price" id="add2_price">
+                </div>
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">金额</span>
+                    <input type="text" class="form-control total" id="add2_amount">
+                </div>
+
+                <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                    <span class="input-group-addon">备注</span>
+                    <input type="text" class="form-control desc" id="add2_note">
+                </div>
+
+            </div>
+            <div class="modal-footer" style="border-top:none">
+                <div style="clear: both"></div>
+                <button id="xiugai_baocun" class="btn btn-primary col-md-1 col-sm-2 btn2 exBtn2"
+                        style="float:right;width:85px;margin:10px 10px 10px 2px">保存
+                </button>
+                <button class="btn  col-md-1 col-sm-2 btn2 exBtn2"
+                        style="float:right;width:100px;margin:10px 10px 10px 12px" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

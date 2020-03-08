@@ -1,0 +1,319 @@
+<div class="tab2">
+    <!--//搜索框ID-->
+    <div class="container" style="margin:0;padding:0">
+
+
+        <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">开始日期</span>
+            <input type="text" class="form-control nameLetter datetimepicker tab2CreatedAtDateStart"
+                   placeholder="点击选择">
+            <span class="input-group-addon removeInfo cursor" onclick="$('.tab2CreatedAtDateStart').val('')">x</span>
+        </div>
+        <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">结束日期</span>
+            <input type="text" class="form-control nameLetter datetimepicker tab2CreatedAtDateEnd"
+                   placeholder="点击选择">
+            <span class="input-group-addon removeInfo cursor" onclick="$('.tab2CreatedAtDateEnd').val('')">x</span>
+        </div>
+
+        <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon ">产品型号</span>
+            <input class="form-control tab2Model" type="text" placeholder="点击获取下拉选项">
+            <span class="input-group-addon cursor" onclick="$('.tab2Model').removeAttr('productId').val('')">x</span>
+        </div>
+
+        <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon ">产品批次</span>
+            <input class="form-control tab2OBatchNo" type="text" placeholder="点击获取下拉选项">
+            <span class="input-group-addon cursor" onclick="$('.tab2OBatchNo').removeAttr('processId').val('')">x</span>
+
+        </div>
+
+        <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon ">产品工序</span>
+            <input class="form-control tab2ProcedureName" type="text" placeholder="点击获取下拉选项">
+            <span class="input-group-addon cursor"
+                  onclick="$('.tab2ProcedureName').removeAttr('procedureName').val('')">x</span>
+
+        </div>
+        <input class="showAllProcess" type="hidden" value="" name="showAllProcess">
+
+        <div style="clear: both"></div>
+
+        <form class="form-inline">
+            <div class="col-md-3 " style="margin:10px 0;">
+                <button type="button" class="btn btn-primary tab2Submit">点击搜索</button>
+            </div>
+            <div class="col-md-3 " style="margin:10px 0;">
+                <button type="button" class="btn btn-warning" onclick="window.myLgModalOpen()">新增进度</button>
+            </div>
+
+        </form>
+
+
+        <div style="clear: both"></div>
+
+    </div>
+
+    <!--产品生产双击进度弹窗-->
+    <div>
+        <div class="modal fade modal-moveable" id="myModal2">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                                class="sr-only">关闭</span></button>
+                        产品生产进度
+                    </div>
+                    <div class="modal-body">
+                        <div style="text-align: center;margin-top:10px;width: 100%">
+
+                            <div class="input-group col-md-12" style="margin-top: 10px">
+                                <span class="input-group-addon ">产品型号</span>
+                                <input id="prd_model_Tab2_tb2_click" name="product_model"
+                                       class="form-control product_model" type="text" readonly>
+                            </div>
+
+                            <div class="input-group col-md-12" style="margin-top: 10px">
+                                <span class="input-group-addon ">产品批次</span>
+                                <input id="prd_batch_Tab2_tb2_click" name="product_batch"
+                                       class="form-control product_batch" type="text" readonly>
+                            </div>
+
+                            <input id="prd_id_Tab2_tb2_click" name="id" class="form-control id" type="hidden">
+                            <!--                            <input id="prd_productId_Tab2_tb2_click"  name="productId" class="form-control productId" type="hidden" >-->
+
+                        </div>
+
+
+                        <!--                    <div style="margin-top: 20px;" class="list-group">-->
+                        <!--                        <a href="#" class="list-group-item">-->
+                        <!--                            <h4 class="list-group-item-heading">产品型号：</h4>-->
+                        <!--                            <p class="list-group-item-text text-muted">A111</p>-->
+                        <!--                        </a>-->
+                        <!--                        <a href="#" class="list-group-item ">-->
+                        <!--                            <h4 class="list-group-item-heading">产品批次：</h4>-->
+                        <!--                            <p class="list-group-item-text text-muted">asa13</p>-->
+                        <!--                        </a>-->
+
+                        <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+                        <!--                    <div style="text-align: center;margin-top:10px;width: 100%">-->
+
+                        <!--                        <button style="margin: auto;" class="btn btn-success btn-block " type="button"><i-->
+                        <!--                                class="icon icon-tags"></i>生产进度-->
+                        <!--                        </button>-->
+                        <!--                    </div>-->
+
+                        <button class="btn  btn-warning " type="button"
+                                onclick="window.createProduction_Process_ProcedureForm()" style="margin-top: 20px">添加工序
+                        </button>
+                        <div>
+
+                            <div style="margin-top: 15px;" id="datagrid_clickProcess_Tap2_tb2_1" class="datagrid">
+                                <div class="datagrid-container">
+
+                                </div>
+
+                            </div>
+
+                            <div class="orderDrag">
+                                <div style="margin-top: 20px">
+                                    工序排序
+                                </div>
+                                <div class="list-group" id="sortableList">
+                                    <div class="list-group-item"><i class="icon-move"></i> 猫咪</div>
+                                    <div class="list-group-item"><i class="icon-move"></i> 小鸡</div>
+                                    <div class="list-group-item"><i class="icon-move"></i> 大黄</div>
+                                    <div class="list-group-item"><i class="icon-move"></i> 鹅鹅鹅</div>
+                                    <div class="list-group-item"><i class="icon-move"></i> 猪王</div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button id="rq421" onclick="window.rq421()" type="button" class="btn btn-primary">封存进度
+                            </button>
+                            <button onclick="window.saveProductionProcedure()" type="button" class="btn btn-danger">保存
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--新增流程弹窗-->
+    <div class="modal fade modal-moveable" id="Production_Process_ProcedureModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">工序</h4></div>
+                <div class="modal-body">
+                    <!--表单-->
+                    <div class="form" id="Production_Process_ProcedureForm">
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">工序名称</span>
+                            <input id="nameformId" type="text" name="name" class="form-control name" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#nameformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">工序单价</span>
+                            <input id="priceformId" type="text" name="price" class="form-control price" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#priceformId').val('')">x</span>
+                        </div>
+                        <input name="id" class="id" type="hidden">
+                        <input name="productionProcessId" class="productionProcessId" type="hidden">
+                        <input name="flag" class="flag" type="hidden">
+                        <input name="index" class="index" type="hidden">
+                    </div>
+
+                </div>
+                <div style="clear: both"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button onclick="window.deleteProduction_Process_ProcedureForm()" type="button"
+                            class="btn btn-danger" data-dismiss="modal">删除
+                    </button>
+                    <button onclick="window.saveProduction_Process_ProcedureForm()" type="button"
+                            class="btn btn-primary" data-dismiss="modal">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--新增进度弹窗部分-->
+    <div class="modal fade modal-moveable" id="myLgModal">
+        <!--   追踪productId     -->
+        <div class="modal-dialog  modal-moveable modal-lg" style="min-width: 320px">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div style="text-align: center;margin-top:10px;width: 100%">
+
+                        <button style="margin: auto;" class="btn btn-success btn-block " type="button"><i
+                                class="icon icon-tags"></i>新增进度
+                        </button>
+                    </div>
+
+
+                    <div class="input-group" style="margin-top: 10px;width: 100%">
+                        <button class="btn btn-success" type="button" style="margin-bottom: 10px">产品型号：</button>
+                        <div class="input-control has-icon-right">
+                            <input id="prdCode_Tab2_1" class="form-control tab2PopupModel" placeholder="产品型号">
+                            <label onclick="$('.tab2PopupModel').removeAttr('productId').val('');$('.procedures').html('')"
+                                   for="prdCode_Tab2_1" class="input-control-icon-right"><i
+                                    class="icon icon-times"></i></label>
+
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-top: 10px;width: 100%">
+                        <button class="btn btn-success" type="button" style="margin-bottom: 10px">产品批次：</button>
+                        <button class="btn btn-warning" type="button" style="margin-bottom: 10px;float: right"
+                                onclick="$('#prdPC_Tab2_1').val(window.generateUUID())">点击生成
+                        </button>
+                        <div class="input-control  has-icon-right">
+                            <input id="prdPC_Tab2_1" type="email" class="form-control" placeholder="产品批次">
+
+                        </div>
+                    </div>
+
+                    <!--                <div class="input-group" style="margin-top: 10px;width: 100%">-->
+                    <!--                    <button class="btn btn-success" type="button" style="margin-bottom: 10px">产品工序：</button>-->
+                    <!--                    <select class="form-control">-->
+                    <!--                        <option value="eat">车间A</option>-->
+                    <!--                        <option value="sleep">车间B</option>-->
+                    <!--                        <option value="code">车间C</option>-->
+                    <!--                    </select>-->
+                    <div id="input-group-WXplus" style="margin-top: 10px;width: 100%">
+                        <button class="btn btn-success" type="button" style="margin-bottom: 10px;margin-right: 15px">
+                            产品工序：
+                        </button>
+                        <div class="procedures"></div>
+                        <!--                    <button class="btn btn-success" type="button" style="margin-bottom: 10px" id="prdWxPlus">增加工序-->
+                        <!--                    </button>-->
+                        <div class="input-control has-label-left has-icon-right">
+                            <!--                        <input id="proInputTab2_1" type="text" class="procedureInputTab2_1 form-control"-->
+                            <!--                               placeholder="工序名称">-->
+                            <!--                        <label for="proInputTab2_1" class="input-control-label-left">工序:</label>-->
+                            <!--                        <label for="proInputTab2_1" class="input-control-icon-right"><i-->
+                            <!--                                class="icon icon-check"></i></label>-->
+                        </div>
+                    </div>
+
+
+                    <input type="hidden" name="productId" class="productId">
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="createProcess">
+                            保存
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--产品生产进度-->
+    <div id="processTables">
+        <div id="datagridCheckableExample_process" class="datagrid">
+            <div class="datagrid-container">
+
+            </div>
+
+        </div>
+
+
+        <div style="text-align:center;width:100%;margin: 20px  0px">
+
+
+        </div>
+
+        <div class="col-md-3 " style="margin:10px 0;" id="getMoreProcess">
+            <button type="button" class="btn btn-warning"
+                    onclick="$('.showAllProcess').val(1);$('.tab2Submit').click();$('#getMoreProcess').remove()">加载更多
+            </button>
+        </div>
+
+    </div>
+
+
+    <!--双击显示工人弹窗-->
+    <div>
+        <div class="modal fade modal-moveable" id="workManNumModal">
+            <div class="modal-dialog" style="min-width: 320px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                                class="sr-only">关闭</span></button>
+                        具体详情
+                    </div>
+                    <div class="modal-body">
+                        <div style="text-align: center;margin-top:10px;">
+
+
+                        </div>
+
+                        <div id="clickShowPeopleContribution" class="datagrid">
+                            <div class="datagrid-container">
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

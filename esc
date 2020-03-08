@@ -1,0 +1,16 @@
+[33m5eef8ae[m[33m ([m[1;36mHEAD -> [m[1;32mlh[m[33m, [m[1;31morigin/lh[m[33m)[m HEAD@{0}: commit: 'merge-update'
+[33mdf9d9ae[m HEAD@{1}: pull origin brave: Merge made by the 'recursive' strategy.
+[33m6c8d8e6[m HEAD@{2}: pull origin lh: Fast-forward
+[33ma4f3270[m HEAD@{3}: commit: '请求端口正常-生产模块page3'
+[33me556e70[m HEAD@{4}: pull origin brave: Merge made by the 'recursive' strategy.
+[33m8e33de1[m HEAD@{5}: pull origin lh: Fast-forward
+[33md4018ba[m HEAD@{6}: commit: 'add-input'
+[33mc18fada[m HEAD@{7}: pull origin lh: Merge made by the 'recursive' strategy.
+[33maebcce6[m HEAD@{8}: commit: 'add'
+[33m6063c28[m HEAD@{9}: pull origin lh: Fast-forward
+[33mb12a167[m HEAD@{10}: commit: 'merge-lh'
+[33m540e860[m HEAD@{11}: commit: '生产模块整合搜索id部分，手机适配表格待实现'
+[33m689e51a[m HEAD@{12}: pull origin lh: Merge made by the 'recursive' strategy.
+[33mbbc37e8[m HEAD@{13}: commit: 'merge'
+[33mfb9c07b[m HEAD@{14}: checkout: moving from dev to lh
+[33m21d0da5[m[33m ([m[1;31morigin/dev[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mdev[m[33m)[m HEAD@{15}: clone: from ssh://git@server.5ftech.com:2224/brave/industry.git

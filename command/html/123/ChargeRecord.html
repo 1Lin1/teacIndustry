@@ -1,0 +1,295 @@
+<div>
+<!--搜索表单-->
+<div class="searchForm" id="ChargeRecordsearchForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">支付out_trade_no</span> 
+<input id="out_trade_nosearchFormId" type="text" name="out_trade_no" class="form-control out_trade_no" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#out_trade_nosearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">时长</span> 
+<input id="timesearchFormId" type="text" name="time" class="form-control time" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#timesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">金额</span> 
+<input id="pricesearchFormId" type="text" name="price" class="form-control price" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#pricesearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">是否已支付</span> 
+<input id="isPaysearchFormId" type="text" name="isPay" class="form-control isPay" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#isPaysearchFormId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">充值用户名</span> 
+<input id="userNamesearchFormId" type="text" name="userName" class="form-control userName" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#userNamesearchFormId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--功能按钮-->
+<div id="ChargeRecordfunctions" class="functions"><button class="btn  btn-warning "type="button"onclick="window.createChargeRecordForm()">新增</button><button class="btn  btn-danger"type="button"onclick="window.batchDeleteChargeRecord()">删除</button><button class="btn  btn-primary"type="button"onclick="window.searchChargeRecord()">搜索</button></div>
+<!--表单-->
+<div class="form" id="ChargeRecordForm"><div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">支付out_trade_no</span> 
+<input id="out_trade_noformId" type="text" name="out_trade_no" class="form-control out_trade_no" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#out_trade_noformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">时长</span> 
+<input id="timeformId" type="text" name="time" class="form-control time" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#timeformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">金额</span> 
+<input id="priceformId" type="text" name="price" class="form-control price" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#priceformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">是否已支付</span> 
+<input id="isPayformId" type="text" name="isPay" class="form-control isPay" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#isPayformId').val('')">x</span> 
+</div> 
+<div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left"> 
+<span class="input-group-addon">充值用户名</span> 
+<input id="userNameformId" type="text" name="userName" class="form-control userName" placeholder=""> 
+<span class="input-group-addon cursor" onclick="$('#userNameformId').val('')">x</span> 
+</div> 
+<input name="id" class="id" type="hidden">
+<input name="flag" class="flag" type="hidden">
+<input name="index" class="index" type="hidden">
+</div>
+<!--弹窗-->
+<div class="modal fade modal-moveable"id="ChargeRecordModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button"class="close"data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button><h4 class="modal-title">ChargeRecord</h4></div><div class="modal-body"></div><div style="clear: both"></div> <div class="modal-footer"><button type="button"class="btn btn-default"data-dismiss="modal">关闭</button><button onclick="window.deleteChargeRecordForm()"type="button"class="btn btn-danger"data-dismiss="modal">删除</button><button onclick="window.saveChargeRecordForm()"type="button"class="btn btn-primary"data-dismiss="modal">保存</button></div></div></div></div>
+
+<!--列表-->
+<div id="table_ChargeRecord"></div>
+</div>
+<script>
+
+ var ChargeRecordDataSource={
+  "form": {
+    "out_trade_no": "",
+    "time": "",
+    "price": "",
+    "isPay": "",
+    "userName": ""
+  },
+  "list": {
+    "cols": [
+      {
+        "name": "out_trade_no",
+        "label": "支付out_trade_no",
+        "width": 100
+      },
+      {
+        "name": "time",
+        "label": "时长",
+        "width": 100
+      },
+      {
+        "name": "price",
+        "label": "金额",
+        "width": 100
+      },
+      {
+        "name": "isPay",
+        "label": "是否已支付",
+        "width": 100
+      },
+      {
+        "name": "userName",
+        "label": "充值用户名",
+        "width": 100
+      },
+      {
+        "name": "createdAt",
+        "label": "创建日期",
+        "width": 150
+      }
+    ],
+    "array": []
+  }
+}
+
+ //渲染列表
+ window.renderChargeRecordTable=function (tableId, dataSource) {
+        $(tableId).html('').append('<div class="table"></div>')
+
+        $(tableId + ' .table').datagrid({
+            dataSource: dataSource,
+            checkable: true,
+            checkByClickRow: false,
+            partialRendering: false,
+            // height: '300',
+            onRender: function () {
+                $(tableId + ' .datagrid-cell').off('click');
+                $(tableId + ' .datagrid-cell').on('click', function () {
+                    var row = $(this).attr('data-row')
+                    var col = $(this).attr('data-col')
+                    if (row == 0 || col == 0) return
+                    var index = row - 1
+                    var formId = 'ChargeRecordForm'
+                    var modalId = 'ChargeRecordModal'
+                    $('#' + modalId).modal('show', 'fit');
+                    var formData = ChargeRecordDataSource.list.array[index];
+                    window.renderForm('#' + formId, formData)
+                    $('#' + formId + ' .flag').val('edit')
+                    $('#' + formId + ' .index').val(index)
+                })
+            }
+        })
+    }
+
+ //创建
+ window.createChargeRecordForm=function () { //调起创建弹窗
+        var formId = 'ChargeRecordForm'
+        var modalId = 'ChargeRecordModal'
+        $('#' + modalId).modal('show')
+        var data = {"id":"","out_trade_no":"","time":"","price":"","isPay":"","userName":""};
+        window.renderForm('#' + formId, data);
+        $('#' + formId + ' .flag').val('new')
+        $('#' + formId + ' .id').val('')
+    }
+
+ //保存
+ window.saveChargeRecordForm=function () { //创建或保存
+        var formId = 'ChargeRecordForm'
+        var flag = $('#' + formId + ' .flag').val()
+        var formData = window.getFormData('#' + formId)
+        if (flag == 'new') { //创建状态
+            ChargeRecordDataSource.list.array.push(formData)
+            var event = events['rq2111']
+            event.requiredParams = {model: 'ChargeRecord'}
+            event.optionalParams = {data: formData}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("创建成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'ChargeRecord'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                ChargeRecordDataSource.list.array = result.data;
+                                window.renderChargeRecordTable('#table_ChargeRecord', ChargeRecordDataSource.list)
+                            })
+                    }, 1000)
+                })
+        } else {
+            var index = $('#' + formId + ' .index').val()
+            var data = ChargeRecordDataSource.list.array[index]
+            for (var x in formData) {
+                try {
+                    data[x] = formData[x]
+                } catch (e) {
+                }
+            }
+            var event = events['rq2112']
+            event.requiredParams = {model: 'ChargeRecord'}
+            event.optionalParams = {data: data}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("保存成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'ChargeRecord'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                ChargeRecordDataSource.list.array = result.data;
+                                window.renderChargeRecordTable('#table_ChargeRecord', ChargeRecordDataSource.list)
+                            })
+                    }, 1000)
+                })
+        }
+        var modalId = 'ChargeRecordModal'
+        $('#' + modalId).modal('hide')
+    }
+
+ //删除
+ window.deleteChargeRecordForm=function () { //删除
+        var formId = 'ChargeRecordForm'
+        var index = $(formId + ' .index').val()
+        var data = ChargeRecordDataSource.list.array[index]
+
+        if (index) { //调用接口从服务器删除
+            var modelName = 'ChargeRecord';
+            var id = data.id;
+            if (!id) {
+                return
+            } else {
+                var event = events['rq2115']
+                event.requiredParams = {model: modelName}
+                event.optionalParams = {items: [{id: id}]}
+                window.ajax(event)
+                    .then(function () {
+                        setTimeout(function () {
+                            new $.zui.Messager("删除成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            $('.modal').modal('hide');
+
+                        }, 1000)
+                    })
+            }
+            ChargeRecordDataSource.list.array.splice(index, 1);
+            window.renderChargeRecordTable('#table_ChargeRecord', ChargeRecordDataSource.list)
+        }
+
+        var modalId = 'ChargeRecordModal'
+        $('#' + modalId).modal('hide');
+    }
+
+ //批量删除
+ window.batchDeleteChargeRecord=function () { //批量删除
+        var formId = 'ChargeRecordForm'
+        var index = $(formId + ' .index').val()
+        var data = ChargeRecordDataSource.list.array[index]
+
+        var tableId = 'table_ChargeRecord'
+        var items = window.getSelectedTableItems('#' + tableId + ' .table')
+        if (items.length == 0) {
+            new $.zui.Messager("请至少选择一个记录", {
+                icon: 'info' // 定义消息图标
+            }).show();
+            return
+        }
+        var batchDeleteEvent = events['rq2115'] //通用删除接口
+        batchDeleteEvent.requiredParams = {model: 'ChargeRecord'}
+        batchDeleteEvent.optionalParams = {items: items}
+        window.ajax(batchDeleteEvent)
+            .then(function () {
+                var getEvent = events['rq2114'] //通用查找接口
+                getEvent.requiredParams = {model: 'ChargeRecord'}
+                getEvent.optionalParams = {items: items}
+                return window.ajax(getEvent)
+            })
+            .then(function (result) {
+                ChargeRecordDataSource.list.array = result.data;
+                window.renderChargeRecordTable('#table_ChargeRecord', ChargeRecordDataSource.list)
+            })
+    }
+
+ //搜索
+ window.searchChargeRecord=function (limit) { //搜索
+        var formId = 'ChargeRecordsearchForm'
+        var formData = limit ? window.getFormData('#' + formId) : {}
+
+        var searchEvent = events['rq2114'] //通用查询接口
+        searchEvent.requiredParams = {model: 'ChargeRecord'}
+        searchEvent.optionalParams = formData
+        window.ajax(searchEvent)
+            .then(function (result) {
+                ChargeRecordDataSource.list.array = result.data;
+                window.renderChargeRecordTable('#table_ChargeRecord', ChargeRecordDataSource.list)
+            })
+    }
+
+</script>

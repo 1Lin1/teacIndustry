@@ -1,0 +1,711 @@
+<div class="tab3">
+    <!--弹窗-->
+    <div class="modal fade modal-moveable" id="Work_OrderModal">
+        <div class="modal-dialog" style="width: 90%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">工单批量录入</h4></div>
+                <div class="modal-body">
+
+                    <div class="row col-md-5">
+                        <div class="input-group" style="margin-top: 10px;">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">日期</button>
+                            </span>
+                            <input name="date" class="form-control datetimepicker  date"
+                                   placeholder="日期">
+                        </div>
+
+                        <div class="input-group" style="margin-top: 10px;">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">型号</button>
+                            </span>
+                            <input name="model" class="form-control newPrd_model model"
+                                   placeholder="产品型号">
+                            <label onclick="$('#Work_OrderModal .newPrd_model').val('');$('#Work_OrderModal .newPrd_batch').val('');$('#Work_OrderModal .newPrd_procedure').val('');"
+                                   for="newPrd_model" class="input-control-icon-right"><i
+                                    class="icon icon-times"></i></label>
+                        </div>
+
+                        <div class="input-group" style="margin-top: 10px;">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">批次</button>
+                            </span>
+                            <select name="batch" class="form-control newPrd_batch batch">
+
+                            </select>
+                        </div>
+
+                        <div class="input-group" style="margin-top: 10px;">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">工序</button>
+                            </span>
+                            <select name="procedure" class="form-control procedure newPrd_procedure">
+                            </select>
+                        </div>
+
+                        <div class="input-group " style="margin-top: 10px">
+                            <span class="input-group-addon ">姓名</span>
+                            <input name="name" class="form-control name employeeN" type="text">
+                            <label onclick="$('.employeeN').val('');$('.employeeId').val('')"
+                                   for="info" class="input-control-icon-right"><i
+                                    class="icon icon-times"></i></label>
+                        </div>
+
+                        <input name="employeeId" class="form-control employeeId" type="hidden">
+                        <input name="department" class="form-control department" type="hidden">
+
+
+                    </div>
+
+                    <div class="row col-md-5">
+
+                        <div class="input-group" style="margin-top: 10px;">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">数量</button>
+                            </span>
+                            <input name="number" class="form-control number" >
+                            <label onclick="$('.number').val('');"
+                                   for="info" class="input-control-icon-right"><i
+                                    class="icon icon-times"></i></label>
+                        </div>
+
+                        <div class="input-group" style="margin-top: 10px;">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">价格</button>
+                            </span>
+                            <input name="price" class="form-control price" >
+                            <label onclick="$('.price').val('');"
+                                   for="info" class="input-control-icon-right"><i
+                                    class="icon icon-times"></i></label>
+                        </div>
+
+                        <div class="input-group" style="margin-top: 10px;">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">备注</button>
+                            </span>
+                            <input name="info" class="form-control info " id="info"
+                                   placeholder="备注">
+                            <label onclick="$('.info').val('');"
+                                   for="info" class="input-control-icon-right"><i
+                                    class="icon icon-times"></i></label>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row col-md-12">
+                        <!--列表-->
+                        <button style="margin-top: 5px" onclick="window.addOneBatchWorkOrder()" type="button"
+                                class="btn btn-primary"
+                        >添加一个工人记录
+                        </button>
+                        <div style="margin-top: 20px" id="table_Work_Order"></div>
+                    </div>
+
+                </div>
+                <div style="clear: both"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-danger"  onclick="window.batchSaveWorkOrder()" id="batchSaveWorkOrder">批量保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--//搜索框ID-->
+    <div class="container" style="margin:0;padding:0">
+
+        <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">开始日期</span>
+            <input type="text" class="form-control nameLetter datetimepicker tab3DateCreatedAtStart"
+                   placeholder="点击选择">
+            <span class="input-group-addon removeInfo cursor" onclick="$('.tab3DateCreatedAtStart').val('')">x</span>
+        </div>
+        <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon">结束日期</span>
+            <input type="text" class="form-control nameLetter datetimepicker tab3DateCreatedAtEnd"
+                   placeholder="点击选择">
+            <span class="input-group-addon removeInfo cursor" onclick="$('.tab3DateCreatedAtEnd').val('')">x</span>
+        </div>
+        <div style="clear: both"></div>
+
+
+        <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon ">姓名</span>
+            <input class="form-control tab3Name" type="text" placeholder="点击获取下拉选项">
+            <span class="input-group-addon cursor" onclick="$('.tab3Name').removeAttr('employeeId').val('')">x</span>
+        </div>
+        <!--        <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">-->
+        <!--            <span class="input-group-addon ">编号</span>-->
+        <!--            <input class="form-control tab3No" type="text">-->
+        <!--        </div>-->
+        <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">
+            <span class="input-group-addon ">型号</span>
+            <input class="form-control tab3Model" type="text" placeholder="点击获取下拉选项">
+            <span class="input-group-addon cursor"
+                  onclick="$('.tab3Model').val('')">x</span>
+        </div>
+    </div>
+
+    <div class="input-group col-md-4" style="float:left;margin:10px 10px 10px 10px">
+        <span class="input-group-addon ">制单员</span>
+        <input class="form-control tab3Creator" type="text" placeholder="点击获取下拉选项">
+        <span class="input-group-addon cursor" onclick="$('.tab3Creator').removeAttr('customerId').val('')">x</span>
+    </div>
+
+    <!--        <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">-->
+    <!--            <span class="input-group-addon ">批次</span>-->
+    <!--            <input class="form-control tab3BatchName" type="text" placeholder="点击获取下拉选项">-->
+    <!--            <span class="input-group-addon cursor"-->
+    <!--                  onclick="$('.tab3BatchName').removeAttr('processId').val('')">x</span>-->
+    <!--        </div>-->
+
+    <div class="input-group col-md-3" style="float:left;margin:10px 10px 10px 10px">
+        <span class="input-group-addon ">工序</span>
+        <input class="form-control tab3ProcedureName" type="text" placeholder="点击获取下拉选项">
+        <span class="input-group-addon cursor"
+              onclick="$('.tab3ProcedureName').removeAttr('productionprocessprocedureid').val('')">x</span>
+    </div>
+
+    <div style="clear: both"></div>
+
+    <form class="form-inline">
+        <div class="col-md-2 " style="margin:10px 0;">
+            <button type="button" class="btn btn-primary tab3Submit">点击搜索</button>
+        </div>
+        <div class="col-md-2 " style="margin:10px 0;">
+            <button id="createNewOrder" type="button" class="btn btn-warning ">
+                新增工单
+            </button>
+        </div>
+        <div class="col-md-2 " style="margin:10px 0;">
+            <button type="button" class="btn btn-warning " onclick="window.openmyOutSourceModal3()"
+            >新增外包工单
+            </button>
+        </div>
+        <div class="col-md-2 " style="margin:10px 0;">
+            <button type="button" class="btn btn-warning " onclick="window.openBatchInputWorkOrder()">
+                批量录入
+            </button>
+        </div>
+
+        <div class="col-md-2 " style="margin:10px 0;">
+            <button onclick="window.doExportAll('gongdan','inforepot3','#datagrid_getWorkOrderList_Tab3_tb1')"
+                    class="btn btn-success"
+                    style="width:100px">导出工单
+            </button>
+        </div>
+
+
+    </form>
+
+
+    <div style="clear: both"></div>
+
+</div>
+
+<!--外包工单弹窗部分-->
+<div class="modal modal-moveable fade" id="myOutSourceModal3">
+    <div class="modal-dialog  modal-moveable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h2 class="modal-title">外包工单</h2>
+            </div>
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">经手人</span>
+                <input name="recorder" type="text" class="form-control outSourceName recorder" readonly>
+            </div>
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">开单日期</span>
+                <input name="createdAt" type="text" class="form-control createdAt" readonly>
+            </div>
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">单据编号</span>
+                <input name="sn" type="text" class="form-control sn">
+                <span class="input-group-addon cursor newPrdNumGen"
+                      onclick="$('#myOutSourceModal3 .sn').val(window.generateUUID())">生成</span>
+            </div>
+            <div style="clear: both"></div>
+            <div style="margin:15px 10px 0px 10px ;font-size: 17px;color:#666;"><span
+                    style="font-weight: bolder;color: red">外包单位:</span></div>
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">&nbsp;&nbsp;名称&nbsp;&nbsp;</span>
+                <input name="name" type="text" class="form-control name">
+            </div>
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">联系人</span>
+                <input name="contactPeople" type="text" class="form-control contactPeople">
+            </div>
+            <div style="clear: both"></div>
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">&nbsp;&nbsp;地址&nbsp;&nbsp;</span>
+                <input name="address" type="text" class="form-control address">
+            </div>
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">&nbsp;&nbsp;电话&nbsp;&nbsp;</span>
+                <input name="contactPhone" type="text" class="form-control contactPhone">
+            </div>
+            <div style="clear: both"></div>
+
+            <div style="margin:15px 10px 0px 10px ;font-size: 17px;color:#666;"><span
+                    style="font-weight: bolder;color: red">产品信息:</span></div>
+            <div class="input-group col-md-3 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">&nbsp;&nbsp;选择型号&nbsp;&nbsp;</span>
+                <input name="outsourceModel" type="text" class="form-control outsourceModel">
+            </div>
+
+            <div class="input-group col-md-3 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">批次</button>
+                            </span>
+                <select name="outsourceBatch" id="outsourceBatch" class="form-control outsourceBatch">
+
+                </select>
+
+            </div>
+
+            <div class="input-group col-md-3 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">工序</button>
+                            </span>
+                <select name="outsourceProcedure" id="outsourceProcedure" class="form-control outsourceProcedure">
+
+                </select>
+
+            </div>
+
+            <div style="clear: both;margin:10px 10px 5px 10px" id="outSoureTable"></div>
+
+            <div id='table-tianjia' class="col-md-10" style="margin:10px 10px 10px 2px"></div>
+
+            <div class="input-group col-md-4 col-xs-11" style="margin:2px 10px 5px 10px;">
+                <span class="input-group-addon">合计</span>
+                <input name="sum" type="text" class="form-control sum" readonly>
+            </div>
+            <div style="margin:15px 10px 0px 10px ;font-size: 17px;color:#666;"><span
+                    style="font-weight: bolder;color: red">委派单位:</span></div>
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">&nbsp;&nbsp;名称&nbsp;&nbsp;</span>
+                <input name="delegateName" type="text" class="form-control delegateName">
+            </div>
+            <div class="input-group col-md-11 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon ">地址、电话</span>
+                <input name="delegateAddressAndPhone" type="text" class="form-control delegateAddressAndPhone">
+            </div>
+            <div style="clear: both"></div>
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">&nbsp;&nbsp;备注&nbsp;&nbsp;</span>
+                <input name="note" type="text" class="form-control note">
+            </div>
+
+
+            <input value="" name="id" type="hidden" class="form-control id">
+            <input value="" name="index" type="hidden" class="form-control index">
+            <input value="" name="flag" type="hidden" class="form-control flag">
+            <input value="" name="supplierId" type="hidden" class="form-control supplierId">
+
+            <div style="clear: both"></div>
+            <div style="clear: both"></div>
+        </div>
+        <div class="modal-footer" style="border-top:none">
+            <div style="clear: both"></div>
+            <button id="myOutSourceModal3_add" class="btn btn-primary col-md-1 col-sm-2 btn2 exBtn2"
+                    style="float:left;width:85px;margin:10px 10px 10px 2px">保存单据
+            </button>
+            <button onclick="window.deleteOutSourceWorkOrder()" class="btn btn-danger col-md-1 col-sm-2 btn2 exBtn2"
+                    style="float:left;width:85px;margin:10px 10px 10px 2px">删除单据
+            </button>
+            <button class="btn btn-primary col-md-1 col-sm-2 btn2 exBtn2"
+                    style="float:left;width:100px;margin:10px 10px 10px 12px" data-dismiss="modal">关闭
+            </button>
+        </div>
+    </div>
+</div>
+<!--外包工单-编辑产品 弹窗部分-->
+<div class="modal modal-moveable fade" id="myOutSourceProductEditModal" style="height: 95%;overflow: scroll">
+    <div class="modal-dialog  modal-moveable modal-lg">
+        <div class="modal-content">
+            <div style="margin:15px 10px 0px 10px ;font-size: 17px;color:#666;"><span
+                    style="font-weight: bolder;color: red">产品:</span></div>
+            <!--            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">-->
+            <!--                <span class="input-group-addon">型号</span>-->
+            <!--                <input readonly name="model" type="text" class="form-control model">-->
+            <!--            </div>-->
+            <!--            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">-->
+            <!--                <span class="input-group-addon">批次</span>-->
+            <!--                <input readonly name="batch" type="text" class="form-control batch">-->
+            <!--            </div>-->
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">工序</span>
+                <input readonly name="procedure" type="text" class="form-control procedure">
+            </div>
+
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">单位</span>
+                <input name="unit" type="text" class="form-control unit">
+            </div>
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">数量</span>
+                <input name="number" type="text" class="form-control number">
+            </div>
+            <div style="clear: both"></div>
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">单价</span>
+                <input name="price" type="text" class="form-control price">
+            </div>
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">金额</span>
+                <input name="wages" type="text" class="form-control wages numToParse">
+            </div>
+            <div class="input-group col-md-4 col-xs-11" style="margin:10px 10px 5px 10px;float: left;">
+                <span class="input-group-addon">备注</span>
+                <input name="desc" type="text" class="form-control desc">
+            </div>
+
+            <input value="" name="index" type="hidden" class="form-control index">
+            <input value="" name="flag" type="hidden" class="form-control flag">
+            <input value="" name="productionProcessId" type="hidden" class="form-control productionProcessId">
+            <input value="" name="productionProcessProcedureId" type="hidden"
+                   class="form-control productionProcessProcedureId">
+
+
+        </div>
+        <div class="modal-footer" style="border-top:none">
+            <div style="clear: both"></div>
+            <button onclick="window.saveOutsourceProduct()" class="btn btn-primary col-md-1 col-sm-2 btn2 exBtn2"
+                    style="float:left;width:85px;margin:10px 10px 10px 2px">保存
+            </button>
+            <button class="btn btn-primary col-md-1 col-sm-2 btn2 exBtn2"
+                    style="float:left;width:100px;margin:10px 10px 10px 12px" data-dismiss="modal">关闭
+            </button>
+            <div>
+                <button style="float:left;width:100px;margin:10px 10px 10px 12px" type="button"
+                        class="btn btn-success" id="xiaohaoIdOutSource">物料消耗
+                </button>
+                <button style="float:left;width:100px;margin:10px 10px 10px 12px" type="button"
+                        class="btn btn-success" id="rukuId_btOutSource">成品入库
+                </button>
+            </div>
+            <button onclick="window.deleteOutsourceProduct()" class="btn btn-danger col-md-1 col-sm-2 btn2 exBtn2"
+                    style="float:left;width:100px;margin:10px 10px 10px 12px">删除
+            </button>
+        </div>
+    </div>
+</div>
+
+<!--新增工单弹窗部分-->
+<div class="modal fade modal-moveable" id="myworkPage">
+    <div class="modal-dialog  modal-moveable modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div style="text-align: center;margin-top:10px;width: 100%">
+
+                    <button style="margin: auto;" class="btn btn-success btn-block " type="button"><i
+                            class="icon icon-tags"></i>内部工单
+                    </button>
+                </div>
+
+                <div>
+                    <div class="input-group " style="margin-top: 10px">
+                        <span class="input-group-addon ">日期</span>
+                        <input name="createdAt" style="width: 100%" id="newDate" class="form-control createdAt "
+                               type="text">
+                    </div>
+
+
+                    <div class="input-group " style="margin-top: 10px">
+                        <span class="input-group-addon ">姓名</span>
+                        <input name="name" id="employeeN" class="form-control name" type="text">
+                    </div>
+
+                    <div class="input-group " style="margin-top: 10px">
+                        <span class="input-group-addon ">编号</span>
+                        <input name="Serial_number" id="newPrdNum" class="form-control Serial_number" type="text">
+                        <span class="input-group-addon cursor" id="newPrdNumGen"
+                              onclick="$('#newPrdNum').val(window.generateUUID())">生成</span>
+                    </div>
+
+                    <div class="input-group " style="margin-top: 10px">
+                        <span class="input-group-addon ">经手人</span>
+                        <input name="recorder" disabled="disabled" id="JsMan_Tab3" class="form-control recorder"
+                               type="text">
+                    </div>
+
+                    <div class="input-group" style="margin-top: 10px;width: 100%">
+                        <button class="btn btn-success" type="button" style="margin-bottom: 10px">部门：</button>
+                        <div class="input-control has-icon-right">
+                            <input name="department" id="newPart" class="form-control department" placeholder="部门">
+                            <label onclick="$('#newPart').val('');"
+                                   for="newPrd_model" class="input-control-icon-right"><i
+                                    class="icon icon-times"></i></label>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-top: 10px;width: 100%">
+                        <button class="btn btn-success" type="button" style="margin-bottom: 10px">型号：</button>
+                        <div class="input-control has-icon-right">
+                            <input name="model" id="newPrd_model" class="form-control newPrd_model model"
+                                   placeholder="产品型号">
+                            <label onclick="$('.newPrd_model').val('');"
+                                   for="newPrd_model" class="input-control-icon-right"><i
+                                    class="icon icon-times"></i></label>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group" style="margin-top: 10px;width: 100%">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">批次</button>
+                            </span>
+                        <select name="batch" id="newPrd_batch" class="form-control newPrd_batch batch">
+
+                        </select>
+
+                    </div>
+
+                    <div class="input-group" style="margin-top: 10px;width: 100%">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">工序</button>
+                            </span>
+                        <select name="procedure" id="newPrd_procedure" class="form-control procedure">
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="input-group " style="margin-top: 10px">
+                        <span class="input-group-addon ">工价</span>
+                        <input name="price" id="newWprice" class="form-control price" type="text">
+                    </div>
+
+                    <div class="input-group " style="margin-top: 10px">
+                        <span class="input-group-addon ">数量</span>
+                        <input name="number" id="newPrdallNum" class="form-control number" type="text">
+                    </div>
+
+
+                    <div class="input-group " style="margin-top: 10px">
+                        <span class="input-group-addon ">薪酬</span>
+                        <input name="wages" readonly id="newWcash" class="form-control wages numToParse"
+                               type="text">
+                    </div>
+
+                    <input name="is_outsourcing" id="is_Outs" class="form-control is_outsourcing" type="hidden">
+                    <input name="employeeId" class="form-control employeeId" type="hidden">
+                    <input name="productionProcessId" class="form-control productionProcessId" type="hidden">
+                    <input name="productionProcessProcedureId" class="form-control productionProcessProcedureId"
+                           type="hidden">
+
+                    <input value="" name="productId" type="hidden" class="form-control productId">
+                    <input value="" name="id" type="hidden" class="form-control id">
+                    <input value="" name="index" type="hidden" class="form-control index">
+                    <input value="" name="flag" type="hidden" class="form-control flag">
+
+                </div>
+                <div style="margin-top:10px;" class="panel">
+                    <div class="panel-body">
+                        备注信息:
+                        <input name="note" class="note" id="Tab3_Wpage_note" rows="3" cols="50" placeholder="备注">
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button onclick="window.deleteWorkOrder()" type="button" class="btn btn-danger"
+                        data-dismiss="modal">删除
+                </button>
+                <button id="wPageUpdate_Tab3" type="button" class="btn btn-primary">保存</button>
+                <div class="editStatus" style="float: left">
+                    <button type="button" class="btn btn-success" id="xiaohaoId">物料消耗
+                    </button>
+                    <button type="button" class="btn btn-success" id="rukuId_bt">成品入库
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-moveable" id="my_worklist_outSourse_samePrd">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h1 class="modal-title">外包工单详情</h1>
+            </div>
+            <div class="modal-body">
+                <div style="clear: both" id="outSoureTable_sameprds"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--物品消耗弹窗-->
+<div style="z-index: 10001;" class="modal fade modal-moveable" id="updateThing">
+    <div class="modal-dialog  modal-moveable modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div style="text-align: center;margin-top:10px;width: 100%">
+
+                    <button style="margin: auto;" class="btn btn-success btn-block " type="button"><i
+                            class="icon icon-tags"></i>物品消耗
+                    </button>
+                </div>
+                <div style="margin-top:10px;width: 100% " class="input-group">
+                    <span class="input-group-addon">经手人</span>
+                    <input readonly name="recorder" id="thingjsManId_Tab3_WPXH" type="text"
+                           class="form-control recorder"
+                           placeholder="">
+                    <span class="input-group-addon fix-border fix-padding"></span>
+                </div>
+                <div style="margin-top:10px;width: 100% " class="input-group">
+                    <span class="input-group-addon">日期</span>
+                    <input name="createdAt" id="thingDateId_Tab3_WPXH" type="text"
+                           class="form-date form-control createdAt"
+                           placeholder="">
+                    <span class="input-group-addon fix-border fix-padding"></span>
+                </div>
+
+
+                <div style="margin-top:10px;width: 100% " class="input-group">
+                    <span class="input-group-addon">型号</span>
+                    <input readonly name="product_model" id="thingCodeId_Tab3_WPXH" type="text"
+                           class="form-control product_model" placeholder="">
+                    <span class="input-group-addon fix-border fix-padding"></span>
+                </div>
+
+                <div style="margin-top:10px;width: 100% " class="input-group">
+                    <span class="input-group-addon">工序</span>
+                    <input readonly name="procedure" id="thingXHId_Tab3_WX" type="text"
+                           class="form-control procedure"
+                           placeholder="">
+                    <span class="input-group-addon fix-border fix-padding"></span>
+                </div>
+                <div style="margin-top:10px;width: 100% " class="input-group">
+                    <span class="input-group-addon">工序数量</span>
+                    <input readonly name="procedureNumber" id="thingNumId_Tab3_WPXH" type="text"
+                           class="form-control procedureNumber" placeholder="">
+                    <span class="input-group-addon fix-border fix-padding"></span>
+                </div>
+
+                <div class="input-group" style="margin-top: 10px;width: 100%">
+                    <span class="input-group-addon">物料</span>
+                    <select name="materialId" class="form-control materialId">
+
+                    </select>
+                </div>
+
+
+                <div style="margin-top:10px;width: 100% " class="input-group">
+                    <span class="input-group-addon">物料消耗数量</span>
+                    <input name="number" id="thingxiaohaoId" type="text" class="form-control number" placeholder="">
+                    <span class="input-group-addon fix-border fix-padding"></span>
+                </div>
+
+
+                <input value="out" type="hidden" name="type" class="type">
+                <input type="hidden" name="productId" class="productId">
+                <input type="hidden" name="factoryId" class="factoryId">
+                <input type="hidden" name="name" class="name">
+                <input type="hidden" name="note" class="note">
+                <input type="hidden" name="consumeType" class="consumeType">
+                <input type="hidden" name="workOrderId" class="workOrderId">
+
+                <!--                    <input type="hidden" name="id" class="id">-->
+
+            </div>
+            <div class="modal-footer">
+                <button onclick="window.saveMaterialConsume()" rq="rq430" type="button" class="btn btn-primary">确认
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!--成品入库弹窗-->
+<div style="z-index: 10001;" class="modal fade modal-moveable" id="updateruku">
+    <div class="modal-dialog  modal-moveable modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div style="text-align: center;margin-top:10px;width: 100%">
+
+                    <button style="margin: auto;" class="btn btn-success btn-block " type="button"><i
+                            class="icon icon-tags"></i>成品入库
+                    </button>
+                </div>
+                <div>
+                    <div style="margin-top:10px;width: 100% " class="input-group">
+                        <span class="input-group-addon">日期</span>
+                        <input name="createdAt" id="rukuDateId" type="text" class="form-control form-date createdAt"
+                               placeholder="日期">
+                        <span class="input-group-addon fix-border fix-padding"></span>
+                    </div>
+                    <div style="margin-top:10px;width: 100% " class="input-group">
+                        <span class="input-group-addon">型号</span>
+                        <input readonly name="product_model" id="ruku_model_tab3" type="text"
+                               class="form-control product_model" placeholder="型号">
+                        <span class="input-group-addon fix-border fix-padding "></span>
+                    </div>
+
+                    <div style="margin-top:10px;width: 100% " class="input-group">
+                        <span class="input-group-addon">批次</span>
+                        <input readonly name="product_batch" id="ruku_batch_tab3" type="text"
+                               class="form-control product_batch" placeholder="批次">
+                        <span class="input-group-addon fix-border fix-padding"></span>
+                    </div>
+
+
+                    <div style="margin-top:10px;width: 100% " class="input-group">
+                        <span class="input-group-addon">数量</span>
+                        <input name="number" id="rukuNumId" type="text" class="form-control number" placeholder="">
+                        <span class="input-group-addon fix-border fix-padding"></span>
+                    </div>
+
+                    <input type="hidden" class="productId" name="productId">
+
+                    <div style="margin-top:10px;width: 100% " class="input-group">
+                        <span class="input-group-addon">经手人</span>
+                        <input readonly name="document_handler" id="ruku_jsman_tab3" type="text"
+                               class="form-control document_handler" placeholder="经手人">
+                        <span class="input-group-addon fix-border fix-padding"></span>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button onclick="window.saveEndproductIn()" id="rq432" type="button" class="btn btn-primary">确认
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="datagrid_getWorkOrderList_Tab3_tb1" class="datagrid">
+    <div class="datagrid-container">
+
+    </div>
+
+</div>
+
+
+</div>
+

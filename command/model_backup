@@ -1,0 +1,39 @@
+// Request: sequelize.define('request', {
+    //     requestId: Sequelize.STRING,
+    //     name: Sequelize.STRING,
+    //     path: Sequelize.STRING,
+    //     requestType: Sequelize.STRING,
+    //     requiredParams: Sequelize.STRING,
+    //     optionalParams: Sequelize.STRING,
+    //     useLog: Sequelize.INTEGER,
+    //     clientOs: Sequelize.INTEGER,
+    //     clientVersion: Sequelize.INTEGER,
+    //     candidateEvents: Sequelize.INTEGER,
+    //     initEvent: Sequelize.INTEGER,
+    // }),
+    // Widget: sequelize.define('widget', {
+    //     name: Sequelize.STRING,
+    // }),
+    // Field: sequelize.define('field', {
+    //     type: Sequelize.STRING,
+    //     candidateArrays: Sequelize.STRING,
+    //     defaultData: Sequelize.STRING,
+    // }),
+    // RequestAndWidget: sequelize.define('request_and_widget', {
+    //     requestId: {
+    //         type: Sequelize.INTEGER,
+    //         allowNull: false,
+    //         unique: 'request_and_widget'
+    //     },
+    //     widgetId: {
+    //         type: Sequelize.INTEGER,
+    //         unique: 'request_and_widget',
+    //         allowNull: false,
+    //         references: null
+    //     },
+    // }),
+
+    // this.Factory.hasMany(this.ProductHasMaterial, {onDelete: 'CASCADE'});
+
+    // this.ProductHasMaterial.belongsTo(this.Product, {foreignKey: 'productId'});
+    // this.ProductHasMaterial.belongsTo(this.Material, {foreignKey: 'materialId'});

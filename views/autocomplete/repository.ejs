@@ -1,0 +1,702 @@
+<script>
+    window.setTab1ClientAutoComplete = function () {
+        events['rq311'].requiredParams = {}
+        events['rq311'].optionalParams = {}
+        var clients;
+        window.ajax(events['rq311'])
+            .then(function (data) {
+                var source = []
+                var items = data.data.rows;
+                clients = data.data.rows;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+                //console.log(source);
+
+                $("#clientAutoComplete").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var client = clients[index]
+                        //console.log(client);
+                        $('.clientName').attr("clientId", client.id);
+                        $('.clientMobile').val(client.mobile)
+                        $('.clientContact').val(client.contact)
+                        $('.clientAddress').val(client.address)
+                    },
+                    notInSourceCallback: function () {
+                        $('.clientName').attr("clientId", '');
+                        $('.clientMobile').val('')
+                        $('.clientContact').val('')
+                        $('.clientAddress').val('')
+                    }
+                });
+
+                $('.removeInfo').click(function () {
+                    $('.clientName').val("")
+                    $('.clientName').removeAttr("clientId")
+                    $('.clientMobile').val("")
+                    $('.clientContact').val("")
+                    $('.clientAddress').val("")
+                })
+                // 将数据处理成表格的格式 并 实例化表格
+            })
+    }
+
+    window.setTab1ModelAndMaterialAutoComplete = function () {
+        var models;
+        var products;
+        var rows
+        var event = events['rq237'];
+        event.requiredParams = {}
+        window.ajax(event)
+            .then(function (data) {
+                var source = []
+                var products = data.data.products;
+                rows = data.data.rows;
+                var items = products;
+
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log('source++', source);
+
+                $("#myProductEditModal .product_model").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var id = ui.item.id
+
+                        // 追踪productId
+                        $("#myProductEditModal .productId").val(id);
+
+                        var materials = []
+                        for (var i = 0; i < rows.length; i++) {
+                            var row = rows[i];
+                            if (row.productId == id) {
+                                materials.push(row.material)
+                            }
+                        }
+                        //console.log('materials', materials);
+                        var string = ''
+                        string = string + '<option value="-1">请选择物料</option>'
+                        for (var i = 0; i < materials.length; i++) {
+                            var material = materials[i];
+                            try {
+                                string = string + '<option index="' + i + '" value="' + material.name + '">' + material.name + '</option>'
+                            } catch (e) {
+                            }
+                        }
+
+                        $('#myProductEditModal .name').html('').html(string);
+                        $('#myProductEditModal .name').off('change')
+                        $('#myProductEditModal .name').on('change', function () {
+                            var index = $('#myProductEditModal .name').find("option:selected").attr('index')
+                            var materialId = materials[index].id
+                            $("#myProductEditModal .materialId").val(materialId);
+
+                        })
+                    }
+                });
+            })
+    }
+
+    window.setTab1MaterialInPopupSupplierAutoComplete = function () {
+        var suppliers;
+
+        window.ajax(events['rq229'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                suppliers = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $("#materialInModal .supplierName").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var supplier = suppliers[index]
+                        //console.log(supplier);
+
+                        $('#materialInModal .supplierId').val(supplier.id);
+                        $('#materialInModal .supplierContact').val(supplier.contact);
+                        $('#materialInModal .supplierAddress').val(supplier.address);
+                        $('#materialInModal .supplierPhone').val(supplier.mobile);
+                    }
+                    ,
+                    notInSourceCallback: function () {
+                        $('#materialInModal .supplierId').val('');
+                        $('#materialInModal .supplierContact').val('');
+                        $('#materialInModal .supplierAddress').val('');
+                        $('#materialInModal .supplierPhone').val('');
+                    }
+                });
+            })
+    }
+
+    window.setTab1MaterialFixAutoComplete = function () {
+        var event = events['rq2114']
+        event.requiredParams = {model: 'Product'}
+        event.optionalParams = {}
+        var models;
+        var materials;
+        var productId;
+        window.ajax(event)
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                models = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+
+                $("#myModal1 .product_model").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        productId = ui.item.id
+                        var model = models[index]
+                        //console.log(model);
+                        $('#myModal1 .productId').val(model.id)
+
+                        var event = events['rq433']
+                        event.requiredParams = {}
+                        event.optionalParams = {productId: model.id}
+                        window.ajax(event)
+                            .then(function (result) {
+                                materials = result.data;
+
+                                var string = ''
+                                string = string + '<option value="-1">请选择物料</option>'
+                                for (var i = 0; i < materials.length; i++) {
+                                    var material = materials[i];
+                                    string = string + '<option materialId="' + material.id + '" index="' + i + '" value="' + material.name + '">' + material.name + '</option>'
+                                }
+
+                                $('#myModal1 .name').html('').html(string).off('change').on('change', function () {
+                                    var index = $(this).find("option:selected").attr('index')
+                                    var material = materials[index];
+                                    $('#myModal1 .materialId').val(material.id)
+                                    var event = events['rq2019']
+                                    event.requiredParams = {}
+                                    event.optionalParams = {id: material.id, productId: productId}
+                                    window.ajax(event)
+                                        .then(function (result) {
+                                            var sum = 0
+                                            try {
+                                                sum = result.data['sum(r.number)'];
+                                                //console.log(result.data['sum(r.number)']);
+                                            } catch (e) {
+                                            }
+                                            $('#myModal1 .currentNumber').val(sum);
+                                        })
+
+                                })
+
+
+                            })
+
+
+                    },
+                    notInSourceCallback: function () {
+                        $('#myModal1 .name').html('')
+                        $('#myModal1 .name').val('')
+                    }
+                });
+
+            })
+    }
+    window.setTab1EndProductFixAutoComplete = function () {
+        var event = events['rq623']
+        event.requiredParams = {}
+        event.optionalParams = {}
+        window.ajax(event)
+            .then(function (data) {
+                var source = []
+                var items = data.data[0];
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.product_model + " ",
+                        value: item.product_model,
+                        id: item.id,
+                        index: i,
+                        number: item['sum(io.number)']
+                    }
+                    source.push(dis);
+                }
+                //console.log(source);
+                $("#productFixModal .product_model").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var item = ui.item
+                        var number = item.number
+                        //console.log(number);
+                        $('#productFixModal .currentNumber').val(number);
+                    },
+                    notInSourceCallback: function () {
+                        $('#productFixModal .currentNumber').val('');
+                    }
+                });
+            })
+    }
+
+    window.setTab2ProductInPopupSupplierAutoComplete = function () {
+        var suppliers;
+
+        window.ajax(events['rq229'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                suppliers = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $("#productInModal .supplierName").autocomplete({
+                    source: source,
+                    // allowNotCorrect: true,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var supplier = suppliers[index]
+                        //console.log(supplier);
+                        $('#productInModal .supplierId').val(supplier.id);
+                        $('#productInModal .supplierContact').val(supplier.contact);
+                        $('#productInModal .supplierAddress').val(supplier.address);
+                        $('#productInModal .supplierPhone').val(supplier.mobile);
+                    }
+                    ,
+                    notInSourceCallback: function () {
+                        $('#productInModal .supplierId').val('');
+                        $('#productInModal .supplierContact').val('');
+                        $('#productInModal .supplierAddress').val('');
+                        $('#productInModal .supplierPhone').val('');
+                        // if (window.confirm("该送货单位不在供应商列表内，是否添加？")) {
+                        //
+                        // } else {
+                        //
+                        // }
+                    }
+                });
+            })
+    }
+
+    window.setTab2ClientAutoComplete = function () {
+        events['rq311'].requiredParams = {}
+        events['rq311'].optionalParams = {loadOrders: true}
+        var clients;
+        window.ajax(events['rq311'])
+            .then(function (data) {
+                var source = []
+                var items = data.data.rows;
+                clients = data.data.rows;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.name + " ",
+                        value: item.name,
+                        id: item.id,
+                        index: i,
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+                $("#productOutModal .receiverDep").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var client = clients[index]
+                        //console.log(client);
+                        $("#productOutModal .clientId").val(client.id)
+                        $("#productOutModal .receiver").val(client.contact)
+                        $("#productOutModal .receiverAddressPhone").val(client.address)
+                        $("#productOutModal .mobile").val(client.mobile)
+                        var orders = client.orders
+                        $("#productOutModal .sn").val('')
+                        if (orders.length == 0) {
+                            window.setTips("#productOutModal .receiverDep", "此客户下没有相应的订单可供选择，请重新选择客户！")
+                            $("#productOutModal .sn").attr('readonly', true)
+                        } else {
+                            $("#productOutModal .sn").removeAttr('readonly')
+                        }
+                        window.setTab2OrderNumberAutoComplete(orders)
+
+                    },
+                    notInSourceCallback: function () {
+                        $("#productOutModal .clientId").val('')
+                        $("#productOutModal .receiver").val('')
+                        $("#productOutModal .receiverAddressPhone").val('')
+                        $("#productOutModal .mobile").val('')
+                        $("#productOutModal .sn").val('')
+                    }
+                });
+
+            })
+    }
+
+    window.setTab2OrderNumberAutoComplete = function (clientOrders) {
+        events['rq322'].requiredParams = {}
+        events['rq322'].optionalParams = {}
+        var orders;
+        var source = []
+        if (!clientOrders) { //从数据库加载所有订单号
+            window.ajax(events['rq322'])
+                .then(function (data) {
+                    var items = data.data.rows;
+                    orders = data.data.rows;
+                    for (var i = 0; i < items.length; i++) {
+                        var item = items[i];
+                        var dis = {
+                            label: item.orderNo + " ",
+                            value: item.orderNo,
+                            id: item.id,
+                            index: i,
+                        }
+                        source.push(dis);
+                    }
+
+                    //console.log(source);
+                    try {
+                        $("#productOutModal .sn").autocomplete("destroy");
+                    } catch (e) {
+                    }
+                    $("#productOutModal .sn").autocomplete({
+                        source: source,
+                        select: function (event, ui) {
+                            //console.log("Selected: ", ui);
+                            var index = ui.item.index
+                            var order = orders[index]
+                            //console.log(orders);
+                            window.order_products = order.order_products;
+                            window.ordersCanSelect = window.order_products;
+
+                            var productTips = ''
+                            var order_products = order.order_products;
+                            for (var i = 0; i < order_products.length; i++) {
+                                var product = order_products[i];
+                                productTips += product.type + ';'
+                            }
+                            productTips = '此订单下可以添加的产品有：' + productTips;
+                            // new $.zui.Messager(productTips, {
+                            //     icon: 'info', // 定义消息图标,
+                            //     time: 10000
+                            // }).show();
+                            $('#candidateProducts').append('<p>' + productTips + '</p>')
+                        }
+
+                    });
+
+                })
+        } else { //从客户的订单里加载
+            orders = clientOrders;
+            for (var i = 0; i < orders.length; i++) {
+                var item = orders[i];
+                var dis = {
+                    label: item.orderNo + " ",
+                    value: item.orderNo,
+                    id: item.id,
+                    index: i,
+                }
+                source.push(dis);
+            }
+            try {
+                $("#productOutModal .sn").autocomplete("destroy");
+            } catch (e) {
+            }
+            $("#productOutModal .sn").autocomplete({
+                source: source,
+                select: function (event, ui) {
+                    //console.log("Selected: ", ui);
+                    var index = ui.item.index
+                    var order = orders[index]
+                    //console.log(orders);
+                    window.order_products = order.order_products;
+                    window.ordersCanSelect = window.order_products;
+
+                    var productTips = ''
+                    var order_products = order.order_products;
+                    for (var i = 0; i < order_products.length; i++) {
+                        var product = order_products[i];
+                        productTips += product.type + ';'
+                    }
+                    productTips = '此订单下可以添加的产品有：' + productTips;
+                    // new $.zui.Messager(productTips, {
+                    //     icon: 'info', // 定义消息图标,
+                    //     time: 10000
+                    // }).show();
+
+                    // cols: [
+                    //     {name: 'product_model', label: '型号',},
+                    //     {name: 'product_batch', label: '批次',},
+                    //     {name: 'packing_quantity', label: '装箱数',},
+                    //     {name: 'packing_amount', label: '箱数',},
+                    //     {name: 'number', label: '数量',},
+                    //     {name: 'price', label: '单价',},
+                    //     {name: 'sum', label: '金额',},
+                    //     {name: 'note', label: '备注',},
+                    // ],
+
+                    var ordersToDisplay = []
+                    for (var i = 0; i < order_products.length; i++) {
+                        var orderProduct = order_products[i];
+                        var order = {
+                            product_model: orderProduct.model,
+                            product_batch: '',
+                            packing_quantity: orderProduct.packingnumber,
+                            packing_amount: orderProduct.packing_amount,
+                            number: orderProduct.number,
+                            price: orderProduct.unitprice,
+                            sum: orderProduct.price,
+                            note: '',
+                        }
+                        ordersToDisplay.push(order)
+                    }
+                    $('#candidateProducts').html('<p>' + productTips + '</p>')
+                    window.tab2ProductOut.dataSource.array = ordersToDisplay
+                    window.renderProductOutPopUp(window.tab2ProductOut.dataSource)
+                }
+            });
+        }
+    }
+
+    window.setTab2ModelAndBatchAutoComplete = function () {
+        events['rq2020'].requiredParams = {}
+        events['rq2020'].optionalParams = {}
+        var models;
+        window.ajax(events['rq2020'])
+            .then(function (data) {
+                var source = []
+                var items = data.data;
+                models = data.data;
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var dis = {
+                        label: item.model + " ",
+                        value: item.model,
+                        id: item.id,
+                        index: i,
+                        production_processes: item.production_processes
+                    }
+                    source.push(dis);
+                }
+
+                //console.log(source);
+
+
+                $("#productInEditModal .product_model").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+                        var model = ui.item
+                        var production_processes = model.production_processes
+
+                        //console.log(model);
+                        // 追踪productId
+                        $('#productInEditModal .productId').val(model.id);
+                        //迭代订单号里的产品，如果符合型号，则将装箱数等信息自动填上
+                        var products = window.candidateProducts;
+                        if (products) {
+                            for (var i = 0; i < products.length; i++) {
+                                var selectedProduct = products[i];
+                                //console.log(selectedProduct);
+                                if (selectedProduct.model == model.value) {
+                                    $('#productInEditModal .packing_quantity').val(selectedProduct.packingnumber ? selectedProduct.packingnumber : 0)
+                                    $('#productInEditModal .packing_amount').val(selectedProduct.packing_amount ? selectedProduct.packing_amount : 0)
+                                    $('#productInEditModal .price').val(selectedProduct.unitprice ? selectedProduct.unitprice : 0)
+                                }
+                            }
+                        }
+
+
+                        $('#productInEditModal .product_batch').popover('show');
+                        //自动带出批次
+                        var batchsOnSelect = []
+
+                        for (var i = 0; i < production_processes.length; i++) {
+                            var item = production_processes[i];
+                            var dis = {
+                                label: item.product_batch + " ",
+                                value: item.product_batch,
+                                id: item.id,
+                                index: i,
+                            }
+                            batchsOnSelect.push(dis)
+                        }
+                        $("#productInEditModal .product_batch").attr('placeholder', '点击选择')
+                        $("#productInEditModal .product_batch").autocomplete({
+                            source: batchsOnSelect,
+                            allowNotCorrect: true,
+                            select: function (event, ui) {
+                                var index = ui.item.index
+                                var batch = batchsOnSelect[index]
+                            },
+                            notInSourceCallback: function () {
+                                var batchsn = $("#productInEditModal .product_batch").val()
+                                window.ajax(events['rq2013'])
+                                    .then(function (data) {
+                                        var items = data.data;
+                                        var unique = true
+                                        for (var i = 0; i < items.length; i++) {
+                                            var item1 = items[i];
+                                            if (item1.product_batch == batchsn) {
+                                                unique = false
+                                            }
+                                        }
+                                        if (!unique) {
+                                            $("#productInEditModal .product_batch").val('')
+                                            new $.zui.Messager("此批次已经存在在其它产品中！不能录入相同的批次号，请重新输入", {
+                                                icon: 'info' // 定义消息图标
+                                            }).show();
+                                        }
+                                    })
+                            }
+
+                        })
+
+
+                        $('#productInEditModal .product_batch').off('change')
+                        $('#productInEditModal .product_batch').on('change', function () {
+
+
+                        })
+
+                    },
+                    notInSourceCallback: function () {
+                        $("#productInEditModal .product_batch").attr('placeholder', '')
+                        $("#productInEditModal .product_batch").val('')
+                        $("#productInEditModal .product_batch").autocomplete('destroy')
+                        $('#productInEditModal .packing_quantity').val('')
+                        $('#productInEditModal .packing_amount').val('')
+                        $('#productInEditModal .price').val('')
+                        $('#productInEditModal .sum').val('')
+                    }
+                });
+                $("#productOutEditModal .product_model").autocomplete({
+                    source: source,
+                    select: function (event, ui) {
+                        //console.log("Selected: ", ui);
+                        var index = ui.item.index
+
+                        var model = ui.item
+                        var production_processes = model.production_processes
+                        //console.log(model);
+
+                        // 追踪productId
+                        $('#productOutEditModal .productId').val(model.id);
+
+                        var modelName = model.value;
+                        var event = events['rq2114']
+                        event.requiredParams = {model: 'Product'}
+                        event.optionalParams = {modelKey: modelName}
+                        window.ajax(event)
+                            .then(function (data) {
+                                console.log(data);
+                                var p = data.data[0]
+                                if (p) {
+                                    $('#productOutEditModal .packing_quantity').val(p.packingnumber ? p.packingnumber : 0)
+                                    $('#productOutEditModal .packing_amount').val(p.packing_amount ? p.packing_amount : 0)
+                                    $('#productOutEditModal .number').val(p.number ? p.number : 0)
+                                    $('#productOutEditModal .price').val(p.unitprice ? p.unitprice : 0)
+                                }
+                            })
+
+
+                        //迭代订单号里的产品，如果符合型号，则将装箱数等信息自动填上
+                        // var order_products = window.order_products;
+                        // if (order_products) {
+                        //     for (var i = 0; i < order_products.length; i++) {
+                        //         var orderProduct = order_products[i];
+                        //         //console.log(orderProduct);
+                        //         //console.log(model);
+                        //         if (orderProduct.model == model.value) {
+                        //             $('#productOutEditModal .packing_quantity').val(orderProduct.packingnumber ? orderProduct.packingnumber : 0)
+                        //             $('#productOutEditModal .packing_amount').val(orderProduct.packing_amount ? orderProduct.packing_amount : 0)
+                        //             $('#productOutEditModal .number').val(orderProduct.number ? orderProduct.number : 0)
+                        //             $('#productOutEditModal .price').val(orderProduct.unitprice ? orderProduct.unitprice : 0)
+                        //         }
+                        //     }
+                        // }
+
+                        //自动带出批次
+                        var batchs = production_processes
+
+
+                        var string = ''
+                        string = string + '<option value="-1">请选择批次</option>'
+                        for (var i = 0; i < batchs.length; i++) {
+                            var batch = batchs[i];
+                            string = string + '<option index="' + i + '" value="' + batch.product_batch + '">' + batch.product_batch + '</option>'
+                        }
+
+                        $('#productOutEditModal .product_batch').html('').html(string);
+                        $('#productOutEditModal .product_batch').off('change')
+                        $('#productOutEditModal .product_batch').on('change', function () {
+
+
+                        })
+
+                    },
+                    notInSourceCallback: function () {
+                        $('#productOutEditModal .product_batch').html('')
+                        $('#productOutEditModal .product_batch').val('')
+                    }
+                });
+
+            })
+    }
+</script>

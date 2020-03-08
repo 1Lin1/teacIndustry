@@ -1,0 +1,228 @@
+<div class="tab4">
+    <button style="margin: 20px 10px" class="btn  btn-danger" type="button" id="deleteOutSourceWorkOrder">
+        删除
+    </button>
+    <button onclick="window.doExport('waibaogongdan','infoprot4','#outSourceTable')" style="margin: 20px 10px" class="btn  btn-success" type="button" id="daochuOSworker">导出
+    </button>
+<!--    <div style="margin-bottom: 20px"-->
+<!--         class="input-control search-box search-box-circle has-icon-left has-icon-right" id="searchboxExample">-->
+<!--        <input id="inputSearchExample1" type="search" class="form-control search-input" placeholder="搜索">-->
+<!--        <label for="inputSearchExample1" class="input-control-icon-left search-icon"><i-->
+<!--                class="icon icon-search"></i></label>-->
+<!--        <a href="#" class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a>-->
+<!--    </div>-->
+
+    <div id="outSourceTable" class="datagrid">
+    </div>
+
+    <!--    外包工单-->
+    <div class="modal fade modal-moveable" id="outSourceform35803">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">外包工单</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="form">
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">经手人</span>
+                            <input id="recorder9832" type="text" name="recorder" class="form-control recorder"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#recorder9832').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">名称</span>
+                            <input id="name6174" type="text" name="name" class="form-control name" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#name6174').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">地址</span>
+                            <input id="address3609" type="text" name="address" class="form-control address"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#address3609').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">联系人</span>
+                            <input id="contactPeople4118" type="text" name="contactPeople"
+                                   class="form-control contactPeople"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#contactPeople4118').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">电话</span>
+                            <input id="contactPhone8564" type="text" name="contactPhone"
+                                   class="form-control contactPhone"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#contactPhone8564').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">单据编号</span>
+                            <input id="sn1349" type="text" name="sn" class="form-control sn" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#sn1349').val('')">x</span>
+                        </div>
+
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">委派单位名称</span>
+                            <input id="delegateName4394" type="text" name="delegateName"
+                                   class="form-control delegateName"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#delegateName4394').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">委派单位地址电话</span>
+                            <input id="delegateAddressAndPhone7257" type="text" name="delegateAddressAndPhone"
+                                   class="form-control delegateAddressAndPhone" placeholder="">
+                            <span class="input-group-addon cursor"
+                                  onclick="$('#delegateAddressAndPhone7257').val('')">x</span>
+                        </div>
+
+                        <div style="clear:both"></div>
+                        <div>进出记录：</div>
+                        <div id="inOutRecords" class="records"></div>
+
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; ">
+                            <span class="input-group-addon">金额</span>
+                            <input id="sum217" type="text" name="sum" class="form-control sum" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#sum217').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; ">
+                            <span class="input-group-addon">备注</span>
+                            <input id="note7345" type="text" name="note" class="form-control note" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#note7345').val('')">x</span>
+                        </div>
+
+                        <input name="id" class="id" type="hidden">
+                        <input name="flag" class="flag" type="hidden">
+                        <input name="index" class="index" type="hidden">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--    工单进出记录-->
+    <div class="modal fade modal-moveable" id="workOrderform35803">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">进出记录</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form">
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">经手人</span>
+                            <input id="recorder5465" type="text" name="recorder" class="form-control recorder"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#recorder5465').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">类型</span>
+                            <input id="type9762" type="text" name="type" class="form-control type" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#type9762').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">姓名</span>
+                            <input id="name7957" type="text" name="name" class="form-control name" placeholder="">
+                            <input id="name7957callback" type="text" name="nameId" class="form-control nameId"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#name7957').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">编号</span>
+                            <input id="Serial_number4697" type="text" name="Serial_number"
+                                   class="form-control Serial_number"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#Serial_number4697').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">部门</span>
+                            <input id="department7807" type="text" name="department" class="form-control department"
+                                   placeholder="">
+                            <input id="department7807callback" type="text" name="departmentId"
+                                   class="form-control departmentId"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#department7807').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">型号</span>
+                            <input id="model5653" type="text" name="model" class="form-control model" placeholder="">
+                            <input id="model5653callback" type="text" name="modelId" class="form-control modelId"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#model5653').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">批次</span>
+                            <select id="batch6020" type="text" name="batch" class="form-control batch"
+                                    placeholder=""></select>
+                            <span class="input-group-addon cursor" onclick="$('#batch6020').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">工序</span>
+                            <select id="procedure4170" type="text" name="procedure" class="form-control procedure"
+                                    placeholder=""></select>
+                            <span class="input-group-addon cursor" onclick="$('#procedure4170').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">数量</span>
+                            <input id="number4645" type="text" name="number" class="form-control number" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#number4645').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">工价</span>
+                            <input id="price8102" type="text" name="price" class="form-control price" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#price8102').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">薪酬</span>
+                            <input id="wages901" type="text" name="wages" class="form-control wages" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#wages901').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">备注</span>
+                            <input id="note8923" type="text" name="note" class="form-control note" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#note8923').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">物料消耗</span>
+                            <input id="material_consumption416" type="text" name="material_consumption"
+                                   class="form-control material_consumption" placeholder="">
+                            <span class="input-group-addon cursor"
+                                  onclick="$('#material_consumption416').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">成品入库</span>
+                            <input id="finishing_warehousing9478" type="text" name="finishing_warehousing"
+                                   class="form-control finishing_warehousing" placeholder="">
+                            <span class="input-group-addon cursor"
+                                  onclick="$('#finishing_warehousing9478').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">是否外包</span>
+                            <input id="is_outsourcing2347" type="text" name="is_outsourcing"
+                                   class="form-control is_outsourcing"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#is_outsourcing2347').val('')">x</span>
+                        </div>
+                        <input name="id" class="id" type="hidden">
+                        <input name="flag" class="flag" type="hidden">
+                        <input name="index" class="index" type="hidden">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

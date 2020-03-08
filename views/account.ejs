@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <%- include head/head %>
+    <style>
+        .input-group {
+            margin: 30px;
+        }
+
+        .btn {
+            width: 340px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container" style="text-align: center;width: 100%;padding-top: 200px">
+    <div style="margin: auto;max-width: 400px">
+        <div class="input-group">
+            <span class="input-group-addon">账号</span>
+            <input id="name" type="text" class="form-control" placeholder="请输入账号名">
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon">密码</span>
+            <input id="password" type="text" class="form-control" placeholder="请输入密码">
+            <span class="input-group-addon forgetPwd cursor">忘记密码</span>
+        </div>
+        <button class="btn btn-success loginBtn cursor" onclick="window.login()">点击登录</button>
+        <button class="btn btn-info cursor" onclick="location.href='rq1001'" style="margin-top: 20px">充值</button>
+        <button class="btn btn-warning cursor" onclick="location.href='rq100'" style="margin-top: 20px">返回首页</button>
+    </div>
+</div>
+
+
+</body>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        events['rq1011'].requiredParams = {type: '', data: {name: "", password: ""}}
+        events['rq1011'].optionalParams = {}
+
+        $('#name').on('change', function () {
+            events['rq1011'].requiredParams.data.name = $(this).val()
+        })
+        $('#password').on('change', function () {
+            events['rq1011'].requiredParams.data.password = $(this).val()
+        })
+
+        window.login = function () {
+
+            window.ajax(events['rq1011'])
+                .then(function (result) {
+                    //console.log(result);
+                    if (result.statusCode == 1) {
+                        new $.zui.Messager(result.msg + " 即将进入首页！", {
+                            icon: 'check' // 定义消息图标
+                        }).show();
+                        setTimeout(function () {
+                            location.href = 'rq100'
+                        }, 1500)
+                    } else {
+                        new $.zui.Messager(result.msg, {
+                            icon: 'times' // 定义消息图标
+                        }).show();
+                    }
+                })
+        }
+
+        $('.forgetPwd').click(function () {
+            new $.zui.Messager("请致电 xxx-xxxxxxxx 联系工作人员进行密码重置！", {
+                icon: 'info' // 定义消息图标
+            }).show();
+        })
+
+
+        $(document).keyup(function (event) {
+            //console.log('key code:', event.keyCode);
+            switch (event.keyCode) {
+                case 13:
+                    window.login()
+
+            }
+        });
+    });
+
+</script>
+
+</html>

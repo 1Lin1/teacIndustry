@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <%- include head/head %>
+    <script src="/bower_components/jquery-qrcode/jquery.qrcode.min.js"></script>
+
+    <style>
+    </style>
+
+
+</head>
+
+<body>
+<%- include header/header %>
+<div class="container">
+    <div class="tabs" id="tabsExample"></div>
+</div>
+</body>
+<script>
+
+    $(document).ready(function () {
+
+        //用户数据
+        var customers = {
+            dataSource: {
+                cols: [
+                    {name: 'name', label: '登录名'},
+                    {name: 'nickName', label: '昵称'},
+                    {name: 'mobile', label: '手机号'},
+                    {name: 'email', label: '邮箱'},
+                    {name: 'type', label: '类型'},
+                    {name: 'createdAt', label: '创建日期'},
+                ],
+                array: []
+            }
+        }
+        var newCustomer = {}
+        var selectedCustomer = {}
+
+        var moneys = {
+            dataSource: {
+                cols: [
+                    {name: 'createdAt', label: '充值日期'},
+                    {name: 'money', label: '金额'},
+                    {name: 'time', label: '时长'},
+                ],
+                array: []
+            }
+        }
+
+        var ChargeRecordDataSource = {
+            "form": {
+                "out_trade_no": "",
+                "time": "",
+                "price": "",
+                "isPay": "",
+                "userName": ""
+            },
+            "list": {
+                "cols": [
+                    {
+                        "name": "createdAt",
+                        "label": "创建日期",
+                        "width": 150
+                    },
+                    {
+                        "name": "out_trade_no",
+                        "label": "交易号码",
+                        "width": 100
+                    },
+                    {
+                        "name": "time",
+                        "label": "时长",
+                        "width": 100
+                    },
+                    {
+                        "name": "price",
+                        "label": "金额",
+                        "width": 100
+                    },
+                    {
+                        "name": "userName",
+                        "label": "充值用户",
+                        "width": 100
+                    },
+                    {
+                        "name": "isPay",
+                        "label": "是否已支付",
+                        "width": 100,
+                        valueOperator: {
+                            getter: function (dataValue, cell, dataGrid) {
+                                if (dataValue) {
+                                    return "已支付"
+                                } else {
+                                    return "未支付"
+                                }
+                            }
+                        },
+
+                    },
+                ],
+                "array": []
+            }
+        }
+
+
+        //渲染列表
+        window.renderChargeRecordTable = function (tableId, dataSource) {
+            $(tableId).html('').append('<div class="table"></div>')
+
+            $(tableId + ' .table').datagrid({
+                dataSource: dataSource,
+                checkable: false,
+                checkByClickRow: false,
+                partialRendering: false,
+                sortable: true
+                // height: '300',
+
+            })
+        }
+
+
+        var renderCustomerForm = function (data) {
+            for (var x in data) {
+                $('#customerModal .' + x).val(data[x])
+            }
+        }
+        var getCustomerFormData = function () {
+            var data = {}
+            $('#customerModal input, #customerModal select').each(function () {
+                var key = $(this).attr('name');
+                var val = $(this).val()
+                data[key] = val;
+            })
+            return data;
+        }
+
+        var renderCustomerTable = function (dataSource) {
+            $('#customer').html('').append('<div class="table"></div>')
+            $('#customer .table').datagrid({
+                dataSource: dataSource,
+                partialRendering: true,
+                onRender: function () {
+                    $('#customer .datagrid-cell').off('click')
+                    $('#customer .datagrid-cell').on('click', function () {
+                        var row = $(this).attr('data-row')
+                        if (row == 0) return;
+                        var customer = dataSource.array[row - 1];
+                        $('#customerModal').modal('show')
+                        $('#qrCode').html('');
+                        renderCustomerForm(customer);
+                    })
+                }
+            });
+        }
+
+        var renderMoneyTable = function (dataSource) {
+            $('#customer').html('').append('<div class="table"></div>')
+            $('#customer .table').datagrid({
+                dataSource: dataSource,
+                partialRendering: true,
+            });
+        }
+
+        //定义标签页
+        var tabs = [
+            {
+                title: '用户管理',
+                icon: 'icon-star',
+                type: 'ajax',
+                url: '/template/supervisor-customer.html',
+                forbidClose: true,
+                onOpen: function () {
+                    // 通用查询接口 Customer
+                    var event = events['rq2114']
+                    event.requiredParams = {model: "Customer"}
+                    event.optionalParams = {}
+                    window.ajax(event)
+                        .then(function (result) {
+                            customers.dataSource.array = result.data;
+                            renderCustomerTable(customers.dataSource)
+                        })
+
+                    window.clickAddCustomer = function () {
+                        $('#customerModal').modal('show')
+                        $('#customerModal ').modal('show')
+                        $('#customerModal input, #customerModal select').val('')
+
+                        genJqueryQrCode('http://cas.5ftech.com/server/wechatRegisterXiaoxiaotech?factoryId=' + window.user.factory.id);
+                    }
+                    window.addCustomer = function () {
+
+                        var customerData = getCustomerFormData();
+                        //console.log(customerData);
+
+                        if (customerData.id) { //编辑
+                            var event = events['rq2112'];
+                            event.requiredParams = {model: "Customer"}
+                            event.optionalParams = {data: customerData}
+                            window.ajax(event)
+                                .then(function (data) {
+                                    $('#customerModal').modal('hide')
+                                    new $.zui.Messager(data.msg, {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    var event = events['rq2114']
+                                    event.requiredParams = {model: "Customer"}
+                                    event.optionalParams = {}
+                                    return window.ajax(event)
+                                })
+                                .then(function (result) {
+                                    customers.dataSource.array = result.data;
+                                    renderCustomerTable(customers.dataSource)
+                                })
+
+                        } else { //保存
+                            var event = events['rq2111'];
+                            event.requiredParams = {model: "Customer"}
+                            event.optionalParams = {data: customerData}
+                            window.ajax(event)
+                                .then(function (data) {
+                                    $('#customerModal').modal('hide')
+                                    new $.zui.Messager(data.msg, {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    var event = events['rq2114']
+                                    event.requiredParams = {model: "Customer"}
+                                    event.optionalParams = {}
+                                    return window.ajax(event)
+                                })
+                                .then(function (result) {
+                                    customers.dataSource.array = result.data;
+                                    renderCustomerTable(customers.dataSource)
+                                })
+                        }
+
+
+                    }
+                    window.deleteCustomer = function () {
+
+                        var customerData = getCustomerFormData();
+                        //console.log(customerData);
+
+                        if (customerData.id) { //删除
+                            var event = events['rq2113'];
+                            event.requiredParams = {model: "Customer"}
+                            event.optionalParams = {data: customerData}
+                            window.ajax(event)
+                                .then(function (data) {
+                                    $('#customerModal').modal('hide')
+                                    new $.zui.Messager(data.msg, {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    var event = events['rq2114']
+                                    event.requiredParams = {model: "Customer"}
+                                    event.optionalParams = {}
+                                    return window.ajax(event)
+                                })
+                                .then(function (result) {
+                                    customers.dataSource.array = result.data;
+                                    renderCustomerTable(customers.dataSource)
+                                })
+
+                        } else {
+                            new $.zui.Messager("请先创建用户再删除", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                        }
+
+
+                    }
+                }
+            },
+            {
+                title: '费用管理',
+                icon: 'icon-star',
+                type: 'ajax',
+                url: '/template/supervisor-money.html',
+                forbidClose: true,
+                onOpen: function () {
+
+                    //搜索
+                    window.searchChargeRecord = function (limit) { //搜索
+                        var formId = 'ChargeRecordsearchForm'
+                        var formData = limit ? window.getFormData('#' + formId) : {}
+
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'ChargeRecord'}
+                        searchEvent.optionalParams = formData
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                ChargeRecordDataSource.list.array = result.data;
+                                window.renderChargeRecordTable('#table_ChargeRecord', ChargeRecordDataSource.list)
+                            })
+                    }
+                    window.searchChargeRecord()
+
+                }
+            }
+        ];
+
+        // 初始化标签页管理器
+        $('#tabsExample').tabs({tabs: tabs});
+
+        var genJqueryQrCode = function (url) {
+            var that = this;
+            //console.log(url);
+            //这是一个加上的测试注释
+            var options = {
+                //demo 地址 https://larsjung.de/jquery-qrcode/latest/demo/
+                // render method: 'canvas', 'image' or 'div'
+                render: 'image',
+                // version range somewhere in 1 .. 40
+                minVersion: 10,
+                maxVersion: 40,
+                // error correction level: 'L', 'M', 'Q' or 'H'
+                ecLevel: 'H',
+                // offset in pixel if drawn onto existing canvas
+                left: 0,
+                top: 0,
+                // size in pixel
+                size: 300,
+                // code color or image element
+                fill: '#000',
+                // background color or image element, null for transparent background
+                background: null,
+                // content
+                text: url,
+                // corner radius relative to module width: 0.0 .. 0.5
+                radius: 0.5,
+                // quiet zone in modules
+                quiet: 3,
+                // modes
+                // 0: normal
+                // 1: label strip
+                // 2: label box
+                // 3: image strip
+                // 4: image box
+                mode: 2,
+                mSize: 0.07,
+                mPosX: 0.5,
+                mPosY: 0.5,
+                label: "微信分享，扫码注册",
+                fontname: 'sans',
+                fontcolor: '#000',
+                image: null
+            };
+            setTimeout(function () {
+                window.jQuery('#qrCode').empty().qrcode(options);
+            }, 200)
+        }
+
+    });
+
+</script>
+
+</html>

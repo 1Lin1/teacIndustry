@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <%- include head/head %>
+
+    <style>
+
+    </style>
+
+
+</head>
+
+<body>
+<%- include header/header %>
+<%- include left/nav %>
+<div class="col-md-10">
+    <div class="tabs" id="tabs2"></div>
+</div>
+
+
+</body>
+
+
+<script>
+
+    $(document).ready(function () {
+        var events = '<%- JSON.stringify(events) %>'//转化成字符串？疑问
+        events = JSON.parse(events);//转化成JSON对象
+        //console.log('可操作的事件 ++++++', events);
+
+        var SupplierDataSource = {
+            "form": {
+                "name": "",
+                "mobile": "",
+                "contact": "",
+                "address": "",
+                "note": ""
+            },
+            "list": {
+                "cols": [
+                    {
+                        "name": "name",
+                        "label": "供应商名称",
+                        "width": 100
+                    },
+                    {
+                        "name": "mobile",
+                        "label": "联系电话",
+                        "width": 100
+                    },
+                    {
+                        "name": "contact",
+                        "label": "联系人",
+                        "width": 100
+                    },
+                    {
+                        "name": "address",
+                        "label": "地址",
+                        "width": 100
+                    },
+                    {
+                        "name": "note",
+                        "label": "备注",
+                        "width": 100
+                    },
+                    {
+                        "name": "createdAt",
+                        "label": "创建日期",
+                        "width": 150
+                    }
+                ],
+                "array": []
+            }
+        }
+
+
+        var xingxicols1 = [
+            {name: 'name', label: '供应商名称', width: 130},
+            {name: 'contact', label: '联系人', width: 120},
+            {name: 'mobile', label: '联系电话', width: 130},
+            {name: 'address', label: '地址', width: 115},
+            {name: 'note', label: '备注', width: 130},
+        ]
+        var xingxicols2 = [
+            {name: 'createdAt', label: '发货日期', width: 130},
+            {name: 'sn', label: '订单编号', width: 120},
+            {name: 'name', label: '客户名称', width: 120},
+            {name: 'document_handler', label: '单据经手人', width: 130},
+            {name: 'product_model', label: '型号', width: 115},
+            {name: 'packing_quantity', label: '装箱数', width: 130},
+            {name: 'packing_amount', label: '箱数', width: 130},
+            {name: 'number', label: '数量', width: 120},
+            {name: 'price', label: '单价', width: 120},
+            {name: 'sum', label: '金额', width: 130},
+            {name: 'note', label: '备注', width: 130},
+        ]
+
+        var xingxicols3 = [{name: 'createdAt', label: '发货日期', width: 130},
+            {name: 'sn', label: '订单编号', width: 120},
+            {name: 'name', label: '供应商名称', width: 120},
+            {name: 'document_handler', label: '单据经手人', width: 130},
+            {name: 'product_model', label: '型号', width: 115},
+            {name: 'product_batch', label: '批次', width: 115},
+            {name: 'packing_quantity', label: '装箱数', width: 130},
+            {name: 'packing_amount', label: '箱数', width: 130},
+            {name: 'number', label: '数量', width: 120},
+            {name: 'price', label: '单价', width: 120},
+            {name: 'sum', label: '金额', width: 130},
+            {name: 'note', label: '备注', width: 130},
+        ]
+
+
+        var tab1Table1Render = function (source1) {
+            //1 清空整个表单
+            $('#canku-table1').html('').append("<div class='table'></div>")
+
+            //2 重新实例化
+            $('#canku-table1 .table').datagrid({
+                dataSource: {
+                    cols: xingxicols1,
+                    array: source1,
+                },
+                checkable: true,
+                checkByClickRow: false,
+                partialRendering: true,
+            });
+
+        }
+
+        var tab2ProductIn = { //
+            endProductOrder: {},
+            endProductInOuts: [
+                {
+                    name: '', //客户名称
+                    employeeId: '', //员工id
+                    document_handler: '', //单据经手人
+                    product_model: '', //产品型号
+                    product_batch: '', //产品批次
+                    packing_quantity: '', //装箱数
+                    packing_amount: '', //箱数
+                    number: '', //数量
+                    price: '', //单价
+                    sum: '', //金额
+                    type: 'in', //出库或者入库类型
+                    note: '' //备注
+                }
+            ],
+            dataSource: {
+                cols: [
+                    {name: 'product_model', label: '型号',},
+                    {name: 'product_batch', label: '批次',},
+                    {name: 'packing_quantity', label: '装箱数',},
+                    {name: 'packing_amount', label: '箱数',},
+                    {name: 'number', label: '数量',},
+                    {name: 'price', label: '单价',},
+                    {name: 'sum', label: '金额',},
+                    {name: 'note', label: '备注',},
+                ],
+                array: []
+            }
+        }
+
+        var tab2ProductOut = { //
+            endProductOrder: {
+                sn: '', //订单编号
+                sum: '', //金额
+                receiver: '', //收货人
+                receiverDep: '', //收货单位
+                receiverAddressPhone: '', //收货单位地址电话
+                mobile: '', //收货单位地址电话
+                note: '', //备注
+                receiverDate: '', //收货日期
+                type: '', //出库或者入库类型
+                recorder: '', //录入人
+                supplierName: '', //发货单位
+                supplierContact: '', //发货联系人
+                supplierAddress: '', //发货单位地址
+                supplierPhone: '', //发货单位电话
+            },
+            endProductInOuts: [{
+                name: '', //客户名称
+                employeeId: '', //员工id
+                document_handler: '', //单据经手人
+                product_model: '', //产品型号
+                product_batch: '', //产品批次
+                packing_quantity: '', //装箱数
+                packing_amount: '', //箱数
+                number: '', //数量
+                price: '', //单价
+                sum: '', //金额
+                type: 'out', //出库或者入库类型
+                note: '' //备注
+            }],
+            dataSource: {
+                cols: [
+                    {name: 'product_model', label: '型号',},
+                    {name: 'product_batch', label: '批次',},
+                    {name: 'packing_quantity', label: '装箱数',},
+                    {name: 'packing_amount', label: '箱数',},
+                    {name: 'number', label: '数量',},
+                    {name: 'price', label: '单价',},
+                    {name: 'sum', label: '金额',},
+                    {name: 'note', label: '备注',},
+                ],
+                array: []
+            }
+        }
+
+        var rendertab2ProductInOrder = function (data) {
+            for (var x in data) {
+                $('#productInModal .' + x).val(data[x])
+            }
+        }
+        var rendertab2ProductOutOrder = function (data) {
+            for (var x in data) {
+                $('#productOutModal .' + x).val(data[x])
+            }
+        }
+
+        var renderProductOutPopUp = function (dataSource) {
+            $('#table-productsOut').html('').append('<div class="table"></div>')
+            $('#table-productsOut .table').datagrid({
+                dataSource: dataSource,
+                height: 200,
+                partialRendering: false,
+                onRender: function () {
+                    $('#table-productsOut .datagrid-cell').off('click')
+                    $('#table-productsOut .datagrid-cell').on('click', function () {
+                        var row = $(this).attr('data-row');
+                        if (row == 0) return;
+                        var index = row - 1
+                        var data = dataSource.array[index];
+                        $('#productOutEditModal').modal('show')
+                        data.index = index
+                        data.flag = 'edit'
+                        renderProductOutEditModal(data);
+                    })
+                }
+            });
+
+            var products = dataSource.array;
+            var sum = 0
+            for (var i = 0; i < products.length; i++) {
+                var product = products[i];
+                sum += parseFloat(product.sum)
+            }
+            $('#productOutModal .sum').val(sum);
+
+        }
+        var renderProductInPopUp = function (dataSource) {
+            $('#table-productsIn').html('').append('<div class="table"></div>')
+            $('#table-productsIn .table').datagrid({
+                dataSource: dataSource,
+                height: 200,
+                partialRendering: false,
+                onRender: function () {
+                    $('#table-productsIn .datagrid-cell').off('click')
+                    $('#table-productsIn .datagrid-cell').on('click', function () {
+                        var row = $(this).attr('data-row');
+                        if (row == 0) return;
+                        var index = row - 1
+                        var data = dataSource.array[index];
+                        data.index = index
+                        data.flag = 'edit'
+                        $('#productInEditModal').modal('show')
+                        renderProductInEditModal(data);
+                    })
+                }
+            });
+            var total = 0;
+            var items = dataSource.array;
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                total = total + (item.sum ? parseFloat(item.sum) : 0)
+            }
+            $('#productInModal .sum').val(total)
+        }
+
+
+        var tab2Table1Render = function (source2) {
+            //1 清空整个表单
+            $('#canku-table2').html('').append('<div class="table"><div class="input-control search-box search-box-circle has-icon-left has-icon-right"id="searchboxExample-canku-table2"style="margin-bottom: 10px; max-width: 300px"><input id="canku-table2-input"type="search"class="form-control search-input"placeholder="关键字过滤(区分大小写)"><label for="canku-table2-input"class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a href="#"class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a></div><div class="datagrid-container"></div></div>')
+
+            //2 重新实例化
+            var dataSource = {
+                cols: xingxicols2,
+                array: source2,
+            }
+            window.exportDataSource.inforepot2 = dataSource;
+            $('#canku-table2 .table').datagrid({
+                dataSource: dataSource,
+                checkable: true,
+                checkByClickRow: false,
+                partialRendering: true,
+                cellFormator: function ($cell, cell, datagrid) {
+                    var col = cell.colIndex;
+                    var row = cell.rowIndex;
+                    var form = cell.config.data
+                    var value = cell.value;
+                    value = value ? value : ''
+                    if (row == 0 || col == 0) { //不绑定点击事件
+
+                    } else {
+
+                        $cell.off('click')
+                        $cell.on('click', function () {
+                            var index = datagrid.getDataIndex(form.id)
+                            var item = dataSource.array[index];
+                            var type = item.type
+                            var formData = dataSource.array[index]
+                            if (type == 'in') {
+
+                                if (!item.endProductOrderId) {
+                                    new $.zui.Messager('此单属于工单入库，数量：' + formData.number, {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    return
+                                }
+
+                                $('#productInModal').modal('show')
+                                $('#productInModal .flag').val('edit');
+                                $('#productInModal .index').val('index');
+                                tab2ProductIn.endProductOrder = formData.end_product_order
+                                rendertab2ProductInOrder(tab2ProductIn.endProductOrder)
+                                tab2ProductIn.dataSource.array = tab2ProductIn.endProductOrder.end_product_in_outs
+                                renderProductInPopUp(tab2ProductIn.dataSource)
+
+                            } else if (type == 'out') {
+                                $('#productOutModal').modal('show')
+                                $('#candidateProducts').html('')
+                                $('#productOutModal .flag').val('edit');
+                                $('#productOutModal .index').val('index');
+                                tab2ProductOut.endProductOrder = formData.end_product_order
+                                rendertab2ProductOutOrder(tab2ProductOut.endProductOrder)
+                                tab2ProductOut.dataSource.array = tab2ProductOut.endProductOrder.end_product_in_outs
+                                renderProductOutPopUp(tab2ProductOut.dataSource)
+                            } else if (type == 'fix') {
+                                new $.zui.Messager('此单属于修正单，数量：' + formData.number, {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                            }
+
+
+                        })
+                    }
+
+                    var config = cell.config
+                    var isCheckbox = config.checkbox;
+                    var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                    $cell[cell.config.html ? 'html' : 'text'](value);
+                    if (config.className) {
+                        $cell.addClass(config.className);
+                    }
+                }
+            });
+
+        }
+
+        var tab3Table1Render = function (source3) {
+            //1 清空整个表单
+            $('#canku-table3').html('').append('<div class="table"><div class="input-control search-box search-box-circle has-icon-left has-icon-right"id="searchboxExample-canku-table3"style="margin-bottom: 10px; max-width: 300px"><input id="canku-table3-input"type="search"class="form-control search-input"placeholder="关键字过滤(区分大小写)"><label for="canku-table3-input"class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a href="#"class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a></div><div class="datagrid-container"></div></div>')
+
+            //2 重新实例化
+            var dataSource = {
+                cols: xingxicols3,
+                array: source3,
+            };
+            window.exportDataSource.inforepot3 = dataSource;
+            $('#canku-table3 .table').datagrid({
+                dataSource: dataSource,
+                checkable: true,
+                checkByClickRow: false,
+                partialRendering: true,
+                cellFormator: function ($cell, cell, datagrid) {
+                    var col = cell.colIndex;
+                    var row = cell.rowIndex;
+                    var form = cell.config.data
+                    var value = cell.value;
+                    value = value ? value : ''
+                    if (row == 0 || col == 0) { //不绑定点击事件
+
+                    } else {
+
+                        $cell.off('click')
+                        $cell.on('click', function () {
+                            var index = datagrid.getDataIndex(form.id)
+                            var item = dataSource.array[index];
+                            var type = item.type
+                            var formData = dataSource.array[index]
+                            if (type == 'in') {
+
+                                if (!item.endProductOrderId) {
+                                    new $.zui.Messager('此单属于工单入库，数量：' + formData.number, {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    return
+                                }
+
+                                $('#productInModal').modal('show')
+                                $('#productInModal .flag').val('edit');
+                                $('#productInModal .index').val('index');
+                                tab2ProductIn.endProductOrder = formData.end_product_order
+                                rendertab2ProductInOrder(tab2ProductIn.endProductOrder)
+                                tab2ProductIn.dataSource.array = tab2ProductIn.endProductOrder.end_product_in_outs
+                                renderProductInPopUp(tab2ProductIn.dataSource)
+
+                            } else if (type == 'out') {
+                                $('#productOutModal').modal('show')
+                                $('#candidateProducts').html('')
+                                $('#productOutModal .flag').val('edit');
+                                $('#productOutModal .index').val('index');
+                                tab2ProductOut.endProductOrder = formData.end_product_order
+                                rendertab2ProductOutOrder(tab2ProductOut.endProductOrder)
+                                tab2ProductOut.dataSource.array = tab2ProductOut.endProductOrder.end_product_in_outs
+                                renderProductOutPopUp(tab2ProductOut.dataSource)
+                            } else if (type == 'fix') {
+                                new $.zui.Messager('此单属于修正单，数量：' + formData.number, {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                            }
+
+
+                        })
+                    }
+
+                    var config = cell.config
+                    var isCheckbox = config.checkbox;
+                    var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                    $cell[cell.config.html ? 'html' : 'text'](value);
+                    if (config.className) {
+                        $cell.addClass(config.className);
+                    }
+                }
+
+            });
+        }
+
+        var productIds = []
+        var tab4Table1Render = function (data) {
+            $('#canku-table4').html('')
+            var products = data;
+
+            for (var i = 0; i < products.length; i++) {
+                var exe = function (i) {
+                    var product = products[i];
+                    var productId = product.id
+                    productIds.push({
+                        id: productId,
+                        name: product.product_model
+                    })
+                    $('#canku-table4').append(" <div style='font-weight: bold;margin: 5px 0;color: #0c8df2'>型号：" + product.product_model + "</div> <div class='table-" + productId + "'></div>")
+                    var cols = [
+                        {name: 'name', label: '物料'},
+                        {name: 'number', label: '数量'},
+                        {name: 'createdAt', label: '日期'},
+                    ]
+                    var array = []
+                    var materials = product.materials
+                    for (var j = 0; j < materials.length; j++) {
+                        var material = materials[j];
+                        var records = material.in_out_record
+                        for (var k = 0; k < records.length; k++) {
+                            var record = records[k];
+                            array.push(record)
+                        }
+                    }
+                    var dataSource = {
+                        cols: cols,
+                        array: array
+                    }
+                    //console.log(dataSource);
+                    $('#canku-table4 .table-' + productId).datagrid({
+                        dataSource: dataSource,
+                        checkable: true,
+                        checkByClickRow: false,
+                        height: 200,
+                    });
+                }
+                exe(i) //防止i值在迭代的时候相互干扰，闭包处理
+            }
+
+            //1 清空整个表单
+
+
+            //2 重新实例化
+
+
+        }
+
+        var materialDataList;
+        var tab5Table1Render = function (data) {
+
+            var cols = [{name: 'product', label: '产品', width: 100}]
+
+            var materials = data.materials;
+            materialDataList = materials;
+            for (var i = 0; i < materials.length; i++) {
+                var material = materials[i];
+                var col = {name: material.id, label: material.name, width: 100}
+                cols.push(col)
+            }
+            //console.log('cols', cols);
+
+            var products = data.products;
+            var rowObject = {}
+            for (var i = 0; i < products.length; i++) {
+                var item = products[i];
+                var itemDisplay = {}
+                if (!rowObject[item.id]) {
+                    rowObject[item.id] = []
+                } else {
+                }
+            }
+            //console.log('rowObject', rowObject);
+
+            var rows = []
+            for (var x in rowObject) {
+                var row = {}
+                var candidates = []
+                for (var i = 0; i < data.rows.length; i++) {
+                    var item = data.rows[i];
+                    if (item.product.id == x) {
+                        candidates.push(item)
+                    }
+                }
+                for (var i = 0; i < candidates.length; i++) {
+                    var candidate = candidates[i];
+                    row[candidate.materialId] = candidate.check
+                }
+
+
+                for (var i = 0; i < products.length; i++) {
+                    var product = products[i];
+                    if (x == product.id) {
+                        //console.log('product:', product);
+                        row['product'] = product.model
+                        row['productIndex'] = i
+                    }
+                }
+                rows.push(row)
+            }
+            //console.log('rows', rows);
+
+            //1 清空整个表单
+            $('#canku-table5').html('').append('<div class="table"><div class="input-control search-box search-box-circle has-icon-left has-icon-right"id="searchboxExample-canku-table5"style="margin-bottom: 10px; max-width: 300px"><input id="canku-table5-input"type="search"class="form-control search-input"placeholder="关键字过滤(区分大小写)"><label for="canku-table5-input"class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a href="#"class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a></div><div class="datagrid-container"></div></div>')
+
+            //2 重新实例化
+
+            var dataSource = {
+                cols: cols,
+                array: rows,
+            }
+            window.exportDataSource.inforepot5 = dataSource;
+            $('#canku-table5 .table').datagrid({
+                dataSource: dataSource,
+                colAutoDefaultWidth: 50,
+                checkable: true,
+                checkByClickRow: false,
+                hoverCell: true,
+                partialRendering: true,
+                cellFormator: function ($cell, cell, datagrid) {
+                    var col = cell.colIndex;
+                    var row = cell.rowIndex;
+                    var form = cell.config.data
+                    var value = cell.value;
+
+
+                    if (col == 1) { //产品
+                        $cell.off('click')
+                        $cell.on('click', function () {
+                            var index = form.productIndex;
+                            var id = products[index].id
+                            $('#ProductModal .id').val(id)
+                            $('#ProductModal').modal('show', 'fit')
+                            var dataToRender;
+                            for (var i = 0; i < products.length; i++) {
+                                var product1 = products[i];
+                                if (product1.id == id) {
+                                    dataToRender = product1
+                                }
+                            }
+                            window.renderForm('#ProductModal', dataToRender)
+                            $('#ProductModal .flag').val('edit')
+                            $('#ProductModal .row').val(row)
+                            $('#ProductModal .col').val(col)
+                        })
+
+                        var config = cell.config
+                        var isCheckbox = config.checkbox;
+                        var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                        $cell[cell.config.html ? 'html' : 'text'](value);
+                        if (config.className) {
+                            $cell.addClass(config.className);
+                        }
+                    } else if (row == 0) { //物料
+                        $cell.off('click')
+                        $cell.on('click', function () {
+                            var id = materials[col - 2].id
+                            $('#InfoModal1_10 .modal-title').text("物料名")
+                            $('#InfoModal1_10 .tab10Value').attr('placeholder', '请输入物料名')
+                            $('#InfoModal1_10 .modelName').val('Material')
+                            $('#InfoModal1_10 .id').val(id)
+                            $('#InfoModal1_10').modal('show', 'fit')
+                            $('.tab10Value').val(value)
+                            $('#InfoModal1_10 .row').val(row)
+                            $('#InfoModal1_10 .col').val(col)
+                        })
+
+                        var config = cell.config
+                        var isCheckbox = config.checkbox;
+                        var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                        $cell[cell.config.html ? 'html' : 'text'](value);
+                        if (config.className) {
+                            $cell.addClass(config.className);
+                        }
+
+                    } else if (col == 0) { //选择框
+                        var config = cell.config
+                        var isCheckbox = config.checkbox;
+                        var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                        $cell[cell.config.html ? 'html' : 'text'](value);
+                        if (config.className) {
+                            $cell.addClass(config.className);
+                        }
+                    } else {  //关联
+                        if (col == 6 && row == 8) {
+                            //console.log(row + '-' + col + ':' + cell.value);
+                            //console.log(cell);
+                        }
+                        var checkString = cell.value ? 'checked' : ''
+                        $cell.html('<div class="checkbox-primary datagrid-checkbox ' + checkString + ' "><label class="content"></label></div>')
+                        $cell.off('click')
+                        $cell.on('click', function () {
+
+                            var index = form.productIndex;
+                            var productId = products[index].id
+                            var materialId = materials[col - 2].id
+                            var id = ''
+                            for (var i = 0; i < data.rows.length; i++) {
+                                var relation = data.rows[i];
+                                if (relation.productId == productId && relation.materialId == materialId) {
+                                    id = relation.id
+                                }
+                            }
+
+                            var hasCheck = $cell.find('.checked');
+                            if (!hasCheck.length) { //增加
+                                $cell.find('.checkbox-primary').addClass('checked')
+                                if (cell.config.data[cell.config.name] === '0' || cell.config.data[cell.config.name] === 0) { //更新
+                                    cell.config.data[cell.config.name] = 1
+                                    var event = events['rq2112']
+                                    event.requiredParams = {}
+                                    var procedureId = id
+                                    var dataToSave = {id: procedureId, check: 1};
+                                    //console.log(dataToSave);
+                                    event.optionalParams = {
+                                        model: "ProductHasMaterial",
+                                        data: dataToSave
+                                    }
+                                    window.ajax(event)
+                                        .then(function (data) {
+                                            //console.log(data);
+                                        })
+                                } else {//创建
+                                    cell.config.data[cell.config.name] = 1
+                                    var event = events['rq2111']
+                                    event.requiredParams = {}
+                                    var dataToSave = {
+                                        productId: productId,
+                                        materialId: materialId,
+                                        check: 1,
+                                        factoryId: window.user.factory.id,
+                                    };
+                                    //console.log(dataToSave);
+                                    event.optionalParams = {
+                                        model: "ProductHasMaterial",
+                                        data: dataToSave,
+                                    }
+                                    window.ajax(event)
+                                        .then(function (data) {
+                                            //console.log(data);
+                                        })
+                                }
+                            } else { //刪除
+                                cell.config.data[cell.config.name] = 0
+                                $cell.find('.checkbox-primary').removeClass('checked')
+                                var event = events['rq2112']
+                                event.requiredParams = {}
+                                var procedureId = id
+                                var dataToSave = {id: procedureId, check: 0};
+                                //console.log(dataToSave);
+                                event.optionalParams = {
+                                    model: "ProductHasMaterial",
+                                    data: dataToSave
+                                }
+                                window.ajax(event)
+                                    .then(function (data) {
+                                        //console.log(data);
+                                        // getTab5Data()
+                                    })
+                            }
+                        })
+                    }
+
+
+                    window.saveProductHasMaterial = function () {
+                        var val = $('.tab10Value').val()
+
+                        //tab1修改工价验证
+                        if (val == '') {
+                            new $.zui.Messager("请输入", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+
+                            return;
+                        }
+
+                        var col = $('#InfoModal1_10 .col').val()
+                        var row = $('#InfoModal1_10 .row').val()
+
+                        // if (col == 1) { //修改产品
+                        //     var event = events['rq2112']
+                        //     event.requiredParams = {}
+                        //     var index = form.productIndex;
+                        //     var productId = products[index].id
+                        //     var dataToSave = window.getFormData("#ProductModal");
+                        //     dataToSave.id = productId;
+                        //     //console.log(dataToSave);
+                        //     event.optionalParams = {model: "Product", data: {id: productId, model: val}}
+                        //     window.ajax(event)
+                        //         .then(function (data) {
+                        //             //console.log(data);
+                        //         })
+                        // } else
+                        if (row == 0) { //修改物料
+                            var event = events['rq2112']
+                            event.requiredParams = {}
+                            var materialId = materials[col - 2].id
+                            var dataToSave = {id: materialId, name: val.trim()};
+                            //console.log(dataToSave);
+                            event.optionalParams = {
+                                model: "Material",
+                                data: dataToSave
+                            }
+
+                            //验证唯一性
+                            var id = materialId
+                            var name = val
+                            var items = materialDataList;
+                            for (var i = 0; i < items.length; i++) {
+                                var item = items[i];
+                                if (item.name == name && ((item.id != id))) {
+                                    new $.zui.Messager("物料名称必须是唯一的", {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    return;
+                                }
+                            }
+
+
+                            window.ajax(event)
+                                .then(function (data) {
+                                    //console.log(data);
+                                })
+                            $('#InfoModal1_10').modal('hide')
+
+                        } else { //修改关联
+
+                        }
+
+                        setTimeout(function () {
+                            window.getTab5Data()
+                        }, 1000)
+                    }
+                },
+                // onRender: function ()
+                // {
+                //     $('.datagrid-cell').off('click');
+                //     $('.datagrid-cell').click(function () {
+                //         var that = $(this);
+                //         var value = $(this).text()
+                //         var id = $(this).￿attr('id')
+                //
+                //         var col = that.attr('data-col')
+                //         var row = that.attr('data-row')
+                //
+                //         if (col == 0 || (col == 1 && row == 0)) {
+                //             return
+                //         }
+                //
+                //         if (col == 1) {
+                //             var id = products[row - 1].id
+                //             $('#InfoModal1_10 .modelName').val('Product')
+                //             $('#InfoModal1_10 .id').val(id)
+                //             $('#InfoModal1_10 .modal-title').text("产品名")
+                //             $('#InfoModal1_10 .tab10Value').attr('placeholder', '请输入产品名')
+                //         } else if (row == 0) {
+                //             var id = materials[col - 2].id
+                //             $('#InfoModal1_10 .modelName').val('Material')
+                //             $('#InfoModal1_10 .id').val(id)
+                //             $('#InfoModal1_10 .modal-title').text("物料名")
+                //             $('#InfoModal1_10 .tab10Value').attr('placeholder', '请输入物料名')
+                //         } else {
+                //
+                //             $('#InfoModal1_10 .modal-title').text("是否包含物料：（包含请输入1）")
+                //             $('#InfoModal1_10 .tab10Value').attr('placeholder', '若包含此物料请输入1')
+                //             var productId = products[row - 1].id
+                //             var materialId = materials[col - 2].id
+                //             var id = ''
+                //             for (var i = 0; i < data.rows.length; i++) {
+                //                 var relation = data.rows[i];
+                //                 if (relation.productId == productId && relation.materialId == materialId) {
+                //                     id = relation.id
+                //                 }
+                //             }
+                //             $('#InfoModal1_10 .modelName').val('ProductHasMaterial')
+                //             $('#InfoModal1_10 .id').val(id)
+                //
+                //         }
+                //         $('#InfoModal1_10').modal('show', 'fit')
+                //         $('.tab10Value').val(value)
+                //
+                //         window.saveProductHasMaterial = function () {
+                //             var val = $('.tab10Value').val()
+                //             that.text(val);
+                //             $('#InfoModal1_10').modal('hide')
+                //
+                //
+                //             if (col == 1) { //修改产品
+                //                 var event = events['rq2112']
+                //                 event.requiredParams = {factoryId: 1}
+                //                 var productId = products[row - 1].id
+                //                 var dataToSave = {id: productId, model: val};
+                //                 //console.log(dataToSave);
+                //                 event.optionalParams = {model: "Product", data: {id: productId, model: val}}
+                //                 window.ajax(event)
+                //                     .then(function (data) {
+                //                         //console.log(data);
+                //                     })
+                //             } else if (row == 0) { //修改物料
+                //                 var event = events['rq2112']
+                //                 event.requiredParams = {factoryId: 1}
+                //                 var materialId = materials[col - 2].id
+                //                 var dataToSave = {id: materialId, name: val};
+                //                 //console.log(dataToSave);
+                //                 event.optionalParams = {
+                //                     model: "Material",
+                //                     data: dataToSave
+                //                 }
+                //                 window.ajax(event)
+                //                     .then(function (data) {
+                //                         //console.log(data);
+                //                     })
+                //             } else {
+                //                 var productId = products[row - 1].id
+                //                 var materialId = materials[col - 2].id
+                //                 var items = data.rows;
+                //                 var index;
+                //                 for (var i = 0; i < items.length; i++) {
+                //                     var item = items[i];
+                //                     //console.log(item, productId, materialId);
+                //                     if (item.productId == productId && item.materialId == materialId) {
+                //                         index = i;
+                //                     }
+                //                 }
+                //                 //console.log(productId, materialId);
+                //                 var productHasMaterial = data.rows[index];
+                //
+                //                 if (productHasMaterial) { //更新
+                //                     var event = events['rq2112']
+                //                     event.requiredParams = {factoryId: 1}
+                //                     var materialId = productHasMaterial.id
+                //                     var dataToSave = {id: materialId, check: val};
+                //                     //console.log(dataToSave);
+                //                     event.optionalParams = {
+                //                         model: "ProductHasMaterial",
+                //                         data: dataToSave
+                //                     }
+                //                     window.ajax(event)
+                //                         .then(function (data) {
+                //                             //console.log(data);
+                //                         })
+                //                 } else {//创建
+                //                     var event = events['rq2111']
+                //                     event.requiredParams = {}
+                //                     var dataToSave = {
+                //                         productId: productId,
+                //                         materialId: materialId,
+                //                         check: val,
+                //                         factoryId: window.user.factory.id,
+                //                     };
+                //                     //console.log(dataToSave);
+                //                     event.optionalParams = {
+                //                         model: "ProductHasMaterial",
+                //                         data: dataToSave,
+                //                     }
+                //                     window.ajax(event)
+                //                         .then(function (data) {
+                //                             //console.log(data);
+                //                         })
+                //                 }
+                //
+                //             }
+                //
+                //             setTimeout(function () {
+                //                 window.getTab5Data()
+                //             }, 1000)
+                //         }
+                //
+                //     })
+                // }
+
+            });
+
+
+        }
+
+
+//         var cols1=[{ name: 'product_model', label: '型号', width: 140 },]
+//         var tab6Table1Render = function (source5) {
+//             $('#canku-table6').html('')
+//             $('#canku-table6').append('<div id="canku-table6_2"></div>')
+//             $('#canku-table6_2').datagrid({
+//                 dataSource: {cols:cols1,array:source5},
+
+//             });
+//         }
+
+
+// $("#wuliao_jia1").click(function () {
+
+// var num= $("#canku-table6 .datagrid-row-head .datagrid-cell-head").length;
+// var num2=num-1;
+// cols1.push({name:"materialsString", label:"物料"+num2, width: 140})
+// tab6Table1Render(source5);
+
+
+// });
+
+
+        // 定义标签页
+        var tabs = [
+            {
+                title: '供应商信息',
+                url: '/template/zp-repository1.html',
+                type: 'ajax',
+                defaultTabIcon: false,
+                forbidClose: true,
+                onOpen: function () {
+
+
+                    //渲染列表
+                    window.renderSupplierTable = function (tableId, dataSource) {
+                        $(tableId).html('').append('<div class="table"><div class="input-control search-box search-box-circle has-icon-left has-icon-right"id="searchboxExample-SupplierTable"style="margin-bottom: 10px; max-width: 300px"><input id="SupplierTable-input"type="search"class="form-control search-input"placeholder="关键字过滤(区分大小写)"><label for="SupplierTable-input"class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a href="#"class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a></div><div class="datagrid-container"></div></div>')
+
+                        window.exportDataSource.inforepot1 = dataSource
+                        $(tableId + ' .table').datagrid({
+                            dataSource: dataSource,
+                            checkable: true,
+                            checkByClickRow: false,
+                            partialRendering: true,
+                            cellFormator: function ($cell, cell, datagrid) {
+                                var col = cell.colIndex;
+                                var row = cell.rowIndex;
+                                var form = cell.config.data
+                                var value = cell.value;
+
+                                if (row == 0 || col == 0) { //不绑定点击事件
+
+                                } else {
+                                    $cell.off('click')
+                                    $cell.on('click', function () {
+                                        var index = datagrid.getDataIndex(form.id);
+                                        var formId = 'SupplierForm'
+                                        var modalId = 'SupplierModal'
+                                        $('#' + modalId).modal('show', 'fit');
+                                        var formData = SupplierDataSource.list.array[index];
+                                        window.renderForm('#' + formId, formData)
+                                        $('#' + formId + ' .flag').val('edit')
+                                        $('#' + formId + ' .index').val(index)
+                                    })
+                                }
+
+
+                                var config = cell.config
+                                var isCheckbox = config.checkbox;
+                                var $cell = isCheckbox ? $cell.find('.content') : $cell;
+                                $cell[cell.config.html ? 'html' : 'text'](value);
+                                if (config.className) {
+                                    $cell.addClass(config.className);
+                                }
+
+
+                            },
+
+                            // height: '300',
+                            // onRender: function () {
+                            //     $(tableId + ' .datagrid-cell').off('click');
+                            //     $(tableId + ' .datagrid-cell').on('click', function () {
+                            //         var row = $(this).attr('data-row')
+                            //         var col = $(this).attr('data-col')
+                            //         if (row == 0 || col == 0) return
+                            //         var index = row - 1
+                            //         var formId = 'SupplierForm'
+                            //         var modalId = 'SupplierModal'
+                            //         $('#' + modalId).modal('show', 'fit');
+                            //         var formData = SupplierDataSource.list.array[index];
+                            //         window.renderForm('#' + formId, formData)
+                            //         $('#' + formId + ' .flag').val('edit')
+                            //         $('#' + formId + ' .index').val(index)
+                            //
+                            //
+                            //     })
+                            // }
+                        })
+                    }
+
+                    //创建
+                    window.createSupplierForm = function () { //调起创建弹窗
+                        var formId = 'SupplierForm'
+                        var modalId = 'SupplierModal'
+                        $('#' + modalId).modal('show')
+                        var data = {"name": "", "mobile": "", "contact": "", "address": "", "note": ""};
+                        window.renderForm('#' + formId, data);
+                        $('#' + formId + ' .flag').val('new')
+                        $('#' + formId + ' .id').val('')
+                    }
+
+                    //保存
+                    window.saveSupplierForm = function () { //创建或保存
+                        var formId = 'SupplierForm'
+                        var flag = $('#' + formId + ' .flag').val()
+                        var formData = window.getFormData('#' + formId)
+                        if (flag == 'new') { //创建状态
+
+                            var name = formData.name
+                            var items = SupplierDataSource.list.array;
+                            for (var i = 0; i < items.length; i++) {
+                                var item = items[i];
+                                if (item.name == name) {
+                                    new $.zui.Messager("供应商名称必须是唯一的", {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    return;
+                                }
+                            }
+
+                            SupplierDataSource.list.array.push(formData)
+                            var event = events['rq2111']
+                            event.requiredParams = {model: 'Supplier'}
+                            event.optionalParams = {data: formData}
+                            window.ajax(event)
+                                .then(function () {
+                                    setTimeout(function () {
+                                        new $.zui.Messager("创建成功", {
+                                            icon: 'info' // 定义消息图标
+                                        }).show();
+                                        var searchEvent = events['rq2114'] //通用查询接口
+                                        searchEvent.requiredParams = {model: 'Supplier'}
+                                        searchEvent.optionalParams = {}
+                                        window.ajax(searchEvent)
+                                            .then(function (result) {
+                                                SupplierDataSource.list.array = result.data;
+                                                window.renderSupplierTable('#table_Supplier', SupplierDataSource.list)
+                                            })
+                                    }, 1000)
+                                })
+                        } else {
+                            var index = $('#' + formId + ' .index').val()
+                            var data = SupplierDataSource.list.array[index]
+
+                            var id = formData.id
+                            var name = formData.name
+                            var items = SupplierDataSource.list.array;
+                            for (var i = 0; i < items.length; i++) {
+                                var item = items[i];
+                                if (item.name == name && ((item.id != id))) {
+                                    new $.zui.Messager("供应商名称必须是唯一的", {
+                                        icon: 'info' // 定义消息图标
+                                    }).show();
+                                    return;
+                                }
+                            }
+
+
+                            for (var x in formData) {
+                                try {
+                                    data[x] = formData[x]
+                                } catch (e) {
+                                }
+                            }
+                            var event = events['rq2112']
+                            event.requiredParams = {model: 'Supplier'}
+                            event.optionalParams = {data: data}
+                            window.ajax(event)
+                                .then(function () {
+                                    setTimeout(function () {
+                                        new $.zui.Messager("保存成功", {
+                                            icon: 'info' // 定义消息图标
+                                        }).show();
+                                        var searchEvent = events['rq2114'] //通用查询接口
+                                        searchEvent.requiredParams = {model: 'Supplier'}
+                                        searchEvent.optionalParams = {}
+                                        window.ajax(searchEvent)
+                                            .then(function (result) {
+                                                SupplierDataSource.list.array = result.data;
+                                                window.renderSupplierTable('#table_Supplier', SupplierDataSource.list)
+                                            })
+                                    }, 1000)
+                                })
+                        }
+                        var modalId = 'SupplierModal'
+                        $('#' + modalId).modal('hide')
+                    }
+
+                    //删除
+                    window.deleteSupplierForm = function () { //删除
+                        var formId = 'SupplierForm'
+                        var index = $(formId + ' .index').val()
+                        var data = SupplierDataSource.list.array[index]
+
+                        if (index) { //调用接口从服务器删除
+                            var modelName = 'Supplier';
+                            var id = data.id;
+                            if (!id) {
+                                return
+                            } else {
+                                var event = events['rq2115']
+                                event.requiredParams = {model: modelName}
+                                event.optionalParams = {items: [{id: id}]}
+                                window.ajax(event)
+                                    .then(function () {
+                                        setTimeout(function () {
+                                            new $.zui.Messager("删除成功", {
+                                                icon: 'info' // 定义消息图标
+                                            }).show();
+                                            $('.modal').modal('hide');
+
+                                        }, 1000)
+                                    })
+                            }
+                            SupplierDataSource.list.array.splice(index, 1);
+                            window.renderSupplierTable('#table_Supplier', SupplierDataSource.list)
+                        }
+
+                        var modalId = 'SupplierModal'
+                        $('#' + modalId).modal('hide');
+                    }
+
+                    //批量删除
+                    window.batchDeleteSupplier = function () { //批量删除
+                        var formId = 'SupplierForm'
+                        var index = $(formId + ' .index').val()
+                        var data = SupplierDataSource.list.array[index]
+
+                        var tableId = 'table_Supplier'
+                        var items = window.getSelectedTableItems('#' + tableId + ' .table')
+                        if (items.length == 0) {
+                            new $.zui.Messager("请至少选择一个记录", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        var batchDeleteEvent = events['rq2115'] //通用删除接口
+                        batchDeleteEvent.requiredParams = {model: 'Supplier'}
+                        batchDeleteEvent.optionalParams = {items: items}
+                        window.ajax(batchDeleteEvent)
+                            .then(function () {
+                                var getEvent = events['rq2114'] //通用查找接口
+                                getEvent.requiredParams = {model: 'Supplier'}
+                                getEvent.optionalParams = {}
+                                return window.ajax(getEvent)
+                            })
+                            .then(function (result) {
+                                SupplierDataSource.list.array = result.data;
+                                window.renderSupplierTable('#table_Supplier', SupplierDataSource.list)
+                            })
+                    }
+
+                    //搜索
+                    window.searchSupplier = function (limit) { //搜索
+                        var formId = 'SuppliersearchForm'
+                        var formData = limit ? window.getFormData('#' + formId) : {}
+
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Supplier'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                SupplierDataSource.list.array = result.data;
+                                window.renderSupplierTable('#table_Supplier', SupplierDataSource.list)
+                            })
+                    }
+
+
+                    window.searchSupplier()
+
+
+                }
+            },
+            {
+                title: '成品出库单信息',
+                url: '/template/zp-repository2.html',
+                type: 'ajax',
+                forbidClose: true,
+                onOpen: function () {
+
+                    //获取出库单信息
+                    events['rq233'].requiredParams = {factoryId: 1}
+                    events['rq233'].optionalParams = {type: 'out'}
+                    window.ajax(events['rq233'])
+                        .then(function (data) {
+                            // 将数据处理成表格的格式 并 实例化表格
+                            tab2Table1Render(data.data);
+
+                        })
+
+                }
+            },
+            {
+                title: '成品入库单信息',
+                url: '/template/zp-repository3.html',
+                type: 'ajax',
+                forbidClose: true,
+                onOpen: function () {
+
+
+                    //获取入库单信息
+                    events['rq233'].requiredParams = {factoryId: 1}
+                    events['rq233'].optionalParams = {type: 'in'}
+                    window.ajax(events['rq233'])
+                        .then(function (data) {
+                            // 将数据处理成表格的格式 并 实例化表格
+                            tab3Table1Render(data.data);
+                        })
+
+
+                }
+            },
+            {
+                title: '物料出入库信息',
+
+                url: '/template/zp-repository4.html',
+                type: 'ajax',
+                forbidClose: true,
+                onOpen: function () {
+
+                    var materialData;
+                    // 物料信息列表
+                    events['rq235'].requiredParams = {factoryId: 1}
+                    events['rq235'].optionalParams = {}
+                    window.ajax(events['rq235'])
+                        .then(function (data) {
+                            materialData = data.data;
+                            tab4Table1Render(data.data)
+                        })
+
+                    //批量导出
+                    window.exportMaterialList = function (isTemplate) {
+                        var itemsToExport = []
+                        productIds;
+                        for (var i = 0; i < productIds.length; i++) {
+                            var productId = productIds[i].id;
+                            var name = productIds[i].name;
+                            var $datagrid = $('#canku-table4 .table-' + productId).data('zui.datagrid');
+                            var items = $datagrid.getCheckItems()
+                            if (items.length > 0) {
+                                var item = {
+                                    name: name,
+                                    dataSource: {cols: $datagrid.options.dataSource.cols, array: items}
+                                }
+                                itemsToExport.push(item)
+                            }
+                        }
+                        if (itemsToExport.length == 0) {
+                            new $.zui.Messager("请至少选择一个记录", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return
+                        }
+                        //console.log(itemsToExport);
+
+                        var event = events['rq2117']
+                        event.requiredParams = {data: itemsToExport}
+                        event.optionalParams = {}
+                        window.ajax(event)
+                            .then(function (data) {
+                                var truthBeTold = window.confirm("单击“确定”继续。 \n请允许弹出窗口以便下载文件！\n下载链接于3分钟后会自动删除！")
+                                if (truthBeTold) {
+                                    window.location.href = data.data;
+                                } else {
+
+                                }
+                            })
+                    }
+
+                    var searchBox = function () {
+                        setTimeout(function () {
+                            var key = $('#procesSearchBox #inputSearchExample2').val()
+                            if (key) {
+                                var filteredData = []
+                                for (var i = 0; i < materialData.length; i++) {
+                                    var item = materialData[i];
+                                    if (item.product_model.indexOf(key) > -1 ) {
+                                        filteredData.push(item)
+                                    }
+                                }
+                                console.log(filteredData);
+                                tab4Table1Render(filteredData)
+                            } else {
+                                tab4Table1Render(materialData)
+                            }
+                        }, 100)
+                    }
+                    $('#procesSearchBox').off('keydown')
+                    $('#procesSearchBox').on('keydown', searchBox)
+                    window.searchBox = searchBox
+
+                }
+            },
+            {
+                title: '物料信息录入',
+                // defaultTabIcon:none,
+                icon: 'none',
+                url: '/template/zp-repository5.html',
+                type: 'ajax',
+                forbidClose: true,
+                onOpen: function () {
+
+
+                    var getTab5Data = function () {
+                        // 物料信息列表
+                        events['rq237'].requiredParams = {factoryId: 1}
+                        events['rq237'].optionalParams = {}
+                        window.ajax(events['rq237'])
+                            .then(function (data) {
+                                tab5Table1Render(data.data)
+                            })
+                    }
+                    window.getTab5Data = getTab5Data;
+                    getTab5Data()
+
+
+                    window.addProduct = function () {
+                        var form = {
+                            "model": "",
+                            "name": "",
+                            "specifications": "",
+                            "packingnumber": "",
+                            "packing_amount": "",
+                            "unitprice": "",
+                            "rowId": ""
+                        }
+                        form.flag = 'new'
+                        window.renderForm('#ProductModal', form)
+                        $('#ProductModal').modal('show', 'fit')
+
+                    }
+                    window.addMaterial = function () {
+                        $('#materialModel').modal('show', 'fit')
+                        $('#materialModel .name').val('')
+
+
+                    }
+                    window.saveProduct = function () {
+                        var data = window.getFormData("#ProductModal")
+                        //console.log(data);
+                        // tab1型号增加验证
+                        if (data.model == '') {
+                            new $.zui.Messager("型号不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+                        if (data.name == '') {
+                            new $.zui.Messager("名称不能为空", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            return;
+                        }
+                        for (var x in data) {
+                            if (data[x] == '') {
+                                data[x] = 0;
+                            }
+                        }
+
+                        $('#ProductModal').modal('hide', 'fit')
+                        var event
+                        if (data.flag == 'new') {
+                            event = events['rq2111'];
+                        } else {
+                            event = events['rq2112'];
+                        }
+                        event.requiredParams = {model: "Product"}
+                        event.optionalParams = {data: data}
+                        window.ajax(event)
+                            .then(function (data) {
+                                new $.zui.Messager(data.msg, {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                window.getTab5Data()
+                            })
+
+                    }
+
+                    window.saveMaterial = function () {
+                        var val = $('#materialModel .name').val();
+
+                        var name = val
+                        var items = materialDataList;
+                        for (var i = 0; i < items.length; i++) {
+                            var item = items[i];
+                            if (item.name == name) {
+                                new $.zui.Messager("物料名称必须是唯一的", {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                return;
+                            }
+                        }
+
+                        var event = events['rq2111'];
+                        event.requiredParams = {model: "Material"}
+                        event.optionalParams = {data: {name: val, factoryId: 1}}
+                        window.ajax(event)
+                            .then(function (data) {
+                                $('#materialModel').modal('hide', 'fit')
+                                new $.zui.Messager(data.msg, {
+                                    icon: 'info' // 定义消息图标
+                                }).show();
+                                getTab5Data()
+                            })
+
+
+                    }
+
+                    window.deleteModel = function (modelName, id) {
+                        var modelName = $('#InfoModal1_10 .modelName').val();
+                        var id = $('#InfoModal1_10 .id').val();
+                        if (!id) {
+                            return
+                        } else {
+                            var event = events['rq2115']
+                            event.requiredParams = {model: modelName}
+                            event.optionalParams = {items: [{id: id}]}
+                            window.ajax(event)
+                                .then(function () {
+                                    setTimeout(function () {
+                                        new $.zui.Messager("删除成功", {
+                                            icon: 'info' // 定义消息图标
+                                        }).show();
+                                        $('.modal').modal('hide');
+                                        getTab5Data()
+                                    }, 1000)
+                                })
+                        }
+                    }
+
+
+                }
+
+
+            }]
+        // 初始化标签页管理器
+        $('#tabs2').tabs({tabs: tabs});
+    });
+
+</script>
+
+</html>

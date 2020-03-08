@@ -1,0 +1,378 @@
+<div>
+    <!--搜索表单-->
+    <div class="searchForm" id="Work_Order_FixsearchForm">
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">姓名</span>
+            <input id="namesearchFormId" type="text" name="name" class="form-control name" placeholder="">
+            <input id="namesearchFormIdcallback" type="hidden" name="nameId" class="form-control nameId" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#namesearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">工号</span>
+            <input id="work_numbersearchFormId" type="text" name="work_number" class="form-control work_number"
+                   placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#work_numbersearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">部门</span>
+            <input id="departmentsearchFormId" type="text" name="department" class="form-control department"
+                   placeholder="">
+            <input id="departmentsearchFormIdcallback" type="hidden" name="departmentId"
+                   class="form-control departmentId" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#departmentsearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">应扣/应加</span>
+            <input id="totalsearchFormId" type="text" name="total" class="form-control total" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#totalsearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">日期</span>
+            <input id="datesearchFormId" type="text" name="date" class="form-control date" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#datesearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">备注</span>
+            <input id="notesearchFormId" type="text" name="note" class="form-control note" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#notesearchFormId').val('')">x</span>
+        </div>
+        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+            <span class="input-group-addon">备注</span>
+            <input id="recordersearchFormId" type="text" name="recorder" class="form-control recorder" placeholder="">
+            <span class="input-group-addon cursor" onclick="$('#recordersearchFormId').val('')">x</span>
+        </div>
+        <input name="id" class="id" type="hidden">
+        <input name="flag" class="flag" type="hidden">
+        <input name="index" class="index" type="hidden">
+    </div>
+    <!--功能按钮-->
+    <div id="Work_Order_Fixfunctions" class="functions">
+        <button class="btn  btn-warning " type="button" onclick="window.createWork_Order_FixForm()">新增</button>
+        <button class="btn  btn-danger" type="button" onclick="window.batchDeleteWork_Order_Fix()">删除</button>
+        <button class="btn  btn-primary" type="button" onclick="window.searchWork_Order_Fix()">搜索</button>
+    </div>
+
+    <!--弹窗-->
+    <div class="modal fade modal-moveable" id="Work_Order_FixModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">Work_Order_Fix</h4></div>
+                <div class="modal-body">
+                    <!--表单-->
+                    <div class="form" id="Work_Order_FixForm">
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">姓名</span>
+                            <input id="nameformId" type="text" name="name" class="form-control name" placeholder="">
+                            <input id="nameformIdcallback" type="hidden" name="nameId" class="form-control nameId"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#nameformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">工号</span>
+                            <input id="work_numberformId" type="text" name="work_number"
+                                   class="form-control work_number"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#work_numberformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">部门</span>
+                            <input id="departmentformId" type="text" name="department" class="form-control department"
+                                   placeholder="">
+                            <input id="departmentformIdcallback" type="hidden" name="departmentId"
+                                   class="form-control departmentId"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#departmentformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">应扣/应加</span>
+                            <input id="totalformId" type="text" name="total" class="form-control total" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#totalformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">日期</span>
+                            <input id="dateformId" type="text" name="date" class="form-control date" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#dateformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">备注</span>
+                            <input id="noteformId" type="text" name="note" class="form-control note" placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#noteformId').val('')">x</span>
+                        </div>
+                        <div class="input-group col-md-5" style="margin:10px 20px 10px 10px; float:left">
+                            <span class="input-group-addon">备注</span>
+                            <input id="recorderformId" type="text" name="recorder" class="form-control recorder"
+                                   placeholder="">
+                            <span class="input-group-addon cursor" onclick="$('#recorderformId').val('')">x</span>
+                        </div>
+                        <input name="id" class="id" type="hidden">
+                        <input name="flag" class="flag" type="hidden">
+                        <input name="index" class="index" type="hidden">
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button onclick="window.deleteWork_Order_FixForm()" type="button" class="btn btn-danger"
+                            data-dismiss="modal">删除
+                    </button>
+                    <button onclick="window.saveWork_Order_FixForm()" type="button" class="btn btn-primary"
+                            data-dismiss="modal">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--列表-->
+    <div id="table_Work_Order_Fix"></div>
+</div>
+<script>
+
+    var Work_Order_FixDataSource = {
+        "form": {
+            "name": "",
+            "work_number": "",
+            "department": "",
+            "total": "",
+            "date": "",
+            "note": "",
+            "recorder": ""
+        },
+        "list": {
+            "cols": [
+                {
+                    "name": "name",
+                    "label": "姓名",
+                    "width": 100
+                },
+                {
+                    "name": "work_number",
+                    "label": "工号",
+                    "width": 100
+                },
+                {
+                    "name": "department",
+                    "label": "部门",
+                    "width": 100
+                },
+                {
+                    "name": "total",
+                    "label": "应扣/应加",
+                    "width": 100
+                },
+                {
+                    "name": "date",
+                    "label": "日期",
+                    "width": 100
+                },
+                {
+                    "name": "note",
+                    "label": "备注",
+                    "width": 100
+                },
+                {
+                    "name": "recorder",
+                    "label": "备注",
+                    "width": 100
+                },
+                {
+                    "name": "createdAt",
+                    "label": "创建日期",
+                    "width": 150
+                }
+            ],
+            "array": []
+        }
+    }
+
+    //渲染列表
+    window.renderWork_Order_FixTable = function (tableId, dataSource) {
+        $(tableId).html('').append('<div class="table"></div>')
+
+        $(tableId + ' .table').datagrid({
+            dataSource: dataSource,
+            checkable: true,
+            checkByClickRow: false,
+            partialRendering: false,
+            // height: '300',
+            onRender: function () {
+                $(tableId + ' .datagrid-cell').off('click');
+                $(tableId + ' .datagrid-cell').on('click', function () {
+                    var row = $(this).attr('data-row')
+                    var col = $(this).attr('data-col')
+                    if (row == 0 || col == 0) return
+                    var index = row - 1
+                    var formId = 'Work_Order_FixForm'
+                    var modalId = 'Work_Order_FixModal'
+                    $('#' + modalId).modal('show', 'fit');
+                    var formData = Work_Order_FixDataSource.list.array[index];
+                    window.renderForm('#' + formId, formData)
+                    $('#' + formId + ' .flag').val('edit')
+                    $('#' + formId + ' .index').val(index)
+                })
+            }
+        })
+    }
+
+    //创建
+    window.createWork_Order_FixForm = function () { //调起创建弹窗
+        var formId = 'Work_Order_FixForm'
+        var modalId = 'Work_Order_FixModal'
+        $('#' + modalId).modal('show')
+        var data = {
+            "id": "",
+            "name": "",
+            "work_number": "",
+            "department": "",
+            "total": "",
+            "date": "",
+            "note": "",
+            "recorder": ""
+        };
+        window.renderForm('#' + formId, data);
+        $('#' + formId + ' .flag').val('new')
+        $('#' + formId + ' .id').val('')
+    }
+
+    //保存
+    window.saveWork_Order_FixForm = function () { //创建或保存
+        var formId = 'Work_Order_FixForm'
+        var flag = $('#' + formId + ' .flag').val()
+        var formData = window.getFormData('#' + formId)
+        if (flag == 'new') { //创建状态
+            Work_Order_FixDataSource.list.array.push(formData)
+            var event = events['rq2111']
+            event.requiredParams = {model: 'Work_Order_Fix'}
+            event.optionalParams = {data: formData}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("创建成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Work_Order_Fix'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                Work_Order_FixDataSource.list.array = result.data;
+                                window.renderWork_Order_FixTable('#table_Work_Order_Fix', Work_Order_FixDataSource.list)
+                            })
+                    }, 1000)
+                })
+        } else {
+            var index = $('#' + formId + ' .index').val()
+            var data = Work_Order_FixDataSource.list.array[index]
+            for (var x in formData) {
+                try {
+                    data[x] = formData[x]
+                } catch (e) {
+                }
+            }
+            var event = events['rq2112']
+            event.requiredParams = {model: 'Work_Order_Fix'}
+            event.optionalParams = {data: data}
+            window.ajax(event)
+                .then(function () {
+                    setTimeout(function () {
+                        new $.zui.Messager("保存成功", {
+                            icon: 'info' // 定义消息图标
+                        }).show();
+                        var searchEvent = events['rq2114'] //通用查询接口
+                        searchEvent.requiredParams = {model: 'Work_Order_Fix'}
+                        searchEvent.optionalParams = {}
+                        window.ajax(searchEvent)
+                            .then(function (result) {
+                                Work_Order_FixDataSource.list.array = result.data;
+                                window.renderWork_Order_FixTable('#table_Work_Order_Fix', Work_Order_FixDataSource.list)
+                            })
+                    }, 1000)
+                })
+        }
+        var modalId = 'Work_Order_FixModal'
+        $('#' + modalId).modal('hide')
+    }
+
+    //删除
+    window.deleteWork_Order_FixForm = function () { //删除
+        var formId = 'Work_Order_FixForm'
+        var index = $(formId + ' .index').val()
+        var data = Work_Order_FixDataSource.list.array[index]
+
+        if (index) { //调用接口从服务器删除
+            var modelName = 'Work_Order_Fix';
+            var id = data.id;
+            if (!id) {
+                return
+            } else {
+                var event = events['rq2115']
+                event.requiredParams = {model: modelName}
+                event.optionalParams = {items: [{id: id}]}
+                window.ajax(event)
+                    .then(function () {
+                        setTimeout(function () {
+                            new $.zui.Messager("删除成功", {
+                                icon: 'info' // 定义消息图标
+                            }).show();
+                            $('.modal').modal('hide');
+
+                        }, 1000)
+                    })
+            }
+            Work_Order_FixDataSource.list.array.splice(index, 1);
+            window.renderWork_Order_FixTable('#table_Work_Order_Fix', Work_Order_FixDataSource.list)
+        }
+
+        var modalId = 'Work_Order_FixModal'
+        $('#' + modalId).modal('hide');
+    }
+
+    //批量删除
+    window.batchDeleteWork_Order_Fix = function () { //批量删除
+        var formId = 'Work_Order_FixForm'
+        var index = $(formId + ' .index').val()
+        var data = Work_Order_FixDataSource.list.array[index]
+
+        var tableId = 'table_Work_Order_Fix'
+        var items = window.getSelectedTableItems('#' + tableId + ' .table')
+        if (items.length == 0) {
+            new $.zui.Messager("请至少选择一个记录", {
+                icon: 'info' // 定义消息图标
+            }).show();
+            return
+        }
+        var batchDeleteEvent = events['rq2115'] //通用删除接口
+        batchDeleteEvent.requiredParams = {model: 'Work_Order_Fix'}
+        batchDeleteEvent.optionalParams = {items: items}
+        window.ajax(batchDeleteEvent)
+            .then(function () {
+                var getEvent = events['rq2114'] //通用查找接口
+                getEvent.requiredParams = {model: 'Work_Order_Fix'}
+                getEvent.optionalParams = {items: items}
+                return window.ajax(getEvent)
+            })
+            .then(function (result) {
+                Work_Order_FixDataSource.list.array = result.data;
+                window.renderWork_Order_FixTable('#table_Work_Order_Fix', Work_Order_FixDataSource.list)
+            })
+    }
+
+    //搜索
+    window.searchWork_Order_Fix = function (limit) { //搜索
+        var formId = 'Work_Order_FixsearchForm'
+        var formData = limit ? window.getFormData('#' + formId) : {}
+
+        var searchEvent = events['rq2114'] //通用查询接口
+        searchEvent.requiredParams = {model: 'Work_Order_Fix'}
+        searchEvent.optionalParams = formData
+        window.ajax(searchEvent)
+            .then(function (result) {
+                Work_Order_FixDataSource.list.array = result.data;
+                window.renderWork_Order_FixTable('#table_Work_Order_Fix', Work_Order_FixDataSource.list)
+            })
+    }
+
+</script>

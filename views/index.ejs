@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include head/head %>
+
+    <style>
+        body {
+            background: white;
+        }
+
+        canvas {
+            margin: auto;
+            height: 250px;
+            min-width: 320px;
+            display: block;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .startUse {
+            width: 100%;
+            margin: auto;
+        }
+
+        .startUseBox {
+            width: 100%;
+            text-align: center;
+        }
+
+        section h2 {
+            font-size: 23px;
+            color: #3a3a3a;
+        }
+
+        section p {
+            font-size: 16px;
+            color: #595959;
+        }
+
+        section li {
+            font-size: 14px;
+            line-height: 28px;
+            color: grey;
+        }
+
+        video {
+            box-shadow: 1px 1px 20px gray
+        }
+    </style>
+</head>
+<body>
+<%- include header/header %>
+<div>
+
+    <div class="container">
+
+        <section class="section section--hero">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <h1 class="mb-xs" style="color: #3280fc">小治智能管理系统</h1>
+                        <h1 class="mb-xs" style="color: #505050">轻松解决生产数据问题</h1>
+                        <h3 class="font-light" style="line-height: 45px;color: #555555">
+                            针对生产实体的流程进行优化管理，记录订单数据，工单数据，外包数据，物料与产品库存，财务管理！
+                        </h3>
+
+                        <div style="margin-top: 60px">
+                            <% if(user){ %>
+                                <p class="startUseBox"><a class="btn btn-primary btn-lg startUse" href="rq300"
+                                                          role="button">马上使用</a></p>
+                            <% }else{ %>
+                                <p class="startUseBox"><a class="btn btn-primary btn-lg startUse" href="rq1000"
+                                                          role="button">马上登录</a></p>
+                            <% } %>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 30px"></div>
+                    <div class="col-md-7  ">
+                        <div class="browser-container " style="text-align: center">
+                                                        <img src="/images/index/indexbanner.png" alt="">
+<!--                            <video src="/videos/xiao1280.mp4" autoplay controls style="margin: auto"></video>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <main>
+            <section class="section section--users bg-mutted-soft" id="anchor">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6" style="text-align: center">
+                            <canvas id="canvas" class="hidden-xs"></canvas>
+                        </div>
+                        <div class="col-sm-6"><h3 class="serif em" style="margin-top: 65px">“
+                                小治管理系统能帮助我们快速实现生产数据化！”</h3>
+                            <p>
+                                <img src="/images/index/1041571215642_.pic.jpg" width="48px" class="profile-image">
+                                <!-- -->by CEO of<!-- --> <a href="">
+                                    华辉五金制造厂
+                                </a></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section section__feature section__feature--query">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6"><img src="/images/index/1021571215523_.pic_hd.jpg"
+                                                   id="write-query-illustrated" class="visible-xs">
+                            <h2>销售模块</h2>
+                            <p class="highlight-p">
+                                享受所有订单数据归集的好处，摆脱各种复杂的excel表格的查询与整理，更高效地治理生产过程。
+                            </p>
+                            <ul class="highlight-ul">
+                                <li>了解客户的订单情况，总金额，已交付金额，应收账款等数据透视，帮助进行客户的开发管理</li>
+                                <li>高效查询所有订单，根据客户名称，订单编号，创建日期等条件组合</li>
+                                <li>了解出库记录，帮助制定更有效率的生产决策</li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 hidden-xs"><img src="/images/index/1021571215523_.pic_hd.jpg"
+                                                             id="write-query-illustrated"></div>
+                    </div>
+                </div>
+            </section>
+            <section class="section section__feature section__feature--visualize">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6"><img src="/images/index/1031571215551_.pic_hd.jpg"
+                                                   id="visualize-illustrated"></div>
+                        <div class="col-sm-6"><h2>生产模块</h2>
+                            <p class="highlight-p">
+                                订单来了，生产如何安排？ 传统的管理方法需要大量手工的无效记录，不能很好地管理内部的生产工单，外包的生产工单。
+                            </p>
+                            <ul class="highlight-ul">
+                                <li>未交付订单与产品透视表，帮助生产管理员对订单情况了如指掌</li>
+                                <li>产品工序的数据归集，更好地安排生产批次，透视每个批次的工序、工单情况。</li>
+                                <li>内部生产跟不上，可进行外包工单处理，委派的工序与成本更好地归集。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section section__integrations">
+                <div class="container">
+                    <div class="row integrations-container">
+                        <div class="col-sm-8"><img src="/images/index/1061571215912_.pic.jpg"
+                                                   id="integrations-illustrated" class="visible-xs">
+                            <h2>库存模块</h2>
+                            <p class="highlight-p">
+                                仓库管理一团糟？不存在的！物料进出，成品入库、出库，统一归集
+                            </p>
+                            <ul class="highlight-ul">
+                                <li>根据产品型号透视仓库现存的物料数量汇总，每个型号能看到物料的进出详情</li>
+                                <li>详细的物料进出记录流水，帮助查找问题所在</li>
+                                <li>根据产品型号透视产品库存表，汇总库存量</li>
+                                <li>详细的成品进出记录流水，帮助查找问题所在</li>
+                                <li>物料与成品的修正功能，帮助盘库</li>
+                            </ul>
+
+                        </div>
+                        <div class="col-sm-4 text-right"><img src="/images/index/1061571215912_.pic.jpg"
+                                                              id="integrations-illustrated" class="hidden-xs"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section section__feature section__feature--visualize">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6"><img src="/images/index/1071571216028_.pic_hd.jpg"
+                                                   id="visualize-illustrated"></div>
+                        <div class="col-sm-6"><h2>财务模块</h2>
+                            <p class="highlight-p">
+                                不盈利的企业不是好企业！财务模块关注生产实体的健壮性！
+                            </p>
+                            <ul class="highlight-ul">
+                                <li>根据已有订单，归集已交付的情况，了解应收账款的健康</li>
+                                <li>根据生产外包，物料入库，成品入库，了解实体的负债情况</li>
+                                <li>根据日期、部门、员工秀视工资的产生数据，了解员工的效益与利益</li>
+                                <li>带工资修正功能，有助于合理的薪酬管理</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section section--small get-started">
+                <div class="container">
+                    <div class="row get-started--signup text-center">
+                        <div class="col-sm-12 p-0">
+                            <h3 class="mb-xs" style="margin: 60px;font-size: 24px">
+                                界面演示
+                            </h3>
+                            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel"
+                                 style="box-shadow: 0px 0px 10px gray;">
+                                <!-- Indicators -->
+                                <ol class="carousel-indicators">
+                                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                                    <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+                                    <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+                                    <li data-target="#carousel-example-generic" data-slide-to="5"></li>
+                                    <li data-target="#carousel-example-generic" data-slide-to="6"></li>
+                                </ol>
+
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner" role="listbox">
+                                    <div class="item active">
+                                        <img src="/images/index/img.png" alt="...">
+                                        <div class="carousel-caption">
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="/images/index/img2.jpg" alt="...">
+                                        <div class="carousel-caption">
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="/images/index/img3.jpg" alt="...">
+                                        <div class="carousel-caption">
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="/images/index/img4.jpg" alt="...">
+                                        <div class="carousel-caption">
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="/images/index/img5.jpg" alt="...">
+                                        <div class="carousel-caption">
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="/images/index/img6.jpg" alt="...">
+                                        <div class="carousel-caption">
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="/images/index/img7.jpg" alt="...">
+                                        <div class="carousel-caption">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Controls -->
+                                <a class="left carousel-control" href="#carousel-example-generic" role="button"
+                                   data-slide="prev">
+                                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="right carousel-control" href="#carousel-example-generic" role="button"
+                                   data-slide="next">
+                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="section section--small get-started">
+                <div class="container">
+                    <div class="row get-started--signup text-center">
+                        <div class="col-sm-12 p-0">
+                            <h3 class="mb-xs" style="margin: 60px">
+                                开始体验完整的生产旅程！
+                            </h3>
+
+                            <% if(user){ %>
+                                <p><a class="btn btn-primary btn-lg" href="rq300" role="button">马上使用</a></p>
+                            <% }else{ %>
+                                <p><a class="btn btn-primary btn-lg" href="rq1000" role="button">马上登录</a></p>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+
+    </div>
+
+
+</div>
+<div class="footer" style="margin-top: 100px;padding: 20px;background: black;color: grey">
+    <div class="container">
+
+
+        <div class="textbox col-md-6 col-sm-12" style="">
+            <div>阳江市小小科技有限公司</div>
+        </div>
+
+        <div class="item col-md-3 col-sm-12">
+            <div>邮箱 faq@xiaoxiaotech.com</div>
+        </div>
+        <div class="item col-md-3 col-sm-12">
+            <div>办公电话 xxx-xxxxxxxx</div>
+        </div>
+
+        <div class="item col-md-3 col-sm-12">
+            <div>粤ICP备19125908号</div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+
+</html>
+<script>
+
+    var canvas = $("#canvas"),
+        context = canvas[0].getContext("2d"),
+        winW,
+        winH,
+        timer = 0,
+        particles = [],
+        cursor = {
+            x: 200,
+            y: 200
+        };
+
+    function setSize() {
+        winW = $(window).width();
+        winH = $(window).height();
+        canvas.attr("width", winW);
+        canvas.attr("height", winH);
+    }
+
+    function particle(offset) {
+        var that = this;
+
+        that.x = 100;
+        that.y = 100;
+        that.offset = offset;
+        that.draw = function () {
+            context.fillRect(that.x, that.y, 2, 2);
+        };
+    }
+
+    function addParticle(offset) {
+        particles.push(new particle(offset));
+    }
+
+    function tick() {
+        context.clearRect(0, 0, winW, winH);
+        context.fillStyle = "#3280fc";
+
+        $.each(particles, function (index, particle) {
+            particle.x += ((cursor.x - particle.x) + Math.sin(((timer * (particle.offset / (cursor.x + 1))) / 40) + particle.offset) * 300) / 20;
+            particle.y += ((cursor.y - particle.y) + Math.cos(((timer * (particle.offset / (cursor.y + 1))) / 40) + particle.offset) * 300) / 20;
+            particle.draw();
+        });
+        timer += 0.05;
+
+        requestAnimationFrame(tick);
+    }
+
+    $(window).on("resize", setSize);
+    $(document).on("mousemove", function (event) {
+        cursor.x = event.pageX;
+        cursor.y = event.pageY;
+    });
+
+    for (var i = 0; i < 3000; i++) {
+        addParticle(i);
+    }
+    ;
+    setSize();
+    tick();
+
+</script>
